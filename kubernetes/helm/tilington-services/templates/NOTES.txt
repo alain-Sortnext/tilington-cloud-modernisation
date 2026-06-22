@@ -1,0 +1,22 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Tilington plc Microservices deployed to namespace: {{ .Values.namespace.name }}
+
+Services deployed:
+{{ if .Values.customerService.enabled -}}
+- customer-service: http://customer-service.{{ .Values.namespace.name }}.svc.cluster.local
+{{- end }}
+{{ if .Values.paymentsService.enabled -}}
+- payments-service: http://payments-service.{{ .Values.namespace.name }}.svc.cluster.local (PCI scope)
+{{- end }}
+{{ if .Values.notificationsService.enabled -}}
+- notifications-service: http://notifications-service.{{ .Values.namespace.name }}.svc.cluster.local
+{{- end }}
+{{ if .Values.auditService.enabled -}}
+- audit-service: http://audit-service.{{ .Values.namespace.name }}.svc.cluster.local (immutable audit)
+{{- end }}
+
+External endpoint: https://{{ .Values.ingress.host }}
+
+TODO: Candidate adds actual Helm templates in kubernetes/helm/tilington-services/templates/
+Required: deployment.yaml, service.yaml, hpa.yaml, ingress.yaml, serviceaccount.yaml
