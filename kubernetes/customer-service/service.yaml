@@ -1,0 +1,46 @@
+# ============================================================
+# Tilington plc — Customer Service Kubernetes Service
+# STATUS: INCOMPLETE — Candidate completes in Phase 5
+# ============================================================
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer-service
+  namespace: tilington-prod
+  labels:
+    app: customer-service
+  annotations:
+    # TODO: Candidate adds service annotations
+    # For ALB controller: service.beta.kubernetes.io/aws-load-balancer-type: external
+spec:
+  selector:
+    app: customer-service
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: ClusterIP  # Internal only — exposed via Ingress, not directly
+
+---
+# TODO: Candidate adds HorizontalPodAutoscaler
+# apiVersion: autoscaling/v2
+# kind: HorizontalPodAutoscaler
+# metadata:
+#   name: customer-service-hpa
+#   namespace: tilington-prod
+# spec:
+#   scaleTargetRef:
+#     apiVersion: apps/v1
+#     kind: Deployment
+#     name: customer-service
+#   minReplicas: 3
+#   maxReplicas: ???  # TODO: Candidate sets based on load estimate
+#   metrics:
+#     - type: Resource
+#       resource:
+#         name: cpu
+#         target:
+#           type: Utilization
+#           averageUtilization: ???  # TODO: Set appropriate threshold
