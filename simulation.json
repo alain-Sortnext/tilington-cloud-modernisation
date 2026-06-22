@@ -2,11 +2,8 @@
   "simulation_id": "tilington-aws-architect-v1",
   "version": "1.0.0",
   "title": "Tilington plc Cloud Modernisation Programme",
-  "role": "AWS Solutions Architect",
   "sector": "UK Financial Services",
   "difficulty": "Mid-Senior",
-  "company_name": "Tilington plc",
-  "company_brief": "Tilington plc is a UK-regulated financial services firm (asset management + retail banking, 1,200 staff) migrating from two on-premise datacentres to AWS. Both DC leases expire Q3 2027 — a hard deadline. The candidate acts as Lead AWS Solutions Architect responsible for designing a scalable, secure, reliable AWS platform with microservices, Kubernetes, CI/CD, observability, migration planning, DR, and cost optimisation.",
   "shared_files": [
     {
       "file_id": "company_brief",
@@ -1184,5 +1181,10 @@
         }
       ]
     }
-  ]
+  ],
+  "role_title": "AWS Solutions Architect",
+  "company": {
+    "name": "Tilington plc",
+    "brief": "Tilington plc is a UK-regulated financial services firm (asset management + retail banking, 1,200 staff) migrating from two on-premise datacentres to AWS. Both DC leases expire Q3 2027 — a hard deadline. The candidate acts as Lead AWS Solutions Architect responsible for designing a scalable, secure, reliable AWS platform with microservices, Kubernetes, CI/CD, observability, migration planning, DR, and cost optimisation."
+  }
 }
