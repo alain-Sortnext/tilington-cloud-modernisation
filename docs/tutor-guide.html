@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutor Guide — Tilington plc AWS Solutions Architect</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap');
+
+  :root {
+    --navy:   #0d1b2a;
+    --ink:    #1a2e45;
+    --steel:  #2c4a6e;
+    --sky:    #4a90c4;
+    --frost:  #e8f0f8;
+    --amber:  #e8a020;
+    --red:    #c0392b;
+    --green:  #1a7a4a;
+    --white:  #ffffff;
+    --rule:   #c8d8e8;
+    --mono:   'IBM Plex Mono', monospace;
+    --sans:   'Inter', sans-serif;
+    --serif:  'Playfair Display', serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--frost);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 40px 48px 32px;
+    border-bottom: 3px solid var(--amber);
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: 'RESTRICTED';
+    position: absolute;
+    top: 18px; right: 48px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--amber);
+    border: 1px solid var(--amber);
+    padding: 3px 8px;
+  }
+  .header-eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--sky);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 8px;
+  }
+  .header-sub {
+    font-size: 15px;
+    color: #9ab4cc;
+    margin-top: 6px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #2a4a6a;
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .meta-label { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; color: #6a8aaa; text-transform: uppercase; }
+  .meta-value { font-size: 13px; font-weight: 500; color: var(--white); }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .two-col { display: grid; grid-template-columns: 260px 1fr; gap: 0; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--navy);
+    padding: 32px 20px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .sidebar-section { margin-bottom: 28px; }
+  .sidebar-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #4a7aaa;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #1e3654;
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s;
+    text-decoration: none;
+    color: #8ab0cc;
+    font-size: 12.5px;
+    margin-bottom: 2px;
+  }
+  .nav-item:hover { background: #1a3454; color: var(--white); }
+  .nav-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--amber);
+    min-width: 18px;
+  }
+
+  /* ── MAIN ── */
+  main { padding: 36px 40px; }
+
+  /* ── SECTION HEADINGS ── */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--rule);
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--sky);
+    font-weight: 600;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--navy);
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .card-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--steel);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-title::before {
+    content: '';
+    display: block;
+    width: 14px;
+    height: 2px;
+    background: var(--amber);
+  }
+
+  /* ── PHASE BLOCKS ── */
+  .phase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .phase-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-left: 4px solid var(--steel);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 18px;
+    transition: border-left-color 0.15s;
+  }
+  .phase-card:hover { border-left-color: var(--amber); }
+  .phase-num { font-family: var(--mono); font-size: 10px; color: var(--sky); letter-spacing: 1px; margin-bottom: 4px; }
+  .phase-name { font-weight: 600; font-size: 13px; color: var(--navy); margin-bottom: 6px; }
+  .phase-output { font-size: 11.5px; color: #5a7090; font-style: italic; margin-bottom: 10px; }
+  .phase-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 2px;
+    background: var(--frost);
+    color: var(--steel);
+    border: 1px solid var(--rule);
+  }
+  .tag.hours { background: #fff8e8; border-color: #e8d090; color: #886020; }
+
+  /* ── PERSONAS ── */
+  .persona-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .persona-card {
+    background: var(--white);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 18px 20px;
+    border-top: 3px solid transparent;
+  }
+  .persona-card.purple { border-top-color: #7c3aed; }
+  .persona-card.teal   { border-top-color: #0d9488; }
+  .persona-card.amber  { border-top-color: #d97706; }
+  .persona-card.coral  { border-top-color: #e05a40; }
+  .persona-name { font-weight: 600; font-size: 14px; color: var(--navy); }
+  .persona-role { font-size: 12px; color: #6080a0; margin-bottom: 10px; }
+  .persona-style { font-size: 12.5px; color: var(--ink); line-height: 1.5; margin-bottom: 10px; }
+  .persona-concern {
+    font-size: 12px;
+    background: var(--frost);
+    padding: 8px 12px;
+    border-left: 3px solid var(--sky);
+    color: var(--steel);
+  }
+
+  /* ── ANSWER KEY ── */
+  .answer-key {
+    background: #fff8e8;
+    border: 1px solid #e8c060;
+    border-left: 4px solid var(--amber);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .answer-key-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #886020;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .key-row {
+    display: flex;
+    gap: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid #eed888;
+    font-size: 12.5px;
+  }
+  .key-row:last-child { border-bottom: none; }
+  .key-label { min-width: 220px; color: #5a4010; font-weight: 500; }
+  .key-value { color: var(--ink); font-family: var(--mono); font-size: 12px; }
+
+  /* ── WRONG DIRECTION ── */
+  .trap-box {
+    background: #fff0ef;
+    border: 1px solid #e0a0a0;
+    border-left: 4px solid var(--red);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+  .trap-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .trap-title::before { content: '⚠'; font-size: 13px; }
+  .trap-text { font-size: 12.5px; color: #6a2020; line-height: 1.55; }
+
+  /* ── DATA TABLE ── */
+  table { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 12.5px; }
+  th {
+    background: var(--navy);
+    color: var(--white);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-align: left;
+    padding: 8px 12px;
+    font-weight: 400;
+  }
+  td { padding: 8px 12px; border-bottom: 1px solid var(--rule); color: var(--ink); }
+  tr:hover td { background: var(--frost); }
+  .sev-critical { background: #fee; color: var(--red); font-family: var(--mono); font-size: 10px; padding: 2px 6px; border-radius: 2px; font-weight: 600; }
+  .sev-high { background: #fff0e0; color: #c06010; font-family: var(--mono); font-size: 10px; padding: 2px 6px; border-radius: 2px; font-weight: 600; }
+  .sev-medium { background: #fff8e0; color: #906010; font-family: var(--mono); font-size: 10px; padding: 2px 6px; border-radius: 2px; font-weight: 600; }
+
+  /* ── RUBRIC ── */
+  .rubric-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--rule); }
+  .rubric-criterion { flex: 1; font-size: 13px; color: var(--ink); }
+  .rubric-marks {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--sky);
+    min-width: 40px;
+    text-align: right;
+  }
+  .rubric-bar { width: 100px; height: 4px; background: var(--rule); border-radius: 2px; overflow: hidden; }
+  .rubric-fill { height: 100%; background: var(--sky); border-radius: 2px; }
+
+  /* ── MISC ── */
+  .pill {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+  }
+  .pill.green  { background: #e0f5ea; color: var(--green); border: 1px solid #a0d5b5; }
+  .pill.amber  { background: #fff8e0; color: #886020; border: 1px solid #e8c060; }
+  .pill.red    { background: #fee8e8; color: var(--red); border: 1px solid #f0a0a0; }
+  .pill.blue   { background: #e8f0f8; color: var(--steel); border: 1px solid #a0c0e0; }
+
+  code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--frost);
+    padding: 1px 5px;
+    border-radius: 2px;
+    color: var(--steel);
+  }
+
+  .divider { border: none; border-top: 1px solid var(--rule); margin: 28px 0; }
+
+  section { margin-bottom: 48px; }
+
+  /* ── BUG TABLE ── */
+  .bug-id { font-family: var(--mono); font-size: 11px; color: var(--red); font-weight: 600; }
+  .bug-subtle { font-style: italic; color: #888; font-size: 11.5px; }
+
+  /* ── COST TABLE ── */
+  .cost-highlight { font-family: var(--mono); font-weight: 600; color: var(--navy); }
+  .cost-trap { color: var(--red); font-family: var(--mono); font-size: 11px; }
+
+  .print-note {
+    background: var(--navy);
+    color: #8ab0cc;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-align: center;
+    padding: 10px;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="container">
+    <div class="header-eyebrow">Project Lab — Tutor Guide</div>
+    <h1>Tilington plc Cloud Modernisation Programme</h1>
+    <div class="header-sub">AWS Solutions Architect · Mid–Senior · UK Financial Services · 9 Phases</div>
+    <div class="header-meta">
+      <div class="meta-item"><span class="meta-label">Repo</span><span class="meta-value">alain-Sortnext/tilington-cloud-modernisation</span></div>
+      <div class="meta-item"><span class="meta-label">Difficulty</span><span class="meta-value">Mid–Senior</span></div>
+      <div class="meta-item"><span class="meta-label">Budget</span><span class="meta-value">£3,200,000 / 18 months</span></div>
+      <div class="meta-item"><span class="meta-label">Files in Repo</span><span class="meta-value">58 files</span></div>
+      <div class="meta-item"><span class="meta-label">Version</span><span class="meta-value">1.0.0 — June 2026</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="two-col">
+  <nav class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Navigation</div>
+      <a href="#overview" class="nav-item"><span class="nav-num">01</span>Simulation Overview</a>
+      <a href="#phases" class="nav-item"><span class="nav-num">02</span>Phase Structure</a>
+      <a href="#personas" class="nav-item"><span class="nav-num">03</span>Personas</a>
+      <a href="#data" class="nav-item"><span class="nav-num">04</span>Data Files</a>
+      <a href="#answer-key" class="nav-item"><span class="nav-num">05</span>Answer Key</a>
+      <a href="#traps" class="nav-item"><span class="nav-num">06</span>Wrong-Direction Traps</a>
+      <a href="#bugs" class="nav-item"><span class="nav-num">07</span>Pipeline Bug List</a>
+      <a href="#rubrics" class="nav-item"><span class="nav-num">08</span>Rubrics Summary</a>
+      <a href="#regulatory" class="nav-item"><span class="nav-num">09</span>Regulatory Context</a>
+      <a href="#repo" class="nav-item"><span class="nav-num">10</span>Repo Structure</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Quick Ref</div>
+      <a href="#" class="nav-item" style="font-size:11px; color:#5a80a0;">DC1: 10.10.0.0/16 London</a>
+      <a href="#" class="nav-item" style="font-size:11px; color:#5a80a0;">DC2: 10.20.0.0/16 Manchester</a>
+      <a href="#" class="nav-item" style="font-size:11px; color:#5a80a0;">Prod VPC: 10.30.0.0/16</a>
+      <a href="#" class="nav-item" style="font-size:11px; color:#5a80a0;">Non-prod: 10.40.0.0/16</a>
+      <a href="#" class="nav-item" style="font-size:11px; color:#5a80a0;">Oracle: £1.4M/year → £0</a>
+      <a href="#" class="nav-item" style="font-size:11px; color:#5a80a0;">Timeline: 18 months</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ── OVERVIEW ── -->
+    <section id="overview">
+      <div class="section-header">
+        <span class="section-num">01</span>
+        <h2 class="section-title">Simulation Overview</h2>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Scenario</div>
+        <p style="font-size:13.5px; line-height:1.7; color:var(--ink);">
+          Tilington plc is a UK financial services firm (asset management + retail banking, 1,200 staff) migrating from two on-premise datacentres to AWS. Both leases expire Q3 2027 — a hard, non-negotiable deadline. The candidate acts as Lead AWS Solutions Architect across all 9 phases, from discovery through to Architecture Review Board sign-off.
+        </p>
+        <hr class="divider">
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-top:4px;">
+          <div>
+            <div style="font-family:var(--mono); font-size:10px; color:var(--sky); letter-spacing:1px; margin-bottom:4px;">SERVERS</div>
+            <div style="font-size:24px; font-weight:600; color:var(--navy);">90</div>
+            <div style="font-size:11px; color:#6080a0;">58 DC1 · 32 DC2</div>
+          </div>
+          <div>
+            <div style="font-family:var(--mono); font-size:10px; color:var(--sky); letter-spacing:1px; margin-bottom:4px;">APPS</div>
+            <div style="font-size:24px; font-weight:600; color:var(--navy);">28</div>
+            <div style="font-size:11px; color:#6080a0;">6 customer-facing</div>
+          </div>
+          <div>
+            <div style="font-family:var(--mono); font-size:10px; color:var(--sky); letter-spacing:1px; margin-bottom:4px;">ORACLE COST</div>
+            <div style="font-size:24px; font-weight:600; color:var(--navy);">£1.4M</div>
+            <div style="font-size:11px; color:#6080a0;">per year · renewal Q2 2026</div>
+          </div>
+          <div>
+            <div style="font-family:var(--mono); font-size:10px; color:var(--sky); letter-spacing:1px; margin-bottom:4px;">BUDGET</div>
+            <div style="font-size:24px; font-weight:600; color:var(--navy);">£3.2M</div>
+            <div style="font-size:11px; color:#6080a0;">18 months · £56,667/mo</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Messy Reality Elements Planted</div>
+        <table>
+          <tr><th>Item</th><th>Location</th><th>Discovery Phase</th><th>Impact</th></tr>
+          <tr><td><strong>SRV-086 &amp; SRV-087</strong> — unknown servers not in CMDB</td><td>DC1 Rack 21</td><td>Phase 1</td><td>Risk assessment required; Sarah asks for 1-para answer</td></tr>
+          <tr><td><strong>ORCL-04 &amp; ORCL-05</strong> share <strong>SRV-076</strong></td><td>DC2 R09</td><td>Phase 1</td><td>Undocumented shared instance — migration complexity</td></tr>
+          <tr><td><strong>APP-027</strong> — legacy fund accounting, unclear if active</td><td>SRV-019</td><td>Phase 1</td><td>Finance says retired; Michael sees DB sessions. Must investigate.</td></tr>
+          <tr><td><strong>MSSQL-03</strong> — referenced by APP-006 &amp; APP-018 but not in server inventory</td><td>SRV-030 notes</td><td>Phase 1</td><td>Mystery dependency — candidate must find and resolve</td></tr>
+          <tr><td><strong>14 EOL OS servers</strong> (Win 2012 R2 + RHEL 7)</td><td>Various</td><td>Phase 1</td><td>ISO 27001 &amp; FCA compliance risk; immediate action required</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── PHASES ── -->
+    <section id="phases">
+      <div class="section-header">
+        <span class="section-num">02</span>
+        <h2 class="section-title">Phase Structure</h2>
+      </div>
+      <div class="phase-grid">
+        <div class="phase-card">
+          <div class="phase-num">PHASE 1</div>
+          <div class="phase-name">Discovery &amp; Current State</div>
+          <div class="phase-output">Enterprise Discovery Pack</div>
+          <div class="phase-tags">
+            <span class="tag">text_editor</span><span class="tag">file_upload</span><span class="tag hours">6–10 hrs</span>
+          </div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-num">PHASE 2</div>
+          <div class="phase-name">AWS Architecture &amp; Landing Zone</div>
+          <div class="phase-output">Enterprise Landing Zone Design</div>
+          <div class="phase-tags">
+            <span class="tag">text_editor</span><span class="tag">file_upload</span><span class="tag hours">8–12 hrs</span>
+          </div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-num">PHASE 3</div>
+          <div class="phase-name">Networking, Security &amp; Hybrid Cloud</div>
+          <div class="phase-output">Security &amp; Network Architecture</div>
+          <div class="phase-tags">
+            <span class="tag">text_editor</span><span class="tag">file_upload</span><span class="tag hours">8–12 hrs</span>
+          </div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-num">PHASE 4</div>
+          <div class="phase-name">IaC, Automation &amp; Operations</div>
+          <div class="phase-output">Infrastructure Automation Platform</div>
+          <div class="phase-tags">
+            <span class="tag">code_panel</span><span class="tag">file_upload</span><span class="tag">text_editor</span><span class="tag hours">10–15 hrs</span>
+          </div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-num">PHASE 5</div>
+          <div class="phase-name">Kubernetes, Microservices &amp; GitOps</div>
+          <div class="phase-output">Cloud-Native Microservices Platform</div>
+          <div class="phase-tags">
+            <span class="tag">code_panel</span><span class="tag">file_upload</span><span class="tag">text_editor</span><span class="tag hours">12–18 hrs</span>
+          </div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-num">PHASE 6</div>
+          <div class="phase-name">CI/CD, DevSecOps &amp; Observability</div>
+          <div class="phase-output">Delivery &amp; Reliability Platform</div>
+          <div class="phase-tags">
+            <span class="tag">code_panel</span><span class="tag">file_upload</span><span class="tag">text_editor</span><span class="tag hours">10–15 hrs</span>
+          </div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-num">PHASE 7</div>
+          <div class="phase-name">Database Architecture</div>
+          <div class="phase-output">Cloud-Native Database Architecture</div>
+          <div class="phase-tags">
+            <span class="tag">text_editor</span><span class="tag">file_upload</span><span class="tag hours">8–12 hrs</span>
+          </div>
+        </div>
+        <div class="phase-card">
+          <div class="phase-num">PHASE 8</div>
+          <div class="phase-name">Migration, DR &amp; FinOps</div>
+          <div class="phase-output">Migration &amp; FinOps Programme</div>
+          <div class="phase-tags">
+            <span class="tag">text_editor</span><span class="tag">file_upload</span><span class="tag hours">10–15 hrs</span>
+          </div>
+        </div>
+        <div class="phase-card" style="grid-column: span 2;">
+          <div class="phase-num">PHASE 9</div>
+          <div class="phase-name">Architecture Review Board &amp; Executive Presentation</div>
+          <div class="phase-output">Executive AWS Architecture Portfolio</div>
+          <div class="phase-tags">
+            <span class="tag">text_editor</span><span class="tag">file_upload</span><span class="tag hours">8–12 hrs</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PERSONAS ── -->
+    <section id="personas">
+      <div class="section-header">
+        <span class="section-num">03</span>
+        <h2 class="section-title">Personas</h2>
+      </div>
+      <div class="persona-grid">
+        <div class="persona-card purple">
+          <div class="persona-name">Sarah Williams</div>
+          <div class="persona-role">Chief Technology Officer · <span class="pill blue">DECISION MAKER</span></div>
+          <div class="persona-style">Direct, board-level language, low technical tolerance, commercially sharp. Has personal political capital in this programme succeeding.</div>
+          <div class="persona-concern">Key concern: On-time DC exit, Oracle renewal decision, Board confidence. Will ask for one-page summaries, not architecture docs.</div>
+        </div>
+        <div class="persona-card teal">
+          <div class="persona-name">Michael Evans</div>
+          <div class="persona-role">Head of Infrastructure · <span class="pill blue">TECHNICAL ALLY</span></div>
+          <div class="persona-style">Honest, cautious, technically deep, sometimes defensive about the legacy estate he built. Warns about Oracle PL/SQL complexity (847 stored procs in ORCL-01).</div>
+          <div class="persona-concern">Key concern: Nothing breaks during migration. Team capacity constraint (4 engineers effectively). Thinks 18 months is tight.</div>
+        </div>
+        <div class="persona-card amber">
+          <div class="persona-name">Emma Clarke</div>
+          <div class="persona-role">Chief Risk Officer · <span class="pill red">CAN BLOCK PRODUCTION</span></div>
+          <div class="persona-style">Formal, precise, risk-first. Former FCA supervisor — knows how the regulator thinks. Cites regulations by section. Will not approve migrations without written evidence.</div>
+          <div class="persona-concern">Key concern: Written data residency confirmation. CloudTrail + Object Lock before any PII goes to AWS. FCA material outsourcing notification filed.</div>
+        </div>
+        <div class="persona-card coral">
+          <div class="persona-name">James Patel</div>
+          <div class="persona-role">Cloud Platform Lead · <span class="pill blue">DAY-TO-DAY CONTACT</span></div>
+          <div class="persona-style">Enthusiastic, cloud-native advocate, strong GitOps opinions. Prefers Slack to email. Will give code review feedback on PRs. Spotted the cross-AZ cost trap.</div>
+          <div class="persona-concern">Key concern: EKS platform quality, GitOps discipline, no ClickOps, OIDC not access keys. Will flag any Terraform shortcut.</div>
+        </div>
+      </div>
+      <div class="card" style="margin-top:16px;">
+        <div class="card-title">Stakeholder Conflicts</div>
+        <table>
+          <tr><th>Conflict</th><th>Between</th><th>Detail</th></tr>
+          <tr><td><strong>Speed vs compliance</strong></td><td>Sarah vs Emma</td><td>Sarah wants to move fast; Emma requires written controls before production. Candidate must navigate both.</td></tr>
+          <tr><td><strong>Timeline realism</strong></td><td>Sarah vs Michael</td><td>Sarah set 18-month timeline; Michael privately thinks it's too tight. Oracle PL/SQL complexity is the flashpoint.</td></tr>
+          <tr><td><strong>Rehost vs refactor</strong></td><td>Michael vs James</td><td>Michael wants to rehost and refactor later; James wants cloud-native from Day 1. Candidate needs an ADR.</td></tr>
+          <tr><td><strong>Dev data</strong></td><td>Emma vs James</td><td>James wanted production-like data in dev for testing; Emma blocked on UK GDPR grounds. Synthetic data required.</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── DATA FILES ── -->
+    <section id="data">
+      <div class="section-header">
+        <span class="section-num">04</span>
+        <h2 class="section-title">Data Files</h2>
+      </div>
+      <div class="card">
+        <div class="card-title">6 Simulation Data Files in /migration/</div>
+        <table>
+          <tr><th>File</th><th>Rows</th><th>Key Hidden Content</th><th>First Used</th></tr>
+          <tr>
+            <td><code>server-inventory.csv</code></td>
+            <td>90</td>
+            <td>SRV-086/087 undocumented; SRV-076 shared Oracle; MSSQL-03 ghost ref in SRV-030</td>
+            <td>Phase 1</td>
+          </tr>
+          <tr>
+            <td><code>application-inventory-template.csv</code></td>
+            <td>28</td>
+            <td>APP-027 status unclear; APP-012 has 25 dependents; 4 repurchase candidates</td>
+            <td>Phase 1</td>
+          </tr>
+          <tr>
+            <td><code>dependency-map.csv</code></td>
+            <td>68</td>
+            <td>APP-006 depends on MSSQL-03; APP-002 uses SMB file share with APP-003; undocumented ORCL-01 reads</td>
+            <td>Phase 1</td>
+          </tr>
+          <tr>
+            <td><code>migration-wave-candidates.csv</code></td>
+            <td>28</td>
+            <td>APP-012 must be Wave 2; APP-007 before APP-002; PCI 12-week cert lead time</td>
+            <td>Phase 8</td>
+          </tr>
+          <tr>
+            <td><code>aws_cost_report.csv</code></td>
+            <td>45</td>
+            <td>Cross-AZ $156.30 = architectural issue; CloudWatch $89.40 = distraction (trap); untagged EC2 $98.40; Aurora $2,180.16</td>
+            <td>Phase 4 / 8</td>
+          </tr>
+          <tr>
+            <td><code>security-findings.csv</code></td>
+            <td>20</td>
+            <td>SF-002+SF-018 = PII breach (public S3 + NI numbers); SF-006 = active SSH brute force from Tor node</td>
+            <td>Phase 3 / 4</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── ANSWER KEY ── -->
+    <section id="answer-key">
+      <div class="section-header">
+        <span class="section-num">05</span>
+        <h2 class="section-title">Answer Key <span class="pill amber">INTERNAL</span></h2>
+      </div>
+
+      <div class="answer-key">
+        <div class="answer-key-title">Infrastructure Figures</div>
+        <div class="key-row"><span class="key-label">EOL OS server count</span><span class="key-value">≥14 (Windows 2012 R2 × 5–7, RHEL 7 × 7–9 depending on count)</span></div>
+        <div class="key-row"><span class="key-label">EOL VMware ESXi hosts</span><span class="key-value">9 (6 × DC1, 3 × DC2 — all vSphere 6.7)</span></div>
+        <div class="key-row"><span class="key-label">CRITICAL patch status servers</span><span class="key-value">SRV-001, 002, 012, 013, 014, 015, 018, 019, 022, 032, 038, 042, 059, 074, 077, 086, 087</span></div>
+        <div class="key-row"><span class="key-label">Undocumented servers</span><span class="key-value">SRV-086 (RHEL 7, DC1 R21) and SRV-087 (Win 2012, DC1 R21)</span></div>
+        <div class="key-row"><span class="key-label">Shared Oracle server</span><span class="key-value">SRV-076 hosts ORCL-04 AND ORCL-05 (undocumented — DC2 Manchester)</span></div>
+        <div class="key-row"><span class="key-label">MSSQL-03 mystery</span><span class="key-value">Referenced by APP-006 (SRV-030) and APP-018 (SRV-034). Not in server inventory. Likely consolidated onto another server in 2021 per Michael Evans.</span></div>
+      </div>
+
+      <div class="answer-key">
+        <div class="answer-key-title">FinOps Figures — January 2026</div>
+        <div class="key-row"><span class="key-label">Total AWS spend (USD, approximate)</span><span class="key-value">~$10,100 (candidate must sum from CSV)</span></div>
+        <div class="key-row"><span class="key-label">Largest single cost</span><span class="key-value">Aurora writer db.r6g.2xlarge — $2,180.16/month</span></div>
+        <div class="key-row"><span class="key-label">Cross-AZ data transfer</span><span class="key-value">$156.30/month → fix: S3 + DynamoDB gateway endpoints (FREE)</span></div>
+        <div class="key-row"><span class="key-label">Annual saving from VPC endpoints</span><span class="key-value">$156.30 × 12 = $1,875.60</span></div>
+        <div class="key-row"><span class="key-label">Non-prod node scheduling saving</span><span class="key-value">2 nodes × $28.08 × (5/7) ≈ $40.12/month</span></div>
+        <div class="key-row"><span class="key-label">Direct Connect monthly cost</span><span class="key-value">$380.00/month</span></div>
+        <div class="key-row"><span class="key-label">Untagged instance monthly cost</span><span class="key-value">i-0nonprod003 — $98.40/month, owner unknown</span></div>
+      </div>
+
+      <div class="answer-key">
+        <div class="answer-key-title">SLO Calculations</div>
+        <div class="key-row"><span class="key-label">Payments Service error budget (99.95% / 30 days)</span><span class="key-value">30 × 24 × 60 × 0.0005 = 21.6 minutes/month</span></div>
+        <div class="key-row"><span class="key-label">Customer Service error budget (99.9% / 30 days)</span><span class="key-value">30 × 24 × 60 × 0.001 = 43.2 minutes/month</span></div>
+        <div class="key-row"><span class="key-label">Payments RPO 15-min mechanism</span><span class="key-value">Aurora Point-in-Time Recovery (PITR) — not automated backups alone</span></div>
+      </div>
+
+      <div class="answer-key">
+        <div class="answer-key-title">Oracle Migration</div>
+        <div class="key-row"><span class="key-label">Oracle stored procedures in ORCL-01</span><span class="key-value">847 total — 214 require manual conversion per SCT</span></div>
+        <div class="key-row"><span class="key-label">Most complex package</span><span class="key-value">customer_ledger_pkg (per Michael Evans)</span></div>
+        <div class="key-row"><span class="key-label">Q2 2026 renewal candidates</span><span class="key-value">ORCL-01, ORCL-02, ORCL-03 (migrate before renewal)</span></div>
+        <div class="key-row"><span class="key-label">Deferred instances</span><span class="key-value">ORCL-04 and ORCL-05 (Wave 5 — complex + shared server)</span></div>
+        <div class="key-row"><span class="key-label">Annual Oracle saving</span><span class="key-value">£1,400,000/year → £4,200,000 over 3 years</span></div>
+      </div>
+    </section>
+
+    <!-- ── WRONG-DIRECTION TRAPS ── -->
+    <section id="traps">
+      <div class="section-header">
+        <span class="section-num">06</span>
+        <h2 class="section-title">Wrong-Direction Traps</h2>
+      </div>
+
+      <div class="trap-box">
+        <div class="trap-title">TRAP 1 — CloudWatch vs Cross-AZ Cost (Phase 4 / 8)</div>
+        <div class="trap-text">
+          The January cost report shows <strong>CloudWatch DataProcessing: $89.40</strong> — this looks like a monitoring verbosity problem. The <em>real</em> issue is <strong>AWS Data Transfer Regional: $156.30</strong> — this is cross-AZ traffic that can be eliminated with free VPC gateway endpoints for S3 and DynamoDB. James Patel's email hints at this but doesn't give the answer. Candidates who fix CloudWatch logs only miss the architectural problem. Strong candidates fix both: reduce log verbosity AND add VPC endpoints.
+        </div>
+      </div>
+
+      <div class="trap-box">
+        <div class="trap-title">TRAP 2 — Aurora Instance Sizing (Phase 7 / 8)</div>
+        <div class="trap-text">
+          SRV-006 (Oracle primary) has 32 vCPU and 256GB RAM. A naive candidate might spec <code>db.r6g.8xlarge</code> (32 vCPU, 256GB) to match. This is wrong. Aurora manages memory differently to a bare-metal Oracle server. The correct approach is to run AWS SCT/DMS in test, measure actual query patterns and connection counts, then right-size. <code>db.r6g.2xlarge</code> (8 vCPU, 64GB) is the starter placeholder — the candidate must justify with workload analysis, not server spec parity.
+        </div>
+      </div>
+
+      <div class="trap-box">
+        <div class="trap-title">TRAP 3 — DR Replica = PII in eu-west-1 (Phase 7 / 8)</div>
+        <div class="trap-text">
+          Aurora Global Tables or cross-region read replicas for customer data would put UK GDPR PII (customer profiles, NI numbers, account data) into eu-west-1 (Ireland). This violates UK GDPR Article 44. The AuditTrail DynamoDB table also cannot use Global Tables for the same reason — plus FCA audit records must stay in UK jurisdiction. Correct DR strategy: encrypted non-PII configuration replicated to eu-west-1; Aurora PITR snapshots only (no live PII replica); AuditTrail DynamoDB stays eu-west-2 only.
+        </div>
+      </div>
+
+      <div class="trap-box">
+        <div class="trap-title">TRAP 4 — AuditTrail DynamoDB TTL (Phase 7)</div>
+        <div class="trap-text">
+          DynamoDB TTL is useful for NotificationDelivery (90-day retention). But candidates often apply TTL logic to AuditTrail too. This is wrong. FCA SYSC 9.1 and COBS record-keeping requirements mean some audit records must be retained indefinitely. AuditTrail table must have <strong>NO TTL</strong> attribute. Object Lock in COMPLIANCE mode (not GOVERNANCE) on the export S3 bucket. Candidates who set TTL on AuditTrail fail the FCA compliance criterion.
+        </div>
+      </div>
+    </section>
+
+    <!-- ── BUG LIST ── -->
+    <section id="bugs">
+      <div class="section-header">
+        <span class="section-num">07</span>
+        <h2 class="section-title">Pipeline Bug List — Phase 6</h2>
+      </div>
+      <div class="card">
+        <div class="card-title">10 Bugs in .github/workflows/deploy.yml</div>
+        <table>
+          <tr><th>Bug ID</th><th>Description</th><th>Root Cause</th><th>Fix</th><th>Subtle?</th></tr>
+          <tr><td class="bug-id">BUG-001</td><td>ECR_REGISTRY env var is empty</td><td>Placeholder left blank</td><td>Set to <code>&lt;ACCOUNT&gt;.dkr.ecr.eu-west-2.amazonaws.com</code></td><td>No</td></tr>
+          <tr><td class="bug-id">BUG-002</td><td>docker build wrong context path</td><td>Uses <code>customer-service/</code> not <code>microservices/customer-service/</code></td><td>Fix path to match repo structure</td><td>No</td></tr>
+          <tr><td class="bug-id">BUG-003</td><td>No Trivy scan on built image</td><td>Step missing from build job</td><td>Add <code>aquasecurity/trivy-action</code> after build, fail on CRITICAL</td><td>No</td></tr>
+          <tr><td class="bug-id">BUG-004</td><td>security-scan job never runs</td><td><code>if: github.ref == 'refs/heads/main'</code> combined with <code>needs: build</code> — job is skipped on non-main branches but returns "success", so it never blocks the push job</td><td>Remove the <code>if</code> condition from security-scan; it should run on all branches</td><td class="bug-subtle">YES — most subtle</td></tr>
+          <tr><td class="bug-id">BUG-005</td><td>AWS credentials via access keys</td><td>Uses <code>aws-actions/configure-aws-credentials@v1</code> with <code>AWS_ACCESS_KEY_ID</code></td><td>Switch to OIDC: <code>role-to-assume: arn:aws:iam::ACCOUNT:role/tilington-github-actions-role</code></td><td>No</td></tr>
+          <tr><td class="bug-id">BUG-006</td><td>IMAGE_TAG never defined</td><td>Variable referenced but never set</td><td>Add: <code>IMAGE_TAG: ${{ github.sha }}</code> or use a step to set it</td><td>No</td></tr>
+          <tr><td class="bug-id">BUG-007</td><td>deploy-production: no AWS credentials</td><td>Entire credentials step missing</td><td>Add OIDC credentials step with production deploy role</td><td>No</td></tr>
+          <tr><td class="bug-id">BUG-008</td><td>No rollback on failed deploy</td><td>Missing rollback step</td><td>Add: <code>kubectl rollout undo deployment/customer-service</code> on failure</td><td>No</td></tr>
+          <tr><td class="bug-id">BUG-009</td><td>No smoke test</td><td>Missing test step post-deploy</td><td>Add HTTP GET to <code>/health/ready</code>; fail step if non-200</td><td>No</td></tr>
+          <tr><td class="bug-id">BUG-010</td><td>No failure notification</td><td>Missing notification step</td><td>Add Slack webhook or GitHub issue creation on pipeline failure</td><td>No</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── RUBRICS ── -->
+    <section id="rubrics">
+      <div class="section-header">
+        <span class="section-num">08</span>
+        <h2 class="section-title">Rubrics Summary</h2>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+        <div class="card">
+          <div class="card-title">Phase 1 — Discovery (100 pts)</div>
+          <div class="rubric-row"><span class="rubric-criterion">Infrastructure analysis</span><span class="rubric-marks">20</span><div class="rubric-bar"><div class="rubric-fill" style="width:20%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">App 6R classification (all 28)</span><span class="rubric-marks">20</span><div class="rubric-bar"><div class="rubric-fill" style="width:20%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Dependency analysis — messy reality</span><span class="rubric-marks">20</span><div class="rubric-bar"><div class="rubric-fill" style="width:20%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Risk register (5+ new risks)</span><span class="rubric-marks">15</span><div class="rubric-bar"><div class="rubric-fill" style="width:15%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Current state diagram</span><span class="rubric-marks">15</span><div class="rubric-bar"><div class="rubric-fill" style="width:15%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Executive summary</span><span class="rubric-marks">10</span><div class="rubric-bar"><div class="rubric-fill" style="width:10%"></div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Phase 4 — IaC &amp; Automation (100 pts)</div>
+          <div class="rubric-row"><span class="rubric-criterion">Terraform plans 0 errors</span><span class="rubric-marks">25</span><div class="rubric-bar"><div class="rubric-fill" style="width:25%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Python inventory — working output</span><span class="rubric-marks">20</span><div class="rubric-bar"><div class="rubric-fill" style="width:20%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Python cost — working + cross-AZ finding</span><span class="rubric-marks">15</span><div class="rubric-bar"><div class="rubric-fill" style="width:15%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">CloudFormation completion</span><span class="rubric-marks">15</span><div class="rubric-bar"><div class="rubric-fill" style="width:15%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Incident resolution (3 incidents)</span><span class="rubric-marks">15</span><div class="rubric-bar"><div class="rubric-fill" style="width:15%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Operations runbook</span><span class="rubric-marks">10</span><div class="rubric-bar"><div class="rubric-fill" style="width:10%"></div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Phase 6 — CI/CD &amp; Observability (100 pts)</div>
+          <div class="rubric-row"><span class="rubric-criterion">All 10 bugs fixed with explanations</span><span class="rubric-marks">30</span><div class="rubric-bar"><div class="rubric-fill" style="width:30%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Security scanning evidence (real)</span><span class="rubric-marks">20</span><div class="rubric-bar"><div class="rubric-fill" style="width:20%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Grafana dashboards (3 created)</span><span class="rubric-marks">20</span><div class="rubric-bar"><div class="rubric-fill" style="width:20%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">SLO framework — calculations correct</span><span class="rubric-marks">20</span><div class="rubric-bar"><div class="rubric-fill" style="width:20%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">DevSecOps pipeline design</span><span class="rubric-marks">10</span><div class="rubric-bar"><div class="rubric-fill" style="width:10%"></div></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Phase 9 — ARB &amp; Executive (100 pts)</div>
+          <div class="rubric-row"><span class="rubric-criterion">ARB presentation (12+ slides, specific data)</span><span class="rubric-marks">30</span><div class="rubric-bar"><div class="rubric-fill" style="width:30%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Emma Clarke's 3 questions (specific)</span><span class="rubric-marks">25</span><div class="rubric-bar"><div class="rubric-fill" style="width:25%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Architecture decision log</span><span class="rubric-marks">15</span><div class="rubric-bar"><div class="rubric-fill" style="width:15%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Risk &amp; trade-off summary</span><span class="rubric-marks">20</span><div class="rubric-bar"><div class="rubric-fill" style="width:20%"></div></div></div>
+          <div class="rubric-row"><span class="rubric-criterion">Portfolio summary (CV-ready)</span><span class="rubric-marks">10</span><div class="rubric-bar"><div class="rubric-fill" style="width:10%"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── REGULATORY ── -->
+    <section id="regulatory">
+      <div class="section-header">
+        <span class="section-num">09</span>
+        <h2 class="section-title">Regulatory Context</h2>
+      </div>
+      <div class="card">
+        <table>
+          <tr><th>Regulation</th><th>Key Requirement</th><th>AWS Implication</th><th>Emma's Priority</th></tr>
+          <tr><td><strong>FCA PS21/3</strong></td><td>Operational resilience — IBS impact tolerances</td><td>RTO ≤ 4h, RPO ≤ 1h for critical services</td><td><span class="pill red">HIGH</span></td></tr>
+          <tr><td><strong>FCA SYSC 8</strong></td><td>Material outsourcing notification</td><td>FCA must be notified before production go-live on AWS</td><td><span class="pill red">HIGH</span></td></tr>
+          <tr><td><strong>UK GDPR Art. 44</strong></td><td>Data residency — PII must stay in UK</td><td>All customer PII in eu-west-2 only; no DR replication of PII to eu-west-1</td><td><span class="pill red">HIGH</span></td></tr>
+          <tr><td><strong>FCA SYSC 13</strong></td><td>Operational risk — IT controls</td><td>CloudTrail, audit logs, access management documented and evidenced</td><td><span class="pill amber">MEDIUM</span></td></tr>
+          <tr><td><strong>ISO 27001</strong></td><td>Information security management</td><td>Controls mapping A.9, A.10, A.12, A.13, A.17 to AWS services</td><td><span class="pill amber">MEDIUM</span></td></tr>
+          <tr><td><strong>NCSC 14 Principles</strong></td><td>Cloud security — all 14 must be addressed</td><td>Specific AWS control per principle — no blanks allowed</td><td><span class="pill amber">MEDIUM</span></td></tr>
+          <tr><td><strong>PCI DSS v4</strong></td><td>Payment card data security</td><td>Payments microservice: WAF, network isolation, audit logging, QSA certification (12-week lead)</td><td><span class="pill amber">MEDIUM</span></td></tr>
+          <tr><td><strong>FCA COBS record-keeping</strong></td><td>Some records: 5–7 years; some: indefinite</td><td>AuditTrail DynamoDB: NO TTL; CloudTrail S3: Object Lock COMPLIANCE mode</td><td><span class="pill red">HIGH</span></td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── REPO STRUCTURE ── -->
+    <section id="repo">
+      <div class="section-header">
+        <span class="section-num">10</span>
+        <h2 class="section-title">Repository Structure</h2>
+      </div>
+      <div class="card">
+        <div class="card-title">58 Files — github.com/alain-Sortnext/tilington-cloud-modernisation</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px; font-size:12.5px;">
+          <div>
+            <p style="font-family:var(--mono); color:var(--steel); font-size:11px; margin-bottom:8px; padding-bottom:4px; border-bottom:1px solid var(--rule);">COMPLETE STARTERS (candidate extends)</p>
+            <p style="line-height:2; color:var(--ink);"><code>docs/company-brief.md</code><br><code>docs/architecture-principles.md</code><br><code>docs/security-requirements.md</code><br><code>docs/migration-objectives.md</code><br><code>docs/adrs/ADR-001 + ADR-002</code><br><code>databases/aurora-design.md</code><br><code>databases/dynamodb-design.md</code><br><code>migration/migration-strategy.md</code><br><code>observability/prometheus/prometheus.yml</code></p>
+          </div>
+          <div>
+            <p style="font-family:var(--mono); color:var(--steel); font-size:11px; margin-bottom:8px; padding-bottom:4px; border-bottom:1px solid var(--rule);">INCOMPLETE IaC (candidate completes)</p>
+            <p style="line-height:2; color:var(--ink);"><code>terraform/networking/main.tf</code> — private subnets TODOs<br><code>terraform/security/iam.tf</code> — KMS policy TODOs<br><code>terraform/eks/main.tf</code> — node group TODOs<br><code>cloudformation/vpc.yaml</code> — subnets TODOs<br><code>kubernetes/customer-service/deployment.yaml</code><br><code>kubernetes/ingress.yaml</code><br><code>gitops/argocd/application.yaml</code><br><code>.github/workflows/deploy.yml</code> — 10 BUGS</p>
+          </div>
+          <div>
+            <p style="font-family:var(--mono); color:var(--steel); font-size:11px; margin-bottom:8px; padding-bottom:4px; border-bottom:1px solid var(--rule);">SIMULATION DRIVERS</p>
+            <p style="line-height:2; color:var(--ink);"><code>migration/server-inventory.csv</code> — 90 servers<br><code>migration/application-inventory-template.csv</code> — 28 apps<br><code>migration/dependency-map.csv</code> — 68 deps<br><code>migration/migration-wave-candidates.csv</code><br><code>migration/aws_cost_report.csv</code> — Jan 2026<br><code>migration/security-findings.csv</code> — 20 findings<br><code>simulation.json</code> — master simulation file</p>
+          </div>
+          <div>
+            <p style="font-family:var(--mono); color:var(--steel); font-size:11px; margin-bottom:8px; padding-bottom:4px; border-bottom:1px solid var(--rule);">PERSONA &amp; PHASE CONTENT</p>
+            <p style="line-height:2; color:var(--ink);"><code>docs/personas/sarah-williams-cto.md</code><br><code>docs/personas/michael-evans-*.md</code><br><code>docs/personas/emma-clarke-cro.md</code><br><code>docs/personas/james-patel-*.md</code><br><code>docs/phase-content/phase-1-discovery.md</code><br><code>docs/phase-content/phase-2-landing-zone.md</code><br><code>...</code><br><code>docs/phase-content/phase-9-arb-presentation.md</code></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="print-note">TILINGTON PLC CLOUD MODERNISATION · PROJECT LAB · TUTOR GUIDE v1.0 · INTERNAL USE ONLY</div>
+
+  </main>
+</div>
+
+</body>
+</html>
