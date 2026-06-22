@@ -1,0 +1,643 @@
+{
+  "simulation_id": "tilington-aws-architect-v1",
+  "version": "1.0.0",
+  "created": "2026-06-22",
+  "role": "AWS Solutions Architect",
+  "sector": "UK Financial Services",
+  "difficulty": "Mid-Senior",
+  "company": {
+    "name": "Tilington plc",
+    "type": "UK Financial Services — Asset Management and Retail Banking",
+    "employees": 1200,
+    "locations": ["London", "Manchester", "Edinburgh"],
+    "regulator": ["FCA", "PRA"],
+    "crisis": "Dual datacentre leases expire Q3 2027. FCA operational resilience in remediation. Oracle licensing £1.4M/year with renewal due Q2 2026.",
+    "budget": "£3,200,000 over 18 months",
+    "aws_regions": {
+      "primary": "eu-west-2",
+      "dr": "eu-west-1",
+      "pii_constraint": "All customer PII must remain in eu-west-2 only"
+    }
+  },
+  "github_repo": "https://github.com/alain-Sortnext/tilington-cloud-modernisation",
+  "personas": [
+    {
+      "id": "sarah-williams",
+      "name": "Sarah Williams",
+      "role": "Chief Technology Officer",
+      "colour": "purple",
+      "style": "Direct, board-level, low technical tolerance, outcomes-focused",
+      "file": "docs/personas/sarah-williams-cto.md",
+      "key_concern": "Programme delivery on time; Oracle renewal decision; Board confidence"
+    },
+    {
+      "id": "michael-evans",
+      "name": "Michael Evans",
+      "role": "Head of Infrastructure",
+      "colour": "teal",
+      "style": "Honest, cautious, technically deep, defensive about legacy estate",
+      "file": "docs/personas/michael-evans-head-of-infrastructure.md",
+      "key_concern": "Nothing breaks during migration; Oracle PL/SQL complexity; team capacity"
+    },
+    {
+      "id": "emma-clarke",
+      "name": "Emma Clarke",
+      "role": "Chief Risk Officer",
+      "colour": "amber",
+      "style": "Formal, precise, risk-first, cites regulation by section",
+      "file": "docs/personas/emma-clarke-chief-risk-officer.md",
+      "key_concern": "FCA compliance posture; data residency written confirmation; audit trail integrity"
+    },
+    {
+      "id": "james-patel",
+      "name": "James Patel",
+      "role": "Cloud Platform Lead",
+      "colour": "coral",
+      "style": "Collaborative, enthusiastic, cloud-native advocate, strong GitOps opinions",
+      "file": "docs/personas/james-patel-cloud-platform-lead.md",
+      "key_concern": "EKS platform quality; GitOps discipline; no ClickOps; CI/CD security"
+    }
+  ],
+  "data_files": [
+    {
+      "file": "migration/server-inventory.csv",
+      "description": "90-server inventory across DC1 (London) and DC2 (Manchester)",
+      "rows": 90,
+      "key_findings": [
+        "SRV-086 and SRV-087: undocumented servers discovered in DC1 Rack 21 — not in CMDB",
+        "SRV-076: hosts both ORCL-04 and ORCL-05 — undocumented shared instance",
+        "SRV-030: references MSSQL-03 which does not appear in server inventory",
+        "14 servers on EOL OS (Windows 2012 R2 + RHEL 7)",
+        "9 ESXi hosts on EOL VMware vSphere 6.7",
+        "SRV-001/002/012/013/014: CRITICAL patch status"
+      ]
+    },
+    {
+      "file": "migration/application-inventory-template.csv",
+      "description": "All 28 applications with 6R classification, owners, dependencies",
+      "rows": 28,
+      "key_findings": [
+        "APP-027: Unclear if still in use — Finance says decommissioned, Michael sees DB activity",
+        "APP-012: Authentication Service has 25 downstream dependencies — critical path",
+        "APP-016: Payments Gateway is in PCI DSS scope",
+        "4 Repurchase candidates: APP-009, APP-010, APP-019, APP-020"
+      ]
+    },
+    {
+      "file": "migration/dependency-map.csv",
+      "description": "Application dependency matrix — documented and undocumented",
+      "rows": 68,
+      "key_findings": [
+        "APP-006 depends on MSSQL-03 — server not in inventory",
+        "APP-002 has file-based integration with APP-003 via SMB file share",
+        "APP-023 reads from ORCL-01 — undocumented dependency",
+        "APP-015 reads from ORCL-01 — undocumented dependency"
+      ]
+    },
+    {
+      "file": "migration/migration-wave-candidates.csv",
+      "description": "28 apps with recommended wave, complexity, sequencing rationale",
+      "rows": 28,
+      "key_findings": [
+        "APP-012 must migrate early (Wave 2) — 25 apps depend on it",
+        "APP-007 must migrate before APP-002 and APP-003",
+        "APP-016 (Payments/PCI) has 12-week PCI QSA certification lead time",
+        "APP-002 has VERY HIGH complexity — 847 Oracle stored procedures"
+      ]
+    },
+    {
+      "file": "migration/aws_cost_report.csv",
+      "description": "January 2026 AWS cost report — 45 rows across 4 accounts",
+      "rows": 45,
+      "key_findings": [
+        "Aurora writer db.r6g.2xlarge: $2,180.16/month — largest single cost",
+        "Direct Connect: $380/month",
+        "Cross-AZ data transfer: $156.30/month — architectural issue, not monitoring",
+        "CloudWatch DataProcessing: $89.40/month — looks like monitoring but is a distraction",
+        "Untagged EC2 i-0nonprod003: $98.40/month — no owner",
+        "Non-prod EKS nodes running 24/7: $28.08/month each — save with scheduling",
+        "Total January spend: ~$10,100 USD — candidate must sum from CSV"
+      ]
+    },
+    {
+      "file": "migration/security-findings.csv",
+      "description": "20 Security Hub and GuardDuty findings",
+      "rows": 20,
+      "key_findings": [
+        "SF-001: CRITICAL — IAM user with 340-day-old access keys",
+        "SF-002: CRITICAL — Public S3 bucket with customer PII (NI numbers)",
+        "SF-006: HIGH — Active SSH brute force attack from known Tor exit node",
+        "SF-007: HIGH — Untagged EC2 instance with unknown owner",
+        "SF-018: CRITICAL — Macie detected NI numbers in public bucket — potential ICO notification"
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "phase_number": 1,
+      "title": "Discovery & Current State Assessment",
+      "portfolio_output": "Enterprise Discovery Pack",
+      "submission_types": ["text_editor", "file_upload"],
+      "estimated_hours": "6-10",
+      "content_file": "docs/phase-content/phase-1-discovery.md",
+      "deliverables": [
+        "Discovery Assessment Report (/docs/discovery-report.md)",
+        "Current State Architecture Diagram (/architecture/current-state.drawio)",
+        "Application Inventory Assessment (/migration/application-inventory.xlsx)",
+        "Stakeholder Register (/docs/stakeholder-register.md)"
+      ],
+      "github_evidence": [
+        "docs/discovery-report.md",
+        "docs/stakeholder-register.md",
+        "architecture/current-state.drawio",
+        "migration/application-inventory.xlsx"
+      ],
+      "tools": ["Draw.io (app.diagrams.net)", "Excel or Google Sheets", "GitHub"],
+      "anti_fake_specifics": [
+        "Exact EOL OS server count with server IDs",
+        "CRITICAL patch status server count",
+        "MSSQL-03 finding and recommendation",
+        "APP-027 recommendation with reasoning",
+        "SRV-086/SRV-087 risk classification",
+        "At least one dependency chain from dependency-map.csv",
+        "ORCL-04/ORCL-05 shared server finding (SRV-076)"
+      ],
+      "rubric": {
+        "infrastructure_analysis": 20,
+        "application_6r_classification": 20,
+        "dependency_analysis_messy_reality": 20,
+        "risk_register_quality": 15,
+        "current_state_diagram": 15,
+        "executive_summary": 10,
+        "total": 100
+      },
+      "interview_questions_status": "RESEARCH REQUIRED — verify from Glassdoor/Indeed UK financial services AWS Solutions Architect reviews"
+    },
+    {
+      "phase_number": 2,
+      "title": "Target AWS Architecture & Landing Zone",
+      "portfolio_output": "Enterprise AWS Landing Zone Design",
+      "submission_types": ["text_editor", "file_upload"],
+      "estimated_hours": "8-12",
+      "content_file": "docs/phase-content/phase-2-landing-zone.md",
+      "deliverables": [
+        "High-Level Design (/docs/hld.md)",
+        "Low-Level Design (/docs/lld.md)",
+        "Landing Zone Architecture Diagram (/architecture/target-state.drawio)",
+        "Governance Framework (/docs/governance-framework.md)",
+        "Architecture Decision Records (/docs/adrs/ — minimum ADR-003 through ADR-005)"
+      ],
+      "github_evidence": [
+        "docs/hld.md",
+        "docs/lld.md",
+        "architecture/target-state.drawio",
+        "docs/governance-framework.md",
+        "docs/adrs/ADR-003-eu-west-2-primary-region.md",
+        "docs/adrs/ADR-004-terraform-iac.md",
+        "docs/adrs/ADR-005-eks-containers.md"
+      ],
+      "tools": ["AWS Free Tier (Organizations, Control Tower)", "Draw.io", "GitHub"],
+      "anti_fake_specifics": [
+        "3+ SCPs written in actual JSON",
+        "Specific AWS account names",
+        "IAM role trust policies for cross-account role",
+        "Emma Clarke data residency requirement addressed in LLD",
+        "Azure AD federation in identity design",
+        "EKS vs ECS ADR with Tilington-specific trade-offs"
+      ],
+      "rubric": {
+        "account_structure": 20,
+        "scp_content_in_json": 20,
+        "identity_access_model": 20,
+        "adrs_quality": 20,
+        "architecture_diagram": 10,
+        "governance_framework": 10,
+        "total": 100
+      },
+      "interview_questions_status": "RESEARCH REQUIRED"
+    },
+    {
+      "phase_number": 3,
+      "title": "Networking, Security & Hybrid Cloud",
+      "portfolio_output": "Enterprise Security & Network Architecture",
+      "submission_types": ["text_editor", "file_upload"],
+      "estimated_hours": "8-12",
+      "content_file": "docs/phase-content/phase-3-networking-security.md",
+      "deliverables": [
+        "Network Architecture Diagram (/architecture/networking.drawio)",
+        "Hybrid Cloud Connectivity Design (/docs/hybrid-connectivity.md)",
+        "Security Architecture Document (/docs/security-architecture.md)",
+        "Compliance Mapping (/security/compliance-mapping.md)",
+        "Risk Register (/docs/risk-register.md)",
+        "Completed Terraform networking module (/terraform/networking/)"
+      ],
+      "github_evidence": [
+        "architecture/networking.drawio",
+        "docs/hybrid-connectivity.md",
+        "docs/security-architecture.md",
+        "security/compliance-mapping.md",
+        "docs/risk-register.md",
+        "terraform/networking/main.tf"
+      ],
+      "tools": ["AWS VPC, Transit Gateway, IAM, KMS, GuardDuty, Security Hub, WAF", "Terraform", "Draw.io"],
+      "anti_fake_specifics": [
+        "VPC CIDR must not conflict with DC1/DC2/non-prod",
+        "All 14 NCSC principles mapped to specific AWS services",
+        "SF-004 remediation: SSM Session Manager replaces SSH",
+        "Hybrid connectivity recommendation includes Direct Connect £380/month figure",
+        "VPC gateway endpoints identified as cross-AZ cost fix"
+      ],
+      "rubric": {
+        "network_architecture_diagram": 20,
+        "hybrid_connectivity": 15,
+        "security_architecture": 25,
+        "ncsc_14_principles": 20,
+        "terraform_completion": 15,
+        "risk_register": 5,
+        "total": 100
+      },
+      "interview_questions_status": "RESEARCH REQUIRED"
+    },
+    {
+      "phase_number": 4,
+      "title": "Infrastructure as Code, Automation & Operations",
+      "portfolio_output": "Infrastructure Automation Platform",
+      "submission_types": ["code_panel", "file_upload", "text_editor"],
+      "estimated_hours": "10-15",
+      "content_file": "docs/phase-content/phase-4-iac-automation.md",
+      "deliverables": [
+        "Completed Terraform repository (/terraform/)",
+        "CloudFormation templates (/cloudformation/)",
+        "Python inventory tool with working output (/python/inventory-tool/)",
+        "Python cost reporting tool with cross-AZ finding (/python/cost-reporting-tool/)",
+        "Incident Resolution Report (/docs/incident-resolution-report.md)",
+        "Operations Runbook (/docs/operations-runbook.md)"
+      ],
+      "github_evidence": [
+        "terraform/networking/main.tf",
+        "terraform/security/iam.tf",
+        "terraform/eks/main.tf",
+        "cloudformation/vpc.yaml",
+        "cloudformation/security.yaml",
+        "python/inventory-tool/inventory.py",
+        "python/inventory-tool/sample-output.csv",
+        "python/cost-reporting-tool/cost_report.py",
+        "docs/incident-resolution-report.md",
+        "docs/operations-runbook.md"
+      ],
+      "tools": ["Terraform", "CloudFormation", "Python", "Boto3", "AWS CLI", "GitHub", "VS Code"],
+      "anti_fake_specifics": [
+        "terraform plan output showing 0 errors",
+        "Actual Python tool output CSV or screenshot",
+        "Cost report references Aurora $2,180.16/month and cross-AZ $156.30/month",
+        "CloudTrail S3 Object Lock set to COMPLIANCE mode with explanation",
+        "Cross-AZ root cause: S3/DynamoDB gateway endpoints fix"
+      ],
+      "rubric": {
+        "terraform_plans_0_errors": 25,
+        "python_inventory_working": 20,
+        "python_cost_working": 15,
+        "cloudformation_completion": 15,
+        "incident_resolution": 15,
+        "operations_runbook": 10,
+        "total": 100
+      },
+      "interview_questions_status": "RESEARCH REQUIRED"
+    },
+    {
+      "phase_number": 5,
+      "title": "Kubernetes, Microservices & GitOps",
+      "portfolio_output": "Cloud-Native Microservices Platform",
+      "submission_types": ["code_panel", "file_upload", "text_editor"],
+      "estimated_hours": "12-18",
+      "content_file": "docs/phase-content/phase-5-kubernetes-gitops.md",
+      "microservices": [
+        {"name": "Customer Service", "data_store": "Aurora PostgreSQL", "scope": "FCA (PII)"},
+        {"name": "Payments Service", "data_store": "Aurora PostgreSQL + DynamoDB PaymentEvents", "scope": "PCI DSS"},
+        {"name": "Notifications Service", "data_store": "DynamoDB NotificationDelivery", "scope": "None"},
+        {"name": "Audit Service", "data_store": "DynamoDB AuditTrail", "scope": "FCA (audit)"}
+      ],
+      "deliverables": [
+        "Microservices Architecture Diagram (/architecture/microservices.drawio)",
+        "Service Boundary Document (/docs/service-boundaries.md)",
+        "API Design Document (/docs/api-design.md)",
+        "Kubernetes Manifests — all 4 services (/kubernetes/)",
+        "Helm Chart with templates (/kubernetes/helm/)",
+        "ArgoCD ApplicationSet (/gitops/argocd/applicationset.yaml)",
+        "EKS Platform Design (/docs/eks-platform-design.md)"
+      ],
+      "github_evidence": [
+        "architecture/microservices.drawio",
+        "docs/service-boundaries.md",
+        "docs/api-design.md",
+        "kubernetes/customer-service/deployment.yaml",
+        "kubernetes/payments-service/deployment.yaml",
+        "kubernetes/notifications-service/deployment.yaml",
+        "kubernetes/audit-service/deployment.yaml",
+        "kubernetes/helm/tilington-services/templates/deployment.yaml",
+        "gitops/argocd/applicationset.yaml",
+        "gitops/overlays/production/kustomization.yaml",
+        "docs/eks-platform-design.md"
+      ],
+      "tools": ["Docker Desktop", "kubectl", "Helm", "ArgoCD", "Draw.io", "GitHub", "VS Code"],
+      "anti_fake_specifics": [
+        "All 4 deployments: runAsNonRoot, readOnlyRootFilesystem, allowPrivilegeEscalation: false",
+        "Topology spread constraints referencing topology.kubernetes.io/zone",
+        "PCI scope: Payments Service in separate namespace or NetworkPolicy",
+        "helm template . produces valid YAML (evidence required)",
+        "ArgoCD ApplicationSet iterates over all 4 microservice names",
+        "Every ServiceAccount has IRSA annotation"
+      ],
+      "rubric": {
+        "microservices_boundary_design": 20,
+        "kubernetes_manifests_completeness": 25,
+        "helm_chart_valid_yaml": 20,
+        "gitops_argocd_applicationset": 15,
+        "api_design_quality": 10,
+        "eks_platform_design": 10,
+        "total": 100
+      },
+      "interview_questions_status": "RESEARCH REQUIRED"
+    },
+    {
+      "phase_number": 6,
+      "title": "CI/CD, DevSecOps & Observability",
+      "portfolio_output": "Enterprise Delivery & Reliability Platform",
+      "submission_types": ["code_panel", "file_upload", "text_editor"],
+      "estimated_hours": "10-15",
+      "content_file": "docs/phase-content/phase-6-cicd-observability.md",
+      "pipeline_bugs": [
+        {"id": "BUG-001", "description": "ECR_REGISTRY env var is empty"},
+        {"id": "BUG-002", "description": "docker build uses wrong context path"},
+        {"id": "BUG-003", "description": "No Trivy image scan on built image"},
+        {"id": "BUG-004", "description": "security-scan job never runs — subtle needs:/if: interaction"},
+        {"id": "BUG-005", "description": "AWS credentials via access keys not OIDC"},
+        {"id": "BUG-006", "description": "IMAGE_TAG variable never defined"},
+        {"id": "BUG-007", "description": "deploy-production has no AWS credentials"},
+        {"id": "BUG-008", "description": "No rollback step on failed deployment"},
+        {"id": "BUG-009", "description": "No smoke test after deployment"},
+        {"id": "BUG-010", "description": "No notification on pipeline failure"}
+      ],
+      "deliverables": [
+        "Fixed GitHub Actions Pipeline (/.github/workflows/deploy.yml)",
+        "DevSecOps Pipeline Design Document (/docs/devsecops-pipeline.md)",
+        "Security Scanning Evidence (/ci-cd/security-scan-results/)",
+        "Grafana Cloud Dashboards — 3 required (/observability/grafana/dashboards/)",
+        "SLO/SLA Runbook (/docs/reliability-runbook.md)"
+      ],
+      "github_evidence": [
+        ".github/workflows/deploy.yml",
+        "docs/devsecops-pipeline.md",
+        "ci-cd/security-scan-results/trivy-scan-output.json",
+        "ci-cd/security-scan-results/checkov-k8s-scan.txt",
+        "observability/grafana/dashboards/service-health-overview.json",
+        "observability/grafana/dashboards/reliability-slo-dashboard.json",
+        "observability/grafana/dashboards/eks-infrastructure-dashboard.json",
+        "docs/reliability-runbook.md"
+      ],
+      "tools": ["GitHub Actions", "Trivy", "Checkov", "CloudWatch", "Grafana Cloud Free", "Prometheus"],
+      "anti_fake_specifics": [
+        "Diff showing each BUG-001 through BUG-010 fixed with specific lines changed",
+        "BUG-004 root cause correctly identified (needs:/if: interaction)",
+        "OIDC role-to-assume format: arn:aws:iam::ACCOUNT:role/tilington-github-actions-role",
+        "Trivy scan output is a real file, not mocked",
+        "Payments Service error budget calculation: 30*24*60*0.0005 = 21.6 minutes/month"
+      ],
+      "slo_definitions": [
+        {"service": "Customer Service", "availability": "99.9%", "latency_p99": "500ms", "error_rate": "0.1%"},
+        {"service": "Payments Service", "availability": "99.95%", "latency_p99": "250ms", "error_rate": "0.05%"},
+        {"service": "Notifications Service", "availability": "99.5%", "latency_p99": "2000ms", "error_rate": "0.5%"},
+        {"service": "Audit Service", "availability": "99.9%", "latency_p99": "1000ms", "error_rate": "0.1%"}
+      ],
+      "rubric": {
+        "pipeline_10_bugs_fixed": 30,
+        "security_scanning_evidence": 20,
+        "grafana_dashboards_created": 20,
+        "slo_framework_calculations": 20,
+        "devsecops_pipeline_design": 10,
+        "total": 100
+      },
+      "interview_questions_status": "RESEARCH REQUIRED"
+    },
+    {
+      "phase_number": 7,
+      "title": "Database Architecture for Cloud-Native Applications",
+      "portfolio_output": "Cloud-Native Database Architecture",
+      "submission_types": ["text_editor", "file_upload"],
+      "estimated_hours": "8-12",
+      "content_file": "docs/phase-content/phase-7-database-architecture.md",
+      "deliverables": [
+        "Database Architecture Document (/docs/database-architecture.md)",
+        "Aurora PostgreSQL Design — complete (/databases/aurora-design.md)",
+        "DynamoDB Access Pattern Design — all 3 tables (/databases/dynamodb-design.md)",
+        "Backup & Recovery Strategy (/docs/backup-recovery-strategy.md)",
+        "Data Security Controls (/docs/data-security-controls.md)"
+      ],
+      "github_evidence": [
+        "docs/database-architecture.md",
+        "databases/aurora-design.md",
+        "databases/dynamodb-design.md",
+        "architecture/database.drawio",
+        "docs/backup-recovery-strategy.md",
+        "docs/data-security-controls.md"
+      ],
+      "tools": ["Aurora PostgreSQL", "DynamoDB", "Draw.io", "GitHub"],
+      "anti_fake_specifics": [
+        "Aurora instance sizing justified against ORCL-01 workload not server size",
+        "DynamoDB PaymentEvents hot partition: write sharding or concrete solution",
+        "AuditTrail TTL explicitly set to NONE with FCA justification",
+        "Backup retention justified against FCA COBS record-keeping",
+        "Cross-region Aurora PII dilemma resolved (not just flagged)",
+        "Payments Service 15-min RPO: PITR named as the mechanism"
+      ],
+      "rubric": {
+        "aurora_design_completeness": 25,
+        "dynamodb_all_3_tables": 30,
+        "backup_recovery_rto_rpo": 20,
+        "data_security_controls": 15,
+        "database_architecture_doc": 10,
+        "total": 100
+      },
+      "interview_questions_status": "RESEARCH REQUIRED"
+    },
+    {
+      "phase_number": 8,
+      "title": "Migration, Disaster Recovery & FinOps",
+      "portfolio_output": "Cloud Migration, DR & FinOps Programme",
+      "submission_types": ["text_editor", "file_upload"],
+      "estimated_hours": "10-15",
+      "content_file": "docs/phase-content/phase-8-migration-finops.md",
+      "oracle_renewal_context": {
+        "instances_for_q2_2026_decision": ["ORCL-01", "ORCL-02", "ORCL-03"],
+        "deferred_instances": ["ORCL-04", "ORCL-05"],
+        "annual_cost": 1400000,
+        "three_year_saving_if_not_renewed": 4200000,
+        "pl_sql_complexity": "847 stored procedures in ORCL-01; 214 require manual conversion per SCT"
+      },
+      "finops_answer_key": {
+        "january_total_usd": "~10100 (candidate must sum from CSV)",
+        "largest_cost": "Aurora writer db.r6g.2xlarge $2180.16/month",
+        "quick_win_1": "VPC gateway endpoints — saves $156.30/month cross-AZ — FREE to implement",
+        "quick_win_2": "Non-prod EKS scheduling — saves ~$40/month",
+        "governance_fix": "Tagging SCP to prevent untagged resources",
+        "aurora_sizing_question": "db.r6g.2xlarge (8 vCPU 64GB) vs ORCL-01 server (32 vCPU 256GB) — discuss"
+      },
+      "deliverables": [
+        "Migration Strategy — complete (/migration/migration-strategy.md)",
+        "Migration Wave Plan (/migration/migration-waves.xlsx)",
+        "DR Architecture Diagram (/architecture/dr.drawio)",
+        "RTO/RPO Matrix (/docs/rto-rpo-matrix.md)",
+        "FinOps Assessment (/finops/finops-assessment.md)",
+        "AWS Well-Architected Review (/docs/well-architected-review.md)"
+      ],
+      "github_evidence": [
+        "migration/migration-strategy.md",
+        "migration/migration-waves.xlsx",
+        "architecture/dr.drawio",
+        "docs/rto-rpo-matrix.md",
+        "finops/finops-assessment.md",
+        "docs/well-architected-review.md"
+      ],
+      "tools": ["AWS Cost Explorer", "Excel or Google Sheets", "Draw.io", "GitHub"],
+      "anti_fake_specifics": [
+        "January total spend calculated from CSV sum, not estimated",
+        "Non-prod scheduling saving uses actual node cost $28.08/month from CSV",
+        "Cross-AZ $156.30/month identified with S3/DynamoDB gateway endpoints as free fix",
+        "Aurora sizing discussion references SRV-006 (32 vCPU 256GB) vs db.r6g.2xlarge",
+        "Oracle recommendation names ORCL-01 ORCL-02 ORCL-03 as Q2 2026 candidates",
+        "AuditTrail not in DR replication plan — FCA UK data residency",
+        "Payments Service 15-min RPO: Aurora PITR named specifically"
+      ],
+      "rubric": {
+        "migration_strategy_all_28_apps": 20,
+        "finops_csv_driven_findings": 25,
+        "dr_architecture": 20,
+        "rto_rpo_matrix_evidenced": 15,
+        "well_architected_review": 10,
+        "wave_plan_spreadsheet": 10,
+        "total": 100
+      },
+      "interview_questions_status": "RESEARCH REQUIRED"
+    },
+    {
+      "phase_number": 9,
+      "title": "Architecture Review Board & Executive Presentation",
+      "portfolio_output": "Executive AWS Architecture Portfolio",
+      "submission_types": ["text_editor", "file_upload"],
+      "estimated_hours": "8-12",
+      "content_file": "docs/phase-content/phase-9-arb-presentation.md",
+      "arb_panel": [
+        {"name": "Emma Clarke", "role": "Chief Risk Officer", "focus": "Data residency, audit trail, privileged access"},
+        {"name": "Priya Sharma", "role": "Head of Information Security", "focus": "NCSC compliance, IAM, security findings"},
+        {"name": "David Okafor", "role": "Head of Retail Technology", "focus": "Customer app stability, migration timeline"},
+        {"name": "CFO", "role": "Chief Financial Officer", "focus": "Budget vs actual, Oracle cost saving, ROI"}
+      ],
+      "emma_clarke_questions": [
+        "Confirm that during DR failover to eu-west-1, no customer PII is replicated to or processed in that region. What technical controls enforce this?",
+        "How does your architecture maintain operational resilience if AWS eu-west-2 experiences an availability event?",
+        "Who within Tilington has administrative access to the AWS Production account? How is privileged access managed and audited?"
+      ],
+      "deliverables": [
+        "ARB Presentation Pack (/presentations/arb-presentation.pptx)",
+        "Architecture Decision Log (/docs/architecture-decision-log.md)",
+        "Risk & Trade-Off Summary (/docs/final-risk-summary.md)",
+        "Final Portfolio Summary (/docs/final-portfolio-summary.md)"
+      ],
+      "github_evidence": [
+        "presentations/arb-presentation.pptx",
+        "docs/architecture-decision-log.md",
+        "docs/final-risk-summary.md",
+        "docs/final-portfolio-summary.md"
+      ],
+      "tools": ["PowerPoint or Google Slides", "Draw.io", "GitHub"],
+      "anti_fake_specifics": [
+        "ARB deck references actual January spend total from CSV",
+        "Emma Clarke's 3 questions answered with specific technical mechanisms not prose",
+        "Architecture decision log contains all ADRs from programme",
+        "NAT Gateway trade-off references ~£90/month per additional NAT GW figure",
+        "Oracle renewal recommendation is specific (renew or don't renew) not conditional",
+        "Portfolio summary names real AWS services with specificity"
+      ],
+      "rubric": {
+        "arb_presentation_quality": 30,
+        "emma_clarke_questions_specific": 25,
+        "architecture_decision_log": 15,
+        "risk_tradeoff_summary": 20,
+        "portfolio_summary": 10,
+        "total": 100
+      },
+      "interview_questions_status": "RESEARCH REQUIRED"
+    }
+  ],
+  "answer_key": {
+    "internal_use_only": true,
+    "note": "Verify candidate answers against these specifics",
+    "key_figures": {
+      "eol_os_server_count": 14,
+      "eol_servers_include": ["SRV-001 through SRV-002 (RHEL 7)", "SRV-012 (RHEL 7)", "SRV-013 through SRV-015 (Win 2012)", "SRV-018 through SRV-019 (Win 2012)", "SRV-022 (RHEL 7)", "SRV-032 (RHEL 7)", "SRV-037 (RHEL 7)", "SRV-038 (RHEL 7)", "SRV-042 (RHEL 7)", "SRV-059 (RHEL 7)", "SRV-063 (Win 2012)", "SRV-065 (Win 2012)", "SRV-074 (RHEL 7)", "SRV-077 (RHEL 7)", "SRV-086 (RHEL 7)", "SRV-087 (Win 2012)"],
+      "eol_vmware_host_count": 9,
+      "critical_patch_servers": ["SRV-001", "SRV-002", "SRV-012", "SRV-013", "SRV-014", "SRV-015", "SRV-018", "SRV-019", "SRV-022", "SRV-032", "SRV-038", "SRV-042", "SRV-059", "SRV-074", "SRV-077", "SRV-086", "SRV-087"],
+      "undocumented_servers": ["SRV-086", "SRV-087"],
+      "shared_oracle_server": "SRV-076 hosts both ORCL-04 and ORCL-05",
+      "missing_server": "MSSQL-03 referenced by APP-006 and APP-018 but not in server inventory",
+      "app_027_status": "Unclear — candidate must investigate and make recommendation",
+      "january_aws_spend_usd_approximate": 10100,
+      "aurora_writer_monthly_usd": 2180.16,
+      "direct_connect_monthly_usd": 380.00,
+      "cross_az_monthly_usd": 156.30,
+      "cloudwatch_monthly_usd": 89.40,
+      "untagged_instance_monthly_usd": 98.40,
+      "nonprod_node_monthly_usd_each": 28.08,
+      "cross_az_fix": "S3 gateway endpoint and DynamoDB gateway endpoint (both free)",
+      "cross_az_annual_saving": 1875.60,
+      "payments_error_budget_minutes_per_month": 21.6,
+      "oracle_stored_procedures": 847,
+      "oracle_manual_conversion_count": 214,
+      "oracle_annual_cost_gbp": 1400000,
+      "oracle_3yr_saving_gbp": 4200000
+    },
+    "common_wrong_answers": {
+      "cross_az_cost": "CloudWatch DataProcessing ($89.40) is a distraction. The architectural problem is Data Transfer Regional ($156.30). Wrong-direction trap.",
+      "aurora_sizing": "Do not compare db.r6g.2xlarge to SRV-006 server specs. Oracle server RAM != Aurora instance RAM needed. RDS manages memory differently.",
+      "dr_pii": "eu-west-1 DR does NOT mean Aurora Global Tables with customer data. This violates UK GDPR. Use encrypted snapshots or non-PII configuration only.",
+      "audit_trail_ttl": "AuditTrail DynamoDB table must have NO TTL. FCA audit records cannot be automatically deleted.",
+      "natgw_count": "Production should have 3 NAT Gateways (one per AZ) for resilience. Cost vs HA trade-off must be documented in an ADR."
+    }
+  },
+  "regulatory_context": {
+    "fca_ps21_3": "Operational resilience — impact tolerances set by March 2025 (Tilington in remediation)",
+    "fca_sysc_8": "Material outsourcing — AWS must be notified to FCA before production go-live",
+    "uk_gdpr": "Customer PII must remain in eu-west-2 (London) — ICO adequacy",
+    "pra_ss2_21": "Cloud resilience stress testing required",
+    "iso_27001": "Controls mapping across all AWS services",
+    "ncsc_14_principles": "All 14 principles must be addressed in security architecture",
+    "pci_dss_v4": "Payments Service in PCI scope — WAF, network segmentation, audit logging required",
+    "fca_cobs_record_keeping": "Some records: 5 years. Some: indefinite. Drives backup retention and AuditTrail TTL=NONE"
+  },
+  "tools_required": {
+    "all_free": true,
+    "list": [
+      "AWS Free Tier",
+      "AWS Organizations and Control Tower",
+      "IAM, KMS, VPC, Route53, Transit Gateway",
+      "CloudTrail, GuardDuty, Security Hub, WAF",
+      "EKS, CloudWatch, Aurora PostgreSQL, DynamoDB",
+      "AWS Cost Explorer",
+      "Terraform",
+      "CloudFormation",
+      "GitHub",
+      "VS Code",
+      "Draw.io (app.diagrams.net)",
+      "Docker Desktop",
+      "kubectl",
+      "Helm",
+      "ArgoCD",
+      "GitHub Actions",
+      "Python and Boto3",
+      "Grafana Cloud Free",
+      "Prometheus",
+      "Excel or Google Sheets",
+      "PowerPoint or Google Slides"
+    ]
+  }
+}
