@@ -7,58 +7,66 @@
   "shared_files": [
     {
       "file_id": "company_brief",
-      "title": "Company Brief",
+      "display_name": "Company Background Document",
+      "title": "Company Background Document",
       "file_type": "md",
       "description": "Tilington plc background, CTO mandate, £3.2M budget, regulatory context (FCA, PRA, UK GDPR), stakeholders, and programme timeline to Q3 2027 DC exit.",
       "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/docs/company-brief.md"
     },
     {
       "file_id": "server_inventory",
-      "title": "Server Inventory CSV — 90 Servers",
+      "display_name": "Server Inventory — 90 Servers",
+      "title": "Server Inventory — 90 Servers",
       "file_type": "csv",
-      "description": "Full inventory of all 90 servers across DC1 (London) and DC2 (Manchester). Contains OS versions, EOL status, patch status, database assignments, and owners. Includes intentional messy reality: two undocumented servers (SRV-086/087), a shared Oracle instance on SRV-076, and CRITICAL patch status entries.",
+      "description": "Full inventory of all 90 servers across DC1 London and DC2 Manchester. Contains OS versions, EOL status, patch status, and database assignments. Includes two undocumented servers (SRV-086/087), a shared Oracle instance on SRV-076, and multiple CRITICAL patch status entries.",
       "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/server-inventory.csv"
     },
     {
       "file_id": "application_inventory",
-      "title": "Application Inventory CSV — 28 Applications",
+      "display_name": "Application Inventory — 28 Applications",
+      "title": "Application Inventory — 28 Applications",
       "file_type": "csv",
-      "description": "All 28 Tilington applications with 6R migration classification, business owners, database dependencies, regulatory scope, and migration wave candidates. APP-027 status is deliberately left unclear for the candidate to investigate.",
+      "description": "All 28 Tilington applications with 6R migration classification, business owners, database dependencies, and regulatory scope. APP-027 status is deliberately left unclear for the candidate to investigate.",
       "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/application-inventory-template.csv"
     },
     {
       "file_id": "dependency_map",
-      "title": "Dependency Map CSV — Application Dependencies",
+      "display_name": "Application Dependency Map",
+      "title": "Application Dependency Map",
       "file_type": "csv",
-      "description": "68 documented and undocumented application dependencies with protocol, port, direction, and criticality. Contains deliberate traps: APP-006 depends on MSSQL-03 which is not in the server inventory, and APP-002 uses an undocumented SMB file share with APP-003.",
+      "description": "68 documented and undocumented application dependencies. Contains deliberate traps: APP-006 depends on MSSQL-03 which is not in the server inventory, and APP-002 uses an undocumented SMB file share with APP-003.",
       "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/dependency-map.csv"
     },
     {
       "file_id": "aws_cost_report",
+      "display_name": "AWS Cost Report — January 2026",
       "title": "AWS Cost Report — January 2026",
       "file_type": "csv",
-      "description": "January 2026 AWS spend across 4 accounts (Production, Non-Production, Security, Logging). 45 rows covering EC2, RDS, EKS, S3, Direct Connect, and data transfer costs. Contains the cross-AZ wrong-direction trap: CloudWatch DataProcessing at $89.40 looks like the problem, but Data Transfer Regional at $156.30 is the real architectural issue.",
+      "description": "January 2026 AWS spend across 4 accounts. 45 rows. Contains the cross-AZ wrong-direction trap: CloudWatch DataProcessing at $89.40 looks like the problem, but Data Transfer Regional at $156.30 is the real architectural issue fixable with free VPC gateway endpoints.",
       "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/aws_cost_report.csv"
     },
     {
       "file_id": "security_findings",
-      "title": "Security Findings CSV — 20 Findings",
+      "display_name": "Security Findings — 20 Findings",
+      "title": "Security Findings — 20 Findings",
       "file_type": "csv",
-      "description": "20 Security Hub and GuardDuty findings across severity levels CRITICAL, HIGH, and MEDIUM. Includes SF-002 and SF-018 (public S3 bucket containing customer National Insurance numbers — potential ICO notification required) and SF-006 (active SSH brute force attack from a known Tor exit node).",
+      "description": "20 Security Hub and GuardDuty findings. Includes SF-002 and SF-018 (public S3 bucket with customer NI numbers — potential ICO notification) and SF-006 (active SSH brute force from Tor exit node).",
       "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/security-findings.csv"
     },
     {
       "file_id": "migration_wave_candidates",
-      "title": "Migration Wave Candidates CSV",
+      "display_name": "Migration Wave Candidates",
+      "title": "Migration Wave Candidates",
       "file_type": "csv",
-      "description": "All 28 applications with recommended migration wave, 6R strategy, complexity rating (LOW to VERY HIGH), sequencing rationale, pre-migration tasks, cutover window, and rollback procedure. Shows critical path dependencies including APP-012 (Authentication Service) which must migrate before all 25 dependent applications.",
+      "description": "All 28 apps with recommended migration wave, complexity rating, sequencing rationale, and pre-migration tasks. APP-012 (Authentication Service) must be Wave 2 — 25 apps depend on it.",
       "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/migration-wave-candidates.csv"
     },
     {
       "file_id": "github_repo",
+      "display_name": "Starter GitHub Repository",
       "title": "Starter GitHub Repository",
       "file_type": "link",
-      "description": "15-20% complete starter repository at github.com/alain-Sortnext/tilington-cloud-modernisation. Contains incomplete Terraform modules (networking, security/IAM, EKS), a broken GitHub Actions pipeline with 10 documented bugs to find and fix, partial Kubernetes manifests, Python automation tool starters, and CloudFormation templates.",
+      "description": "15-20% complete starter repository. Contains incomplete Terraform modules, a broken GitHub Actions pipeline with 10 documented bugs, partial Kubernetes manifests, and Python automation tool starters.",
       "url": "https://github.com/alain-Sortnext/tilington-cloud-modernisation"
     }
   ],
@@ -76,12 +84,16 @@
       "persona_id": "sarah_williams",
       "first_name": "Sarah",
       "last_name": "Williams",
+      "role_title": "Chief Technology Officer",
       "relationship": "manager",
+      "avatar_color": "purple",
+      "initials": "SW",
+      "bio": "Sarah approved the £3.2M programme budget personally and presented it to the Board. She is accountable for delivery and has political capital invested in success. She will not review your Terraform — she will read your one-page executive summary and ask three pointed questions. Expects outcomes, not diagrams.",
       "inbox_messages": [
         {
           "message_id": "sw_001",
           "subject": "Welcome to the Tilington Cloud Programme",
-          "body": "Welcome aboard. I'll be direct: this programme has a hard deadline and I need it to succeed.\n\nYour first priority is discovery. I need to understand what we're dealing with before I commit publicly to the Oracle renewal decision in Q2. Michael will brief you on the estate — but I warn you, the documentation is patchy. Don't trust the CMDB without verifying it.\n\nI'd like to see your initial findings by the end of Phase 1. Please structure your report so I can hand the executive summary to the Board without editing it.\n\nOne request: if you find anything that changes the programme timeline or budget, tell me immediately.\n\nSarah"
+          "body": "Welcome aboard. I'll be direct: this programme has a hard deadline and I need it to succeed.\n\nYour first priority is discovery. I need to understand what we're dealing with before I commit publicly to the Oracle renewal decision in Q2. Michael will brief you on the estate — but I warn you, the documentation is patchy. Don't trust the CMDB without verifying it.\n\nI'd like to see your initial findings by the end of Phase 2. Please structure your report so I can hand the executive summary to the Board without editing it.\n\nOne request: if you find anything that changes the programme timeline or budget, tell me immediately.\n\nSarah"
         },
         {
           "message_id": "sw_002",
@@ -99,17 +111,21 @@
       "persona_id": "michael_evans",
       "first_name": "Michael",
       "last_name": "Evans",
+      "role_title": "Head of Infrastructure",
       "relationship": "colleague",
+      "avatar_color": "teal",
+      "initials": "ME",
+      "bio": "Michael built DC1 in 2014 and DC2 in 2016. He knows every server in the estate — or thought he did until two undocumented servers turned up in the physical audit. He is your closest technical ally but will push back on anything unsafe. Has AWS Solutions Architect Associate but has never used Terraform in production.",
       "inbox_messages": [
         {
           "message_id": "me_001",
           "subject": "Things you need to know before you start",
-          "body": "Hey — welcome. I've pushed the server inventory to the repo but fair warning: it's not complete.\n\nWe found two servers in DC1 Rack 21 during the physical audit last week that aren't in the CMDB. SRV-086 and SRV-087. Nobody owns them. Could be test boxes from 2022 or could be something important.\n\nAlso — APP-027 (Legacy Fund Accounting). Finance say they stopped using it 18 months ago. But I'm still seeing database sessions on ORCL-05. Can you help me nail down whether this is active or not?\n\nOne more thing: APP-006 references MSSQL-03 in the dependency map but I cannot find MSSQL-03 anywhere in the server inventory.\n\nMichael"
+          "body": "Hey — welcome. I've pushed the server inventory to the repo but fair warning: it's not complete.\n\nWe found two servers in DC1 Rack 21 during the physical audit last week that aren't in the CMDB. SRV-086 and SRV-087. Nobody owns them. Could be test boxes from 2022 or could be something important.\n\nAlso — APP-027 (Legacy Fund Accounting). Finance say they stopped using it 18 months ago. But I'm still seeing database sessions on ORCL-05 that look like it's still connecting. Can you help me nail down whether this is active or not?\n\nOne more thing: APP-006 references MSSQL-03 in the dependency map but I cannot find MSSQL-03 anywhere in the server inventory.\n\nMichael"
         },
         {
           "message_id": "me_002",
           "subject": "Oracle — We Need to Talk",
-          "body": "I need to flag something before it becomes a problem.\n\nORCL-01 has 847 stored procedures. I've done a rough pass with the Oracle Schema Conversion Tool and it's flagging 214 of them as requiring manual conversion. Some of them are PL/SQL packages that took our DBA six months to write.\n\nORCL-02 is even more complex — it has custom scheduler jobs and 3 database links to external systems.\n\nI'm not saying we can't do it. I'm saying Sarah's timeline assumes this is straightforward and it isn't. Can you factor this into your Phase 7 database planning?\n\nMichael"
+          "body": "I need to flag something before it becomes a problem.\n\nORCL-01 has 847 stored procedures. I've done a rough pass with the Oracle Schema Conversion Tool and it's flagging 214 of them as requiring manual conversion. Some of them are PL/SQL packages that took our DBA six months to write. The most complex is customer_ledger_pkg.\n\nORCL-02 is even more complex — it has custom scheduler jobs and 3 database links to external systems (SWIFT, Refinitiv, a legacy FTP gateway).\n\nI'm not saying we can't do it. I'm saying Sarah's timeline assumes this is straightforward and it isn't. Can you factor this into your Phase 8 database planning?\n\nMichael"
         }
       ]
     },
@@ -117,7 +133,11 @@
       "persona_id": "emma_clarke",
       "first_name": "Emma",
       "last_name": "Clarke",
+      "role_title": "Chief Risk Officer",
       "relationship": "stakeholder",
+      "avatar_color": "amber",
+      "initials": "EC",
+      "bio": "Emma spent nine years as a senior supervisor at the FCA before joining Tilington. She knows how the regulator thinks because she used to be one. She will not approve a production migration until she has evidence in writing. She can stop the programme. Cites regulations by section. Expects specific technical mechanisms — not prose assertions.",
       "inbox_messages": [
         {
           "message_id": "ec_001",
@@ -140,7 +160,11 @@
       "persona_id": "james_patel",
       "first_name": "James",
       "last_name": "Patel",
+      "role_title": "Cloud Platform Lead",
       "relationship": "colleague",
+      "avatar_color": "coral",
+      "initials": "JP",
+      "bio": "James joined two years ago to lead the cloud journey. AWS Solutions Architect Professional certified. Has run EKS in production for three years. Your primary technical contact and most likely to review your pull requests. Strong opinions on GitOps — considers ClickOps a professional failing. Prefers Slack to email.",
       "inbox_messages": [
         {
           "message_id": "jp_001",
@@ -155,7 +179,7 @@
         {
           "message_id": "jp_003",
           "subject": "Architecture decisions we need ADRs for",
-          "body": "A few things we need Architecture Decision Records for before the ARB:\n\n1. eu-west-2 as primary region — needs to be written down with the UK GDPR rationale\n2. Terraform as primary IaC — I want this locked in before anyone suggests CloudFormation-only\n3. EKS vs ECS — I've committed us to EKS but we need the documented trade-off\n\nAlso the NAT Gateway question. Do we run 1 NAT GW (cost) or 3 (one per AZ, HA)? ~£90/month per additional NAT GW. Document it as an ADR.\n\nJames"
+          "body": "A few things we need Architecture Decision Records for before the ARB:\n\n1. eu-west-2 as primary region — needs to be written down with the UK GDPR rationale\n2. Terraform as primary IaC — I want this locked in before anyone suggests CloudFormation-only\n3. EKS vs ECS — I've committed us to EKS but we need the documented trade-off\n\nAlso the NAT Gateway question. Do we run 1 NAT GW (cost) or 3 (one per AZ, HA)? About £90/month per additional NAT GW. Document it as an ADR.\n\nJames"
         }
       ]
     }
@@ -310,107 +334,182 @@
       "title": "Welcome to Tilington plc",
       "sequence_order": 1,
       "phase_type": "onboarding",
+      "pre_phase_context": "You have just been appointed Lead AWS Solutions Architect at Tilington plc. The Board has approved a £3.2M programme to migrate 90 servers and 28 applications to AWS before both datacentre leases expire in Q3 2027. Start by reading the company brief, meeting your team, and setting up the GitHub repository that will hold your portfolio.",
+      "objectives": [
+        "Understand Tilington's business context, regulatory environment, and programme drivers",
+        "Meet your four key stakeholders and understand their priorities and potential conflicts",
+        "Set up the starter GitHub repository that will hold all your deliverables",
+        "Understand the data files and deliberate messy-reality elements you will encounter"
+      ],
+      "skills_preview": [
+        "Stakeholder analysis",
+        "Regulatory context (FCA, UK GDPR, PCI DSS)",
+        "Enterprise discovery",
+        "AWS programme management"
+      ],
+      "business_impact": {
+        "without_this": "You start technical work without understanding the regulatory constraints or stakeholder dynamics, leading to architecture decisions that Emma Clarke will block",
+        "with_this": "You enter Phase 2 with full situational awareness — understanding why eu-west-1 cannot hold PII, why the Oracle renewal is urgent, and what each stakeholder will scrutinise"
+      },
       "sections": [
         {
           "section_id": "p1_s1_landing",
           "title": "Your New Role",
-          "type": "simulation_landing",
+          "type": "phase_intro",
           "order_index": 0,
-          "content": {
-            "headline": "You've just been appointed Lead AWS Solutions Architect at Tilington plc.",
-            "subheadline": "Welcome to the Cloud Modernisation Programme",
-            "description": "You have just been appointed Lead AWS Solutions Architect at Tilington plc. The Board has approved a £3.2M programme to migrate 90 servers and 28 applications to AWS before both datacentre leases expire in Q3 2027. Start by reading the company brief, meeting your team, and setting up the GitHub repository that will hold your portfolio."
-          }
-        },
-        {
-          "section_id": "p1_s1b_detail",
-          "title": "Programme Overview",
-          "type": "rich_text_display",
-          "order_index": 1,
-          "content": {
-            "text": "## Programme Overview\n\nTilington plc operates two business lines: Tilington Asset Management (£4.2bn AUM) and Tilington Retail Financial Services (approximately 180,000 individual customers). Both datacentre leases expire Q3 2027 — a hard, non-negotiable deadline.\n\nThree additional drivers make this urgent:\n\n- **FCA PS21/3 operational resilience** — Tilington missed the March 2025 impact tolerance deadline and is under active FCA scrutiny. Cloud migration is the primary remediation path.\n\n- **Oracle licensing** — £1.4M per year with a 3-year renewal due Q2 2026. Migrating to Aurora PostgreSQL eliminates this. Potential saving: £4.2M over 3 years.\n\n- **Technology debt** — VMware vSphere 6.7 EOL, Windows Server 2012 R2 EOL. Continued operation creates ISO 27001 and FCA compliance risk.\n\n**Board-approved budget:** £3,200,000 over 18 months (£56,667/month)\n\n**Portfolio output:** Enterprise AWS Architecture Portfolio — 23 deliverables\n\n**Target roles on completion:** AWS Solutions Architect at UK banks — £70,000–£125,000"
-          }
+          "content": {}
         },
         {
           "section_id": "p1_s2_company",
           "title": "About Tilington plc",
           "type": "rich_text_display",
+          "order_index": 1,
+          "content": {
+            "text": "## About Tilington plc\n\nTilington plc operates two business lines:\n\n- **Tilington Asset Management** — institutional asset management, £4.2bn AUM\n\n- **Tilington Retail Financial Services** — ISAs, savings, and investment products for approximately 180,000 individual customers\n\nOffices in London (head office), Manchester (operations), and Edinburgh (fund management). 1,200 employees. Regulated by the FCA and PRA.\n\n---\n\n## Why This Programme Exists\n\nThree drivers make this migration urgent — not optional:\n\n**Driver 1 — Datacentre Lease Expiry (Hard Deadline)**\n\nBoth DC leases expire Q3 2027. No renewal option. All workloads must migrate or decommission.\n\n**Driver 2 — FCA Operational Resilience (Active Enforcement)**\n\nFCA PS21/3 required firms to set and test impact tolerances by March 2025. Tilington is in remediation. Cloud migration is the primary fix.\n\n**Driver 3 — Oracle Licensing Cost**\n\nOracle contract: £1.4M per year. 3-year renewal due Q2 2026. Target: migrate to Aurora PostgreSQL and eliminate this cost. Potential saving: £4.2M over 3 years.\n\n---\n\n## Programme Budget\n\nBoard-approved budget: £3,200,000 over 18 months — approximately £56,667 per month."
+          }
+        },
+        {
+          "section_id": "p1_s2b_regions",
+          "title": "AWS Region Strategy",
+          "type": "data_table",
           "order_index": 2,
           "content": {
-            "text": "## About Tilington plc\n\nTilington plc operates two business lines:\n\n- **Tilington Asset Management** — institutional asset management, £4.2bn AUM\n\n- **Tilington Retail Financial Services** — ISAs, savings, and investment products for approximately 180,000 individual customers\n\nOffices in London (head office), Manchester (operations), and Edinburgh (fund management).\n\n**Regulated by:** Financial Conduct Authority (FCA) and Prudential Regulation Authority (PRA)\n\n---\n\n## The Programme\n\nTwo datacentre leases expire in Q3 2027 — this is a hard, non-negotiable deadline. Both datacentres must be vacated.\n\nAdditionally:\n\n- **FCA PS21/3 operational resilience** — Tilington missed the March 2025 impact tolerance deadline and is under active FCA scrutiny. Cloud migration is the primary remediation path.\n\n- **Oracle licensing** — £1.4M per year with a 3-year renewal due Q2 2026. Migrating to Aurora PostgreSQL eliminates this cost. Potential saving: £4.2M over 3 years.\n\n- **Technology debt** — VMware vSphere 6.7 is EOL. Windows Server 2012 R2 is EOL. Continued operation creates ISO 27001 and FCA compliance risk.\n\n**Board-approved budget:** £3,200,000 over 18 months\n\n**Monthly budget:** £56,667\n\n---\n\n## AWS Region Strategy\n\n| Region | Purpose |\n\n|--------|--------|\n\n| eu-west-2 (London) | Primary — all production workloads and all customer PII |\n\n| eu-west-1 (Ireland) | DR only — no customer PII permitted |\n\n**UK GDPR constraint:** All customer personal data must remain in eu-west-2 at all times — including during DR failover."
+            "headers": [
+              "Region",
+              "Purpose",
+              "PII Permitted"
+            ],
+            "rows": [
+              [
+                "eu-west-2 (London)",
+                "Primary — all production workloads",
+                "Yes — all customer PII here"
+              ],
+              [
+                "eu-west-1 (Ireland)",
+                "DR only",
+                "No — UK GDPR constraint"
+              ]
+            ],
+            "caption": "UK GDPR constraint: All customer personal data must remain in eu-west-2 at all times — including during DR failover to eu-west-1."
           }
         },
         {
           "section_id": "p1_s3_team",
           "title": "Meet Your Team",
-          "type": "rich_text_display",
+          "type": "meet_the_team",
           "order_index": 3,
           "content": {
-            "text": "## Meet Your Team\n\nYou will work with four key stakeholders throughout this programme. Each has different priorities — and sometimes conflicting ones. Understanding who they are and what they care about is essential to navigating this project.\n\n---\n\n### Sarah Williams — Chief Technology Officer\n\nSarah approved the £3.2M budget personally and presented the programme to the Board in January 2026. She is accountable for delivery.\n\nShe is not a hands-on architect. She will not review your Terraform. She will read your one-page executive summary and ask three pointed questions.\n\n**What she cares about:** On-time DC exit, Oracle renewal decision, Board confidence.\n\n**Communication style:** Direct, board-level language, outcomes-focused. Expects summaries, not diagrams.\n\n---\n\n### Michael Evans — Head of Infrastructure\n\nMichael has been at Tilington for eleven years. He built DC1 in 2014 and DC2 in 2016. He knows every server in the estate — or at least he thought he did until two undocumented servers turned up in the physical audit.\n\nHe is your closest day-to-day technical ally but will push back on anything he considers unsafe or unrealistic.\n\n**What he cares about:** Nothing breaks during migration. Oracle PL/SQL complexity. Team capacity — he has six engineers, effectively four available for migration work.\n\n**Communication style:** Honest, cautious, technically deep. Uses Slack. Will flag problems early.\n\n---\n\n### Emma Clarke — Chief Risk Officer\n\nEmma spent nine years as a senior supervisor at the FCA before joining Tilington. She knows how the regulator thinks because she used to be one.\n\nShe is not anti-technology. But she will not approve a production migration until she has evidence in writing. She can stop the programme.\n\n**What she cares about:** Written data residency confirmation (not verbal). CloudTrail with immutable logs before any PII goes to AWS. FCA material outsourcing notification filed.\n\n**Communication style:** Formal, precise, cites regulations by section. Expects specific technical mechanisms — not assertions.\n\n---\n\n### James Patel — Cloud Platform Lead\n\nJames joined two years ago specifically to lead the cloud journey. He has AWS Solutions Architect Professional certification and has run EKS in production for three years.\n\nHe is your primary technical contact and most likely to review your pull requests. He has strong opinions on GitOps and considers ClickOps a professional failing.\n\n**What he cares about:** EKS platform quality. GitOps discipline. No long-lived credentials in GitHub secrets. Terraform standards — modules, remote state, peer review.\n\n**Communication style:** Collaborative, Slack-first, enthusiastic. Leaves code review comments directly on PRs."
+            "intro": "You will work with four key stakeholders throughout this programme. Each has different priorities — and sometimes conflicting ones. Understanding who they are and what they care about is essential to navigating this project."
           }
         },
         {
-          "section_id": "p1_s4_files",
+          "section_id": "p1_s4_conflicts",
+          "title": "Stakeholder Dynamics",
+          "type": "rich_text_display",
+          "order_index": 4,
+          "content": {
+            "text": "## Stakeholder Conflicts to Be Aware Of\n\nThese conflicts are real and will surface throughout the programme. You will need to navigate them.\n\n**Sarah vs Emma — Speed vs Compliance**\n\nSarah wants to move fast. Emma requires written controls and evidence before any production migration. Emma has veto power. Sarah has budget authority. You are in the middle.\n\n**Sarah vs Michael — Timeline Realism**\n\nSarah set an 18-month timeline. Michael privately thinks it is too tight, particularly given the Oracle PL/SQL complexity (847 stored procedures, 214 requiring manual conversion). He raises this in private but softens it in programme calls.\n\n**James vs Emma — Dev Data**\n\nJames wanted to use production-like customer data in the dev environment for testing. Emma blocked it on UK GDPR grounds. James complied but uses synthetic data. This means testing is less representative.\n\n**Michael vs James — Rehost vs Refactor**\n\nMichael wants to rehost workloads quickly and refactor later. James wants cloud-native from Day 1. The simulation requires you to make an ADR on this trade-off."
+          }
+        },
+        {
+          "section_id": "p1_s5_files",
           "title": "Your Project Files",
           "type": "file_library",
-          "order_index": 4,
+          "order_index": 5,
           "content": {
             "file_ids": [
               "company_brief",
               "github_repo"
+            ],
+            "instruction": "Read the Company Background Document first, then clone or bookmark the GitHub repository. You will commit all your deliverables to the repo throughout this programme."
+          }
+        },
+        {
+          "section_id": "p1_s6_repo",
+          "title": "Understanding the GitHub Repository",
+          "type": "rich_text_display",
+          "order_index": 6,
+          "content": {
+            "text": "## Your GitHub Repository\n\nThe starter repository is at **github.com/alain-Sortnext/tilington-cloud-modernisation**\n\nThis repository is 15-20% complete by design. Your job across 9 phases is to complete it.\n\n- Files marked `# TODO:` need your work\n\n- Files marked `# STARTER` show you the pattern — extend them\n\n- Files with `???` are your architectural decisions to make\n\n- Do not delete starter files. Build on them.\n\n---\n\n## Data Files in /migration/\n\nSix CSV files drive the simulation. Read them carefully before Phase 2.\n\nEach file contains deliberate complexity and hidden traps that you must surface during discovery."
+          }
+        },
+        {
+          "section_id": "p1_s6b_datafiles",
+          "title": "Simulation Data Files",
+          "type": "data_table",
+          "order_index": 7,
+          "content": {
+            "headers": [
+              "File",
+              "Contents",
+              "Key Trap"
+            ],
+            "rows": [
+              [
+                "server-inventory.csv",
+                "90 servers across DC1 and DC2",
+                "SRV-086/087 undocumented; SRV-076 shared Oracle"
+              ],
+              [
+                "application-inventory-template.csv",
+                "28 applications",
+                "APP-027 status unclear"
+              ],
+              [
+                "dependency-map.csv",
+                "68 dependencies",
+                "MSSQL-03 ghost reference"
+              ],
+              [
+                "aws_cost_report.csv",
+                "January 2026 AWS costs",
+                "CloudWatch $89.40 is a distraction — Data Transfer $156.30 is the real issue"
+              ],
+              [
+                "security-findings.csv",
+                "20 Security Hub findings",
+                "SF-002/SF-018 = potential ICO breach"
+              ],
+              [
+                "migration-wave-candidates.csv",
+                "Wave sequencing",
+                "APP-012 is critical path — 25 dependents"
+              ]
             ]
           }
         },
         {
-          "section_id": "p1_s5_repo",
-          "title": "Your GitHub Repository",
-          "type": "rich_text_display",
-          "order_index": 5,
-          "content": {
-            "text": "## Your GitHub Repository\n\nThe starter repository is at:\n\n**[github.com/alain-Sortnext/tilington-cloud-modernisation](https://github.com/alain-Sortnext/tilington-cloud-modernisation)**\n\nThis repository is **15–20% complete by design.** Your job across 9 phases is to complete it.\n\n---\n\n## Repository Structure\n\n```\n\ntilington-cloud-modernisation/\n\n├── docs/              ← Architecture docs, ADRs, runbooks\n\n├── architecture/      ← Draw.io diagrams — commit exports here\n\n├── terraform/         ← IaC modules — networking, security, IAM, EKS\n\n├── cloudformation/    ← CFN templates — vpc.yaml, security.yaml\n\n├── kubernetes/        ← K8s manifests — deployments, services, ingress\n\n├── gitops/            ← ArgoCD application configs and overlays\n\n├── ci-cd/             ← GitHub Actions pipelines\n\n├── python/            ← Automation tools — inventory, cost reporting\n\n├── databases/         ← Aurora and DynamoDB design documents\n\n├── migration/         ← Strategy docs, wave plans, CSV data files\n\n├── observability/     ← Grafana dashboards, Prometheus config\n\n├── finops/            ← Cost dashboards, savings analysis\n\n├── presentations/     ← ARB deck, exec slides\n\n└── submissions/       ← Your phase submission evidence\n\n```\n\n---\n\n## How to Use the Repo\n\n- Files marked with `# TODO:` need your work\n\n- Files marked with `# STARTER` show you the pattern — extend them\n\n- Files with `???` placeholders require your architectural decisions\n\n- **Do not delete starter files.** Build on them.\n\n- Commit your evidence to the relevant directory at the end of each phase\n\n---\n\n## Data Files in /migration/\n\nAll six CSV data files are in `/migration/`. These drive the simulation — read them carefully.\n\n| File | Contents | Key Traps |\n\n|------|---------|----------|\n\n| server-inventory.csv | 90 servers across DC1 and DC2 | SRV-086/087 undocumented; SRV-076 shared Oracle |\n\n| application-inventory-template.csv | 28 applications | APP-027 status unclear |\n\n| dependency-map.csv | 68 dependencies | MSSQL-03 ghost reference |\n\n| aws_cost_report.csv | January 2026 AWS costs | CloudWatch trap — real issue is cross-AZ |\n\n| security-findings.csv | 20 Security Hub findings | SF-002/SF-018 potential ICO breach |\n\n| migration-wave-candidates.csv | Wave sequencing | APP-012 critical path — 25 dependents |"
-          }
-        },
-        {
-          "section_id": "p1_s6_inbox_sarah",
+          "section_id": "p1_s7_inbox_sarah",
           "title": "First Message from Sarah Williams",
           "type": "inbox_message",
-          "order_index": 6,
+          "order_index": 8,
           "persona_id": "sarah_williams",
           "message_id": "sw_001"
         },
         {
-          "section_id": "p1_s7_inbox_james",
+          "section_id": "p1_s8_inbox_james",
           "title": "First Message from James Patel",
           "type": "inbox_message",
-          "order_index": 7,
+          "order_index": 9,
           "persona_id": "james_patel",
           "message_id": "jp_001"
         },
         {
-          "section_id": "p1_s8_orientation",
+          "section_id": "p1_s9_orientation",
           "title": "Orientation Check",
-          "type": "text_editor",
-          "order_index": 8,
+          "type": "multiple_choice",
+          "order_index": 10,
           "review_mode": "instant_ai",
-          "rubric": [
-            {
-              "criterion_id": "c1",
-              "criterion_label": "Identifies the three business drivers (DC lease expiry, FCA remediation, Oracle cost) correctly",
-              "points": 30
-            },
-            {
-              "criterion_id": "c2",
-              "criterion_label": "Names the four stakeholders and their primary concern for this programme",
-              "points": 30
-            },
-            {
-              "criterion_id": "c3",
-              "criterion_label": "Identifies the UK GDPR data residency constraint and its implication for the DR region",
-              "points": 40
-            }
-          ],
           "content": {
-            "text": "Before you begin, answer these three orientation questions to confirm you have understood the brief:\n\n**1.** What are the three main business drivers behind this cloud migration? Why is the Q3 2027 deadline non-negotiable?\n\n**2.** Name all four stakeholders. For each, state their primary concern about this programme in one sentence.\n\n**3.** Tilington has chosen eu-west-1 (Ireland) as the DR region. What is the key constraint on what can be stored or processed there, and why?"
+            "question": "Tilington has chosen eu-west-1 (Ireland) as its DR region. Which of the following is permitted in eu-west-1 under the programme's data residency policy?",
+            "options": [
+              "Aurora PostgreSQL read replicas containing customer account data",
+              "DynamoDB Global Table replication of the AuditTrail table",
+              "Non-PII configuration data and infrastructure state",
+              "Encrypted backups of customer payment history"
+            ],
+            "correct_index": 2
           }
         }
       ]
@@ -936,7 +1035,7 @@
           "type": "rich_text_display",
           "order_index": 1,
           "content": {
-            "text": "## Kubernetes, Microservices & GitOps\n\n**Portfolio output:** Cloud-Native Microservices Platform\n\n**GitHub evidence:** /kubernetes/ (all 4 services with deployment, service, hpa, pdb, serviceaccount), /gitops/argocd/applicationset.yaml, /gitops/overlays/production/ and /non-production/, /architecture/microservices.drawio, /docs/service-boundaries.md, /docs/api-design.md\n\n**Tools:** Docker Desktop, kubectl, Helm, ArgoCD, Draw.io, GitHub, VS Code\n\n**Estimated time:** 12–18 hours\n\n---\n\n## The Four Microservices\n\n| Service | Data Store | Regulatory Scope |\n\n|---------|-----------|------------------|\n\n| Customer Service | Aurora PostgreSQL | FCA — PII |\n\n| Payments Service | Aurora PostgreSQL + DynamoDB | PCI DSS |\n\n| Notifications Service | DynamoDB | None |\n\n| Audit Service | DynamoDB AuditTrail | FCA — no TTL |"
+            "text": "## Kubernetes, Microservices & GitOps\n\n**Portfolio output:** Cloud-Native Microservices Platform\n\n**GitHub evidence:** /kubernetes/ (all 4 services with deployment, service, hpa, pdb, serviceaccount), /gitops/argocd/applicationset.yaml, /gitops/overlays/production/ and /non-production/, /architecture/microservices.drawio, /docs/service-boundaries.md, /docs/api-design.md\n\n**Tools:** Docker Desktop, kubectl, Helm, ArgoCD, Draw.io, GitHub, VS Code\n\n**Estimated time:** 12–18 hours\n\n---\n\n## The Four Microservices\n"
           }
         },
         {
@@ -964,14 +1063,49 @@
           "type": "rich_text_display",
           "order_index": 4,
           "content": {
-            "text": "## Your Tasks\n\n### The Four Microservices\n\n| Service | Data Store | Regulatory Scope |\n\n|---------|-----------|------------------|\n\n| Customer Service | Aurora PostgreSQL | FCA — PII |\n\n| Payments Service | Aurora PostgreSQL + DynamoDB PaymentEvents | PCI DSS |\n\n| Notifications Service | DynamoDB NotificationDelivery | None |\n\n| Audit Service | DynamoDB AuditTrail | FCA — append-only, no TTL |\n\n---\n\n### Deliverable 1 — Kubernetes Manifests for All 4 Services\n\n**Commit to:** `/kubernetes/` (one directory per service)\n\nFor each microservice create: `deployment.yaml`, `service.yaml`, `hpa.yaml`, `pdb.yaml`, `serviceaccount.yaml`.\n\nEvery deployment must include security context (`runAsNonRoot: true`, `readOnlyRootFilesystem: true`, `allowPrivilegeEscalation: false`), topology spread constraints across 3 AZs, resource limits and requests, liveness and readiness probes, and IRSA annotation (`eks.amazonaws.com/role-arn`) on ServiceAccount.\n\nPayments Service: separate namespace or NetworkPolicy restricting inbound to ALB and Customer Service only.\n\n### Deliverable 2 — Helm Chart Templates\n\n**Commit to:** `/kubernetes/helm/tilington-services/templates/`\n\nCreate: `deployment.yaml`, `service.yaml`, `hpa.yaml`, `ingress.yaml`, `serviceaccount.yaml`, `pdb.yaml`.\n\nThe chart must pass `helm template .` without errors — paste output as evidence.\n\n### Deliverable 3 — ArgoCD GitOps Configuration\n\n**Commit to:** `/gitops/argocd/applicationset.yaml`, `/gitops/overlays/production/kustomization.yaml`, `/gitops/overlays/non-production/kustomization.yaml`\n\nFix `application.yaml` with real EKS cluster URL format. Create an ApplicationSet iterating over all 4 microservices.\n\n### Deliverable 4 — Service Boundary and API Design\n\n**Commit to:** `/docs/service-boundaries.md`, `/docs/api-design.md`\n\nFor each service: what data it owns, reads via API, events it publishes, events it subscribes to.\n\nCustomer Service REST API: method, path, request/response JSON schema, HTTP status codes, PII fields flagged."
+            "text": "## Your Tasks\n\n### The Four Microservices\n\n---\n\n### Deliverable 1 — Kubernetes Manifests for All 4 Services\n\n**Commit to:** `/kubernetes/` (one directory per service)\n\nFor each microservice create: `deployment.yaml`, `service.yaml`, `hpa.yaml`, `pdb.yaml`, `serviceaccount.yaml`.\n\nEvery deployment must include security context (`runAsNonRoot: true`, `readOnlyRootFilesystem: true`, `allowPrivilegeEscalation: false`), topology spread constraints across 3 AZs, resource limits and requests, liveness and readiness probes, and IRSA annotation (`eks.amazonaws.com/role-arn`) on ServiceAccount.\n\nPayments Service: separate namespace or NetworkPolicy restricting inbound to ALB and Customer Service only.\n\n### Deliverable 2 — Helm Chart Templates\n\n**Commit to:** `/kubernetes/helm/tilington-services/templates/`\n\nCreate: `deployment.yaml`, `service.yaml`, `hpa.yaml`, `ingress.yaml`, `serviceaccount.yaml`, `pdb.yaml`.\n\nThe chart must pass `helm template .` without errors — paste output as evidence.\n\n### Deliverable 3 — ArgoCD GitOps Configuration\n\n**Commit to:** `/gitops/argocd/applicationset.yaml`, `/gitops/overlays/production/kustomization.yaml`, `/gitops/overlays/non-production/kustomization.yaml`\n\nFix `application.yaml` with real EKS cluster URL format. Create an ApplicationSet iterating over all 4 microservices.\n\n### Deliverable 4 — Service Boundary and API Design\n\n**Commit to:** `/docs/service-boundaries.md`, `/docs/api-design.md`\n\nFor each service: what data it owns, reads via API, events it publishes, events it subscribes to.\n\nCustomer Service REST API: method, path, request/response JSON schema, HTTP status codes, PII fields flagged."
+          }
+        },
+        {
+          "section_id": "p6_microservices_table",
+          "title": "The Four Microservices",
+          "type": "data_table",
+          "order_index": 5,
+          "content": {
+            "headers": [
+              "Service",
+              "Data Store",
+              "Regulatory Scope"
+            ],
+            "rows": [
+              [
+                "Customer Service",
+                "Aurora PostgreSQL",
+                "FCA — PII"
+              ],
+              [
+                "Payments Service",
+                "Aurora PostgreSQL + DynamoDB",
+                "PCI DSS"
+              ],
+              [
+                "Notifications Service",
+                "DynamoDB NotificationDelivery",
+                "None"
+              ],
+              [
+                "Audit Service",
+                "DynamoDB AuditTrail",
+                "FCA — append-only, no TTL"
+              ]
+            ]
           }
         },
         {
           "section_id": "p6_s5_code",
           "title": "Submit Your Helm Chart and ArgoCD Config",
           "type": "code_panel",
-          "order_index": 5,
+          "order_index": 6,
           "review_mode": "instant_ai",
           "rubric": [
             {
@@ -1003,7 +1137,7 @@
           "section_id": "p6_s6_editor",
           "title": "Microservices Architecture Decisions",
           "type": "text_editor",
-          "order_index": 6,
+          "order_index": 7,
           "review_mode": "instant_ai",
           "rubric": [
             {
@@ -1079,14 +1213,115 @@
           "type": "rich_text_display",
           "order_index": 4,
           "content": {
-            "text": "## Your Tasks\n\n### Deliverable 1 — Fix All 10 Pipeline Bugs\n\n**Commit to:** `/.github/workflows/deploy.yml`\n\nFor each bug: root cause, specific lines changed, explanation of why the original failed.\n\n| Bug | Description |\n\n|-----|-------------|\n\n| BUG-001 | ECR_REGISTRY env var is empty |\n\n| BUG-002 | docker build uses wrong context path |\n\n| BUG-003 | No Trivy scan on built image |\n\n| BUG-004 | security-scan job never blocks — read how `needs:` + `if:` interact on skipped jobs |\n\n| BUG-005 | AWS credentials via long-lived access keys — replace with OIDC |\n\n| BUG-006 | IMAGE_TAG variable never defined |\n\n| BUG-007 | deploy-production has no AWS credentials step |\n\n| BUG-008 | No rollback on failed deployment |\n\n| BUG-009 | No smoke test after deployment |\n\n| BUG-010 | No failure notification |\n\n### Deliverable 2 — Security Scanning Evidence\n\n**Commit to:** `/ci-cd/security-scan-results/`\n\nRun Trivy against a real Docker image — commit JSON output to `trivy-scan-output.json`. Run Checkov against Kubernetes manifests — commit to `checkov-k8s-scan.txt`. For each FAILED Checkov check: document what it flagged, why it matters, what you changed.\n\n### Deliverable 3 — Grafana Cloud Dashboards\n\n**Commit to:** `/observability/grafana/dashboards/`\n\nCreate 3 dashboards in Grafana Cloud free tier (grafana.com/products/cloud). Export each as JSON.\n\n- **Dashboard 1** — Service Health: request rate, error rate, P95 latency for all 4 services\n\n- **Dashboard 2** — Reliability and SLO: SLO compliance, error budget remaining, burn rate\n\n- **Dashboard 3** — EKS Infrastructure: node CPU/memory, pod scheduling, HPA events\n\n### Deliverable 4 — SLO Framework\n\n**Commit to:** `/docs/reliability-runbook.md`\n\nDefine SLOs for all 4 services. Calculate the Payments Service error budget: 30 × 24 × 60 × 0.0005 = **21.6 minutes/month** — show your working. Define fast burn alert and slow burn alert thresholds. Define escalation path. Explain how this provides FCA PS21/3 evidence."
+            "text": "## Your Tasks\n\n### Deliverable 1 — Fix All 10 Pipeline Bugs\n\n**Commit to:** `/.github/workflows/deploy.yml`\n\nFor each bug: root cause, specific lines changed, explanation of why the original failed.\n\n### Deliverable 2 — Security Scanning Evidence\n\n**Commit to:** `/ci-cd/security-scan-results/`\n\nRun Trivy against a real Docker image — commit JSON output to `trivy-scan-output.json`. Run Checkov against Kubernetes manifests — commit to `checkov-k8s-scan.txt`. For each FAILED Checkov check: document what it flagged, why it matters, what you changed.\n\n### Deliverable 3 — Grafana Cloud Dashboards\n\n**Commit to:** `/observability/grafana/dashboards/`\n\nCreate 3 dashboards in Grafana Cloud free tier (grafana.com/products/cloud). Export each as JSON.\n\n- **Dashboard 1** — Service Health: request rate, error rate, P95 latency for all 4 services\n\n- **Dashboard 2** — Reliability and SLO: SLO compliance, error budget remaining, burn rate\n\n- **Dashboard 3** — EKS Infrastructure: node CPU/memory, pod scheduling, HPA events\n\n### Deliverable 4 — SLO Framework\n\n**Commit to:** `/docs/reliability-runbook.md`\n\nDefine SLOs for all 4 services. Calculate the Payments Service error budget: 30 × 24 × 60 × 0.0005 = **21.6 minutes/month** — show your working. Define fast burn alert and slow burn alert thresholds. Define escalation path. Explain how this provides FCA PS21/3 evidence."
+          }
+        },
+        {
+          "section_id": "p7_bugs_table",
+          "title": "The 10 Pipeline Bugs to Fix",
+          "type": "data_table",
+          "order_index": 5,
+          "content": {
+            "headers": [
+              "Bug ID",
+              "Description"
+            ],
+            "rows": [
+              [
+                "BUG-001",
+                "ECR_REGISTRY env var is empty"
+              ],
+              [
+                "BUG-002",
+                "docker build uses wrong context path"
+              ],
+              [
+                "BUG-003",
+                "No Trivy scan on built image"
+              ],
+              [
+                "BUG-004",
+                "security-scan job never blocks — needs:/if: skipped-job interaction (most subtle)"
+              ],
+              [
+                "BUG-005",
+                "AWS credentials via long-lived access keys — replace with OIDC"
+              ],
+              [
+                "BUG-006",
+                "IMAGE_TAG variable never defined"
+              ],
+              [
+                "BUG-007",
+                "deploy-production has no AWS credentials step"
+              ],
+              [
+                "BUG-008",
+                "No rollback on failed deployment"
+              ],
+              [
+                "BUG-009",
+                "No smoke test after deployment"
+              ],
+              [
+                "BUG-010",
+                "No failure notification"
+              ]
+            ],
+            "caption": "For each bug: identify the root cause, show the specific lines changed, and explain why the original code failed."
+          }
+        },
+        {
+          "section_id": "p7_slo_table",
+          "title": "SLO Targets — All Four Services",
+          "type": "data_table",
+          "order_index": 6,
+          "content": {
+            "headers": [
+              "Service",
+              "Availability SLO",
+              "P99 Latency",
+              "Error Rate",
+              "Window"
+            ],
+            "rows": [
+              [
+                "Customer Service",
+                "99.9%",
+                "< 500ms",
+                "< 0.1%",
+                "30-day rolling"
+              ],
+              [
+                "Payments Service",
+                "99.95%",
+                "< 250ms",
+                "< 0.05%",
+                "30-day rolling"
+              ],
+              [
+                "Notifications Service",
+                "99.5%",
+                "< 2000ms",
+                "< 0.5%",
+                "30-day rolling"
+              ],
+              [
+                "Audit Service",
+                "99.9%",
+                "< 1000ms",
+                "< 0.1%",
+                "30-day rolling"
+              ]
+            ],
+            "caption": "Payments Service error budget: 30 × 24 × 60 × 0.0005 = 21.6 minutes per month. Show your working."
           }
         },
         {
           "section_id": "p7_s5_code",
           "title": "Submit Your Fixed Pipeline",
           "type": "code_panel",
-          "order_index": 5,
+          "order_index": 7,
           "review_mode": "instant_ai",
           "rubric": [
             {
@@ -1118,7 +1353,7 @@
           "section_id": "p7_s6_editor",
           "title": "SLO Calculations and FCA Connection",
           "type": "text_editor",
-          "order_index": 6,
+          "order_index": 8,
           "review_mode": "instant_ai",
           "rubric": [
             {
@@ -1207,10 +1442,45 @@
           }
         },
         {
+          "section_id": "p8_db_constraints_table",
+          "title": "Database Design Constraints",
+          "type": "data_table",
+          "order_index": 6,
+          "content": {
+            "headers": [
+              "Constraint",
+              "Rule",
+              "Basis"
+            ],
+            "rows": [
+              [
+                "AuditTrail TTL",
+                "NO TTL — table must retain records indefinitely",
+                "FCA COBS record-keeping"
+              ],
+              [
+                "Aurora replication",
+                "Cannot replicate customer PII to eu-west-1",
+                "UK GDPR data residency"
+              ],
+              [
+                "Payments RPO",
+                "15-minute RPO requires Aurora PITR — not daily backups",
+                "FCA PS21/3 impact tolerance"
+              ],
+              [
+                "Audit access model",
+                "audit-service: write-only. compliance-viewer: read-only",
+                "Least privilege + FCA audit integrity"
+              ]
+            ]
+          }
+        },
+        {
           "section_id": "p8_s6_editor",
           "title": "Submit Your Database Designs",
           "type": "text_editor",
-          "order_index": 6,
+          "order_index": 7,
           "review_mode": "instant_ai",
           "rubric": [
             {
@@ -1303,10 +1573,57 @@
           }
         },
         {
+          "section_id": "p9_finops_table",
+          "title": "January 2026 — 5 FinOps Findings to Identify",
+          "type": "data_table",
+          "order_index": 5,
+          "content": {
+            "headers": [
+              "Finding",
+              "Amount",
+              "Action",
+              "Saving"
+            ],
+            "rows": [
+              [
+                "Aurora writer db.r6g.2xlarge",
+                "$2,180.16/month",
+                "Validate sizing against ORCL-01 workload — not server specs",
+                "TBD after analysis"
+              ],
+              [
+                "Direct Connect",
+                "$380/month",
+                "Assess cost vs programme budget — is it justified?",
+                "N/A"
+              ],
+              [
+                "Non-prod EKS nodes running 24/7",
+                "$28.08 × 2 = $56.16/month",
+                "Schedule off nights/weekends",
+                "~$40/month"
+              ],
+              [
+                "Untagged EC2 i-0nonprod003",
+                "$98.40/month",
+                "Identify owner or terminate, enforce tagging policy",
+                "$98.40/month"
+              ],
+              [
+                "Cross-AZ Data Transfer Regional",
+                "$156.30/month",
+                "Add S3 and DynamoDB VPC gateway endpoints (free)",
+                "$1,875.60/year"
+              ]
+            ],
+            "caption": "Sum the blended_cost_usd column from the CSV for the total January spend. Do not estimate."
+          }
+        },
+        {
           "section_id": "p9_s5_editor",
           "title": "Submit Your FinOps Assessment and DR Design",
           "type": "text_editor",
-          "order_index": 5,
+          "order_index": 6,
           "review_mode": "instant_ai",
           "rubric": [
             {
@@ -1407,10 +1724,45 @@
           }
         },
         {
+          "section_id": "p10_arb_panel_table",
+          "title": "ARB Panel Members and Their Focus Areas",
+          "type": "data_table",
+          "order_index": 6,
+          "content": {
+            "headers": [
+              "Panellist",
+              "Role",
+              "Primary Focus"
+            ],
+            "rows": [
+              [
+                "Emma Clarke",
+                "Chief Risk Officer",
+                "Data residency, FCA compliance, audit trail, privileged access"
+              ],
+              [
+                "Priya Sharma",
+                "Head of Information Security",
+                "NCSC compliance, IAM, security findings remediation"
+              ],
+              [
+                "David Okafor",
+                "Head of Retail Technology",
+                "Customer app stability, migration timeline, user impact"
+              ],
+              [
+                "CFO",
+                "Chief Financial Officer",
+                "Budget vs actual, Oracle saving (£4.2M), ROI"
+              ]
+            ]
+          }
+        },
+        {
           "section_id": "p10_s6_submit",
           "title": "Upload Your ARB Presentation",
           "type": "file_upload",
-          "order_index": 6,
+          "order_index": 7,
           "review_mode": "instant_ai",
           "rubric": [
             {
@@ -1447,7 +1799,7 @@
           "section_id": "p10_s7_editor",
           "title": "Emma Clarke's Three Written Answers",
           "type": "text_editor",
-          "order_index": 7,
+          "order_index": 8,
           "review_mode": "instant_ai",
           "rubric": [
             {
