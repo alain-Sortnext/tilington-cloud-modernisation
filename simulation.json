@@ -11,8 +11,8 @@
         "file_id": "company_brief",
         "title": "Tilington plc — Company Background & Regulatory Context",
         "description": "CTO mandate, £3.2M budget, FCA/PRA/UK GDPR regulatory context, datacentre lease expiry timeline, Oracle licensing cost drivers, and stakeholder list.",
-        "file_type": "md",
-        "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/docs/company-brief.md",
+        "file_type": "pdf",
+        "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/docs/company-brief.pdf",
         "name": "Tilington plc — Company Background & Regulatory Context",
         "display_name": "Tilington plc — Company Background & Regulatory Context",
         "available_from_phase": "start"
