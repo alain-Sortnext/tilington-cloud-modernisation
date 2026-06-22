@@ -1,0 +1,82 @@
+# ============================================================
+# Tilington plc — ArgoCD Application Configuration
+# STATUS: INCOMPLETE — Candidate completes in Phase 5
+# ============================================================
+# 
+# This ArgoCD Application defines GitOps sync for the
+# customer-service microservice from this repository.
+#
+# ArgoCD watches: gitops/overlays/production/
+# Target cluster: Tilington EKS production cluster
+# ============================================================
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tilington-customer-service
+  namespace: argocd
+  labels:
+    app: customer-service
+    environment: production
+    team: cloud-platform
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io  # Ensures cleanup on delete
+
+spec:
+  project: tilington-production
+
+  source:
+    repoURL: https://github.com/alain-Sortnext/tilington-cloud-modernisation
+    targetRevision: main
+    path: gitops/overlays/production  # TODO: Candidate creates this Kustomize overlay
+
+  destination:
+    server: https://kubernetes.default.svc  # TODO: Replace with actual EKS cluster URL
+    namespace: tilington-prod
+
+  syncPolicy:
+    automated:
+      prune: true      # Remove resources no longer in Git
+      selfHeal: true   # Re-apply if someone manually changes the cluster
+    syncOptions:
+      - CreateNamespace=true
+      - PruneLast=true
+      - RespectIgnoreDifferences=true
+    retry:
+      limit: 3
+      backoff:
+        duration: 5s
+        maxDuration: 3m
+        factor: 2
+
+  # TODO: Candidate defines ignoreDifferences for fields that change at runtime
+  # ignoreDifferences:
+  #   - group: apps
+  #     kind: Deployment
+  #     jsonPointers:
+  #       - /spec/replicas  # HPA manages this
+
+  # TODO: Candidate adds health checks for custom resources
+
+---
+# TODO: Candidate creates ArgoCD ApplicationSet for all 4 microservices
+# This would template an Application for:
+# - customer-service
+# - payments-service
+# - notifications-service
+# - audit-service
+#
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: tilington-microservices
+# spec:
+#   generators:
+#     - list:
+#         elements:
+#           - service: customer-service
+#           - service: payments-service
+#           - service: notifications-service
+#           - service: audit-service
+#   template:
+#     ... TODO: complete the template
