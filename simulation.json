@@ -9,65 +9,65 @@
     "shared_files": [
       {
         "file_id": "company_brief",
-        "file_name": "Tilington plc — Company Background & Regulatory Context",
-        "file_description": "CTO mandate, £3.2M budget, FCA/PRA/UK GDPR regulatory context, datacentre lease expiry timeline, stakeholders, and Oracle licensing cost drivers.",
-        "file_type": "documentation",
+        "title": "Tilington plc — Company Background & Regulatory Context",
+        "description": "CTO mandate, £3.2M budget, FCA/PRA/UK GDPR regulatory context, datacentre lease expiry timeline, Oracle licensing cost drivers, and stakeholder list.",
+        "file_type": "md",
         "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/docs/company-brief.md",
         "available_from": "start"
       },
       {
         "file_id": "server_inventory",
-        "file_name": "Server Inventory — 90 Servers (DC1 + DC2)",
-        "file_description": "Full inventory of all 90 servers across DC1 London and DC2 Manchester. Contains OS versions, EOL status, patch status, and database assignments. Includes two undocumented servers (SRV-086/087), a shared Oracle instance on SRV-076, and CRITICAL patch status entries.",
-        "file_type": "reference",
+        "title": "Server Inventory — 90 Servers (DC1 + DC2)",
+        "description": "Full inventory of all 90 servers across DC1 London and DC2 Manchester. Contains OS versions, EOL status, patch status, and database assignments. Includes two undocumented servers (SRV-086/087), a shared Oracle instance on SRV-076, and CRITICAL patch status entries.",
+        "file_type": "csv",
         "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/server-inventory.csv",
         "available_from": "start"
       },
       {
         "file_id": "application_inventory",
-        "file_name": "Application Inventory — 28 Applications",
-        "file_description": "All 28 Tilington applications with 6R migration classification, business owners, database dependencies, and regulatory scope. APP-027 status is deliberately left unclear for the candidate to investigate.",
-        "file_type": "reference",
+        "title": "Application Inventory — 28 Applications",
+        "description": "All 28 Tilington applications with 6R migration classification, business owners, database dependencies, and regulatory scope. APP-027 status is deliberately left unclear for the candidate to investigate.",
+        "file_type": "csv",
         "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/application-inventory-template.csv",
         "available_from": "start"
       },
       {
         "file_id": "dependency_map",
-        "file_name": "Application Dependency Map",
-        "file_description": "68 documented and undocumented application dependencies with protocol, port, direction, and criticality. Contains deliberate traps: APP-006 depends on MSSQL-03 which is not in the server inventory.",
-        "file_type": "reference",
+        "title": "Application Dependency Map",
+        "description": "68 documented and undocumented application dependencies. Contains deliberate traps: APP-006 depends on MSSQL-03 which is not in the server inventory, and APP-002 uses an undocumented SMB file share with APP-003.",
+        "file_type": "csv",
         "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/dependency-map.csv",
         "available_from": "start"
       },
       {
         "file_id": "aws_cost_report",
-        "file_name": "AWS Cost Report — January 2026",
-        "file_description": "January 2026 AWS spend across 4 accounts. 45 rows. Contains the cross-AZ wrong-direction trap: CloudWatch DataProcessing at $89.40 looks like the problem, but Data Transfer Regional at $156.30 is the real architectural issue — fixable with free VPC gateway endpoints.",
-        "file_type": "reference",
+        "title": "AWS Cost Report — January 2026",
+        "description": "January 2026 AWS spend across 4 accounts. 45 rows. Contains the cross-AZ trap: CloudWatch DataProcessing at $89.40 looks like the problem, but Data Transfer Regional at $156.30 is the real architectural issue — fixable with free VPC gateway endpoints saving $1,875.60/year.",
+        "file_type": "csv",
         "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/aws_cost_report.csv",
         "available_from": "start"
       },
       {
         "file_id": "security_findings",
-        "file_name": "Security Findings — 20 AWS Security Hub Findings",
-        "file_description": "20 Security Hub and GuardDuty findings. Includes SF-002 and SF-018 (public S3 bucket with customer NI numbers — potential ICO notification) and SF-006 (active SSH brute force from Tor exit node).",
-        "file_type": "reference",
+        "title": "Security Findings — 20 AWS Security Hub Findings",
+        "description": "20 Security Hub and GuardDuty findings. Includes SF-002 and SF-018 (public S3 bucket with customer NI numbers — potential ICO notification) and SF-006 (active SSH brute force from Tor exit node).",
+        "file_type": "csv",
         "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/security-findings.csv",
         "available_from": "start"
       },
       {
         "file_id": "migration_wave_candidates",
-        "file_name": "Migration Wave Candidates — All 28 Applications",
-        "file_description": "All 28 apps with recommended migration wave, complexity rating, sequencing rationale, and pre-migration tasks. APP-012 (Authentication Service) must be Wave 2 — 25 apps depend on it.",
-        "file_type": "reference",
+        "title": "Migration Wave Candidates — All 28 Applications",
+        "description": "All 28 apps with recommended migration wave, complexity rating, sequencing rationale, and pre-migration tasks. APP-012 (Authentication Service) must be Wave 2 — 25 apps depend on it.",
+        "file_type": "csv",
         "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/migration-wave-candidates.csv",
         "available_from": "start"
       },
       {
         "file_id": "github_repo",
-        "file_name": "Starter GitHub Repository — tilington-cloud-modernisation",
-        "file_description": "15-20% complete starter repository. Contains incomplete Terraform modules, a broken GitHub Actions pipeline with 10 documented bugs to find and fix, partial Kubernetes manifests, and Python automation tool starters.",
-        "file_type": "code_template",
+        "title": "Starter GitHub Repository",
+        "description": "15-20% complete starter repository at github.com/alain-Sortnext/tilington-cloud-modernisation. Contains incomplete Terraform modules, a broken CI/CD pipeline with 10 bugs, partial Kubernetes manifests, and Python automation tool starters.",
+        "file_type": "link",
         "url": "https://github.com/alain-Sortnext/tilington-cloud-modernisation",
         "available_from": "start"
       }
@@ -514,7 +514,8 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "Correctly identifies that only non-PII data is permitted in eu-west-1 (DR region) under UK GDPR",
-                "points_possible": 100
+                "points_possible": 100,
+                "points": 100
               }
             ]
           },
@@ -607,27 +608,32 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "Infrastructure analysis — EOL OS count correct with server IDs, CRITICAL patch servers identified, SRV-086/087 assessed, SRV-076 shared Oracle documented",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "Application 6R classification — all 28 apps classified, APP-027 investigated with definitive recommendation",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "Dependency analysis — MSSQL-03 mystery resolved with recommendation, specific dependency chain cited from CSV",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c4",
                 "criterion_label": "Risk register — 5 or more new risks with impact, likelihood, owner, and mitigation",
-                "points_possible": 15
+                "points_possible": 15,
+                "points": 15
               },
               {
                 "criterion_id": "c5",
                 "criterion_label": "Executive summary — board-readable, honest about timeline, specific risk calls with CSV evidence",
-                "points_possible": 15
+                "points_possible": 15,
+                "points": 15
               }
             ],
             "content": {
@@ -644,12 +650,14 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "Addresses all four messy reality items (SRV-086/087, APP-027, MSSQL-03, SRV-076) with specific findings from the CSV data",
-                "points_possible": 60
+                "points_possible": 60,
+                "points": 60
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "Quantifies the EOL OS and CRITICAL patch risk with specific server IDs and regulatory implications",
-                "points_possible": 40
+                "points_possible": 40,
+                "points": 40
               }
             ],
             "content": {
@@ -763,27 +771,32 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "Account structure — 6+ accounts, OU hierarchy documented, rationale for each separation",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "SCPs in valid JSON — minimum 3, correct Effect/Action/Resource structure",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "Identity model — IAM Identity Centre with Azure AD federation, 6-role hierarchy defined",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c4",
                 "criterion_label": "ADRs — minimum 3 in Nygard format with Tilington-specific trade-offs, not generic statements",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c5",
                 "criterion_label": "Data residency — written technical mechanism naming the specific AWS control",
-                "points_possible": 15
+                "points_possible": 15,
+                "points": 15
               }
             ],
             "content": {
@@ -800,12 +813,14 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "3 SCPs in valid JSON syntax with correct Effect, Action, Resource structure",
-                "points_possible": 60
+                "points_possible": 60,
+                "points": 60
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "Data residency answer names specific AWS controls — not prose assertions",
-                "points_possible": 40
+                "points_possible": 40,
+                "points": 40
               }
             ],
             "content": {
@@ -920,22 +935,26 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "Private subnets, NAT GW, route tables, VPC flow logs completed — no 0.0.0.0/0 ingress except ALB",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "All 14 NCSC principles mapped to specific AWS controls — no blanks",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "Data Transfer Regional ($156.30) correctly identified as architectural root cause — not CloudWatch. VPC gateway endpoints named as free fix with $1,875.60 annual saving",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               },
               {
                 "criterion_id": "c4",
                 "criterion_label": "SF-002/SF-018 response: ICO Article 33 assessment, data lineage, governance fix named",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               }
             ],
             "content": {
@@ -952,17 +971,20 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "Correctly identifies Data Transfer Regional ($156.30) as the architectural problem — not CloudWatch ($89.40). Explains why.",
-                "points_possible": 35
+                "points_possible": 35,
+                "points": 35
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "Names S3 gateway endpoint and DynamoDB gateway endpoint as the free fix, calculates $1,875.60 annual saving",
-                "points_possible": 30
+                "points_possible": 30,
+                "points": 30
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "Emma Clarke response: ICO Article 33 72-hour clock addressed, data lineage explained, governance fix named",
-                "points_possible": 35
+                "points_possible": 35,
+                "points": 35
               }
             ],
             "content": {
@@ -1068,27 +1090,32 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "terraform plan output shows 0 errors across all three modules",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "CloudTrail S3 uses Object Lock COMPLIANCE mode with explanation of difference from GOVERNANCE",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "Python inventory tool produces actual CSV output with Oracle instances (oracle-ee/oracle-se2) correctly identified",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c4",
                 "criterion_label": "security.yaml creates Security Hub with FSBP and CIS standards enabled plus GuardDuty detector",
-                "points_possible": 15
+                "points_possible": 15,
+                "points": 15
               },
               {
                 "criterion_id": "c5",
                 "criterion_label": "All 3 incidents resolved: root cause, containment, long-term fix, evidence — untagged instance governance fix named",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               }
             ],
             "content": {
@@ -1105,17 +1132,20 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "SSH brute force: root cause identified, SSM Session Manager named as the long-term fix replacing SSH",
-                "points_possible": 35
+                "points_possible": 35,
+                "points": 35
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "Cross-AZ cost: Data Transfer Regional correctly identified, VPC endpoints named, $1,875.60 annual saving calculated",
-                "points_possible": 35
+                "points_possible": 35,
+                "points": 35
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "Untagged instance: investigation documented, governance fix (SCP or Config rule) named",
-                "points_possible": 30
+                "points_possible": 30,
+                "points": 30
               }
             ],
             "content": {
@@ -1254,22 +1284,26 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "All 4 deployments have correct security context (runAsNonRoot, readOnlyRootFilesystem, allowPrivilegeEscalation: false), topology spread, and IRSA annotation",
-                "points_possible": 30
+                "points_possible": 30,
+                "points": 30
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "helm template produces valid YAML without errors — output pasted as evidence",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "ArgoCD ApplicationSet iterates over all 4 microservices, production and non-production overlays both created",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               },
               {
                 "criterion_id": "c4",
                 "criterion_label": "Payments Service PCI isolation implemented via separate namespace or NetworkPolicy",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               }
             ],
             "content": {
@@ -1286,17 +1320,20 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "Explains PCI DSS isolation for Payments Service with the specific Kubernetes mechanism used",
-                "points_possible": 35
+                "points_possible": 35,
+                "points": 35
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "Explains why AuditTrail DynamoDB must have NO TTL and names the FCA regulatory basis",
-                "points_possible": 35
+                "points_possible": 35,
+                "points": 35
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "Explains IRSA and why every ServiceAccount needs the eks.amazonaws.com/role-arn annotation",
-                "points_possible": 30
+                "points_possible": 30,
+                "points": 30
               }
             ],
             "content": {
@@ -1502,22 +1539,26 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "All 10 bugs fixed with root cause and lines changed — BUG-004 correctly explains needs:/if: skipped-job interaction",
-                "points_possible": 35
+                "points_possible": 35,
+                "points": 35
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "BUG-005 fixed with OIDC role-to-assume — no long-lived credentials in GitHub secrets",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "BUG-008 rollback added via kubectl rollout undo, BUG-009 smoke test checks /health/ready endpoint",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c4",
                 "criterion_label": "Real Trivy scan output committed (not mocked), Checkov failed checks documented with remediation",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               }
             ],
             "content": {
@@ -1534,17 +1575,20 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "Payments Service error budget correctly calculated as 21.6 minutes/month with working shown (30 × 24 × 60 × 0.0005)",
-                "points_possible": 35
+                "points_possible": 35,
+                "points": 35
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "Fast burn and slow burn thresholds defined with specific percentages and time windows",
-                "points_possible": 30
+                "points_possible": 30,
+                "points": 30
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "SLO framework explicitly connected to FCA PS21/3 — explains what Emma Clarke would show the regulator",
-                "points_possible": 35
+                "points_possible": 35,
+                "points": 35
               }
             ],
             "content": {
@@ -1696,27 +1740,32 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "Aurora instance sizing justified against ORCL-01 workload not SRV-006 server specs, SQL schema complete with indexes",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "PaymentEvents hot partition solved with concrete mechanism — write sharding or equivalent proposed",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "AuditTrail has NO TTL with FCA COBS justification, separate KMS key, correct least-privilege access model",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c4",
                 "criterion_label": "Payments Service 15-minute RPO achieved via Aurora PITR specifically — daily backups not sufficient, correctly distinguished",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c5",
                 "criterion_label": "Oracle recommendation names ORCL-01/02/03, addresses PL/SQL complexity, gives specific recommendation with £4.2M saving",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               }
             ],
             "content": {
@@ -1870,27 +1919,32 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "Total January spend calculated from CSV sum — not estimated. Top 5 costs by service identified.",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "All 5 FinOps findings identified and quantified — cross-AZ $156.30 as architectural issue with $1,875.60 annual saving",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "AuditTrail excluded from DR replication with UK data residency and FCA rationale",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c4",
                 "criterion_label": "Payments Service 15-minute RPO evidenced via Aurora PITR — not general automated backups",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c5",
                 "criterion_label": "All 28 apps assigned to waves, APP-012 in Wave 2, wave entry/exit criteria defined",
-                "points_possible": 15
+                "points_possible": 15,
+                "points": 15
               }
             ],
             "content": {
@@ -2042,27 +2096,32 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "ARB deck has 12+ slides, references January spend total from CSV, Oracle saving of £4.2M over 3 years quantified",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "Emma Clarke Q1: names SCP, Aurora snapshot-only strategy, AuditTrail exclusion, CloudTrail detective control",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "Emma Clarke Q2: covers Multi-AZ, eu-west-1 warm standby, Route 53 failover, in-flight payment handling",
-                "points_possible": 20
+                "points_possible": 20,
+                "points": 20
               },
               {
                 "criterion_id": "c4",
                 "criterion_label": "Emma Clarke Q3: names specific IAM Identity Centre roles, break-glass procedure, monthly review cadence",
-                "points_possible": 15
+                "points_possible": 15,
+                "points": 15
               },
               {
                 "criterion_id": "c5",
                 "criterion_label": "Risk and trade-off summary documents all 5 trade-offs with cost figures — NAT Gateway ~£90/month cited",
-                "points_possible": 15
+                "points_possible": 15,
+                "points": 15
               }
             ],
             "content": {
@@ -2079,17 +2138,20 @@
               {
                 "criterion_id": "c1",
                 "criterion_label": "Q1 data residency: names all 4 mechanisms — SCP, Aurora snapshot-only, AuditTrail exclusion, CloudTrail detective control",
-                "points_possible": 40
+                "points_possible": 40,
+                "points": 40
               },
               {
                 "criterion_id": "c2",
                 "criterion_label": "Q2 operational resilience: covers Multi-AZ, eu-west-1 failover, Route 53, and in-flight payments",
-                "points_possible": 35
+                "points_possible": 35,
+                "points": 35
               },
               {
                 "criterion_id": "c3",
                 "criterion_label": "Q3 privileged access: names specific IAM Identity Centre roles, break-glass procedure, review cadence",
-                "points_possible": 25
+                "points_possible": 25,
+                "points": 25
               }
             ],
             "content": {
