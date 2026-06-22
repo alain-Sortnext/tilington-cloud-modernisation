@@ -510,7 +510,14 @@
               "Encrypted backups of customer payment history"
             ],
             "correct_index": 2
-          }
+          },
+          "rubric": [
+            {
+              "criterion_id": "c1",
+              "criterion_label": "Correctly identifies that only non-PII data is permitted in eu-west-1 (DR region) under UK GDPR",
+              "points": 100
+            }
+          ]
         }
       ]
     },
