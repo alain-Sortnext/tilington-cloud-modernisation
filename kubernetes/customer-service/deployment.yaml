@@ -1,0 +1,176 @@
+# ============================================================
+# Tilington plc — Customer Service Kubernetes Deployment
+# STATUS: INCOMPLETE — Candidate completes in Phase 5
+# ============================================================
+#
+# The Customer Service is responsible for:
+# - Customer profile management (create, read, update)
+# - Account summary retrieval
+# - KYC status management
+# - Customer authentication token validation
+#
+# FCA/UK GDPR: This service handles PII — encryption in transit mandatory
+# ============================================================
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-service
+  namespace: tilington-prod
+  labels:
+    app: customer-service
+    version: "1.0.0"
+    tier: backend
+    managed-by: argocd
+  annotations:
+    # TODO: Candidate adds deployment annotations for monitoring and rollback
+    # deployment.kubernetes.io/revision: "1"
+spec:
+  replicas: 3  # Minimum for HA — 3 AZs in eu-west-2
+  selector:
+    matchLabels:
+      app: customer-service
+  strategy:
+    # TODO: Candidate chooses strategy: RollingUpdate or Blue/Green
+    # Document choice in ADR — consider FCA impact tolerance requirements
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0  # Zero-downtime deployment
+
+  template:
+    metadata:
+      labels:
+        app: customer-service
+        version: "1.0.0"
+      annotations:
+        # TODO: Prometheus scrape annotations
+        # prometheus.io/scrape: "true"
+        # prometheus.io/port: "8080"
+        # prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: customer-service-sa  # IRSA role — see terraform/security/iam.tf
+      
+      # Security context — non-root, read-only filesystem
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 3000
+        fsGroup: 2000
+        seccompProfile:
+          type: RuntimeDefault
+      
+      # Spread across AZs — required for FCA operational resilience
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: customer-service
+      
+      containers:
+        - name: customer-service
+          image: # TODO: Candidate sets ECR image URI
+          # Pattern: <account>.dkr.ecr.eu-west-2.amazonaws.com/tilington/customer-service:latest
+          
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          
+          # Environment variables — secrets via AWS Secrets Manager or K8s secrets
+          env:
+            - name: ENVIRONMENT
+              value: "production"
+            - name: AWS_REGION
+              value: "eu-west-2"
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: aurora-credentials
+                  key: host
+            - name: DB_NAME
+              value: "tilington_customers"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: aurora-credentials
+                  key: username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: aurora-credentials
+                  key: password
+            # TODO: Candidate adds remaining env vars:
+            # - LOG_LEVEL
+            # - JAEGER_ENDPOINT (tracing)
+            # - PAYMENTS_SERVICE_URL (internal service URL)
+          
+          # Resource limits — MUST be set for EKS cluster autoscaler
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+              # TODO: Candidate reviews and adjusts based on load testing
+          
+          # Health checks — required for zero-downtime deployments
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+          
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 3
+          
+          # TODO: Add startupProbe for slow-starting containers
+          
+          # Security context for container
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          
+          # Volume mounts for temp files (read-only root filesystem)
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: logs
+              mountPath: /app/logs
+      
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: logs
+          emptyDir: {}
+      
+      # TODO: Candidate adds:
+      # - Node affinity for EKS managed node groups
+      # - Pod disruption budget reference
+      # - Image pull secrets for ECR (if not using IRSA)
+
+---
+# TODO: Candidate adds:
+# PodDisruptionBudget to ensure minimum availability during node maintenance
+# apiVersion: policy/v1
+# kind: PodDisruptionBudget
+# metadata:
+#   name: customer-service-pdb
+# spec:
+#   minAvailable: 2
+#   selector:
+#     matchLabels:
+#       app: customer-service
