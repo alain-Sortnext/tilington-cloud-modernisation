@@ -1,0 +1,120 @@
+# ============================================================
+# Tilington plc Helm Chart Values
+# STATUS: STARTER — Candidate completes in Phase 5
+# ============================================================
+
+global:
+  environment: production
+  region: eu-west-2
+  imageRegistry: # TODO: Candidate sets ECR registry URI
+  # Pattern: <account_id>.dkr.ecr.eu-west-2.amazonaws.com
+
+# ── Customer Service ──
+customerService:
+  enabled: true
+  image:
+    repository: tilington/customer-service
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+  replicaCount: 3  # Minimum 3 for HA across 3 AZs
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 10  # TODO: Candidate validates max based on Aurora connection limits
+    targetCPUUtilizationPercentage: 70
+  service:
+    type: ClusterIP
+    port: 80
+  env:
+    LOG_LEVEL: "INFO"
+    # Sensitive values injected from Kubernetes secrets — not here
+
+# ── Payments Service ──
+paymentsService:
+  enabled: true
+  image:
+    repository: tilington/payments-service
+    tag: "1.0.0"
+    pullPolicy: IfNotPresent
+  replicaCount: 3
+  resources:
+    requests:
+      memory: "512Mi"   # Payments service needs more memory — cryptographic operations
+      cpu: "250m"
+    limits:
+      memory: "1Gi"
+      cpu: "1000m"
+  autoscaling:
+    enabled: true
+    minReplicas: 3
+    maxReplicas: 20    # Higher max — payments are burst-heavy
+    targetCPUUtilizationPercentage: 60
+  service:
+    type: ClusterIP
+    port: 80
+  pciScope: true        # Reminder: this service is in PCI DSS scope
+
+# ── Notifications Service ──
+notificationsService:
+  enabled: true
+  image:
+    repository: tilington/notifications-service
+    tag: "1.0.0"
+  replicaCount: 2       # Lower — async, not latency-sensitive
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "50m"
+    limits:
+      memory: "256Mi"
+      cpu: "200m"
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 15     # Scale up for statement generation days (month-end burst)
+    targetCPUUtilizationPercentage: 75
+
+# ── Audit Service ──
+auditService:
+  enabled: true
+  image:
+    repository: tilington/audit-service
+    tag: "1.0.0"
+  replicaCount: 3       # 3 for HA — FCA audit trail must always be available
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "100m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+  autoscaling:
+    enabled: false      # TODO: Candidate evaluates — audit service write rate is constant
+  immutableAudit: true  # Reminder: writes to DynamoDB with no TTL
+
+# ── Ingress ──
+ingress:
+  enabled: true
+  host: api.tilington.co.uk
+  tls: true
+  # TODO: Candidate adds ACM certificate ARN, WAF ARN
+
+# ── Namespace ──
+namespace:
+  name: tilington-prod
+  create: true
+
+# ── TODO: Candidate adds values for: ──
+# - imagePullSecrets
+# - podAnnotations (Prometheus scrape annotations)
+# - nodeSelector (EKS node group targeting)
+# - tolerations
+# - topologySpreadConstraints
+# - serviceAccount.annotations (IRSA role ARNs)
