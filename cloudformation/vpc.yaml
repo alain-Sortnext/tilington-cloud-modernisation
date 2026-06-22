@@ -1,0 +1,138 @@
+# ============================================================
+# Tilington plc — CloudFormation VPC Template
+# STATUS: INCOMPLETE — Candidate completes in Phase 4
+# This template is used for the non-production account
+# Production uses Terraform — this demonstrates CFN knowledge
+# ============================================================
+
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  Tilington plc Non-Production VPC
+  Creates VPC, subnets, routing, and security baseline.
+  STATUS: INCOMPLETE - Candidate must complete all TODO sections.
+
+Parameters:
+  Environment:
+    Type: String
+    Default: "non-production"
+    AllowedValues:
+      - non-production
+      - staging
+    Description: Deployment environment
+
+  VpcCidr:
+    Type: String
+    Default: "10.40.0.0/16"
+    Description: "CIDR for non-production VPC. Must not conflict with DC1 (10.10.0.0/16), DC2 (10.20.0.0/16), or Prod (10.30.0.0/16)"
+
+# TODO: Candidate adds parameters for:
+# - PublicSubnetCidrAZ1
+# - PublicSubnetCidrAZ2
+# - PrivateSubnetCidrAZ1
+# - PrivateSubnetCidrAZ2
+
+Mappings:
+  # TODO: Candidate considers using Mappings for AZ-specific configurations
+
+Resources:
+
+  # VPC
+  TilingtonVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCidr
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: !Sub "tilington-${Environment}-vpc"
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ManagedBy
+          Value: CloudFormation
+
+  # Internet Gateway
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "tilington-${Environment}-igw"
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref TilingtonVPC
+      InternetGatewayId: !Ref InternetGateway
+
+  # TODO: Candidate adds:
+  # - PublicSubnetAZ1 (AWS::EC2::Subnet)
+  # - PublicSubnetAZ2 (AWS::EC2::Subnet)
+  # - PrivateSubnetAZ1 (AWS::EC2::Subnet)
+  # - PrivateSubnetAZ2 (AWS::EC2::Subnet)
+  # - NatGatewayEIP (AWS::EC2::EIP)
+  # - NatGateway (AWS::EC2::NatGateway)
+  # - PublicRouteTable (AWS::EC2::RouteTable)
+  # - PrivateRouteTable (AWS::EC2::RouteTable)
+  # - PublicRoute (0.0.0.0/0 -> IGW)
+  # - PrivateRoute (0.0.0.0/0 -> NAT GW)
+  # - Route table associations
+
+  # VPC Flow Logs — required for security monitoring
+  FlowLogRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: vpc-flow-logs.amazonaws.com
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: FlowLogsPolicy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                  - logs:DescribeLogGroups
+                  - logs:DescribeLogStreams
+                Resource: "*"
+                # TODO: Tighten this to specific log group ARN
+
+  FlowLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/tilington/${Environment}/vpc-flow-logs"
+      RetentionInDays: 90  # TODO: Increase to 365 for FCA compliance
+      # TODO: Add KMS encryption
+
+  VPCFlowLog:
+    Type: AWS::EC2::FlowLog
+    Properties:
+      ResourceId: !Ref TilingtonVPC
+      ResourceType: VPC
+      TrafficType: ALL
+      DeliverLogsPermissionArn: !GetAtt FlowLogRole.Arn
+      LogGroupName: !Ref FlowLogGroup
+
+Outputs:
+  VpcId:
+    Description: VPC ID
+    Value: !Ref TilingtonVPC
+    Export:
+      Name: !Sub "tilington-${Environment}-vpc-id"
+
+  VpcCidr:
+    Description: VPC CIDR Block
+    Value: !GetAtt TilingtonVPC.CidrBlock
+    Export:
+      Name: !Sub "tilington-${Environment}-vpc-cidr"
+
+  # TODO: Candidate adds outputs for all subnet IDs
+  # These are imported by other stacks via Fn::ImportValue
+
