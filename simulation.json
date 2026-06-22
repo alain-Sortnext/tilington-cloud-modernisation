@@ -952,5 +952,40 @@
         ]
       }
     ]
-  }
+  },
+  "description": "Tilington plc is a UK financial services firm (asset management and retail banking, 1,200 staff) migrating 90 servers and 28 applications from two on-premise datacentres to AWS before a hard Q3 2027 lease expiry deadline. You are the Lead AWS Solutions Architect. Across 9 phases you will conduct enterprise discovery of a messy legacy estate, design a multi-account AWS landing zone, build Terraform IaC modules, deploy four microservices to EKS using GitOps, build a DevSecOps CI/CD pipeline, design Aurora PostgreSQL and DynamoDB data architectures, plan a phased migration and DR strategy, and present your full architecture to an executive Architecture Review Board. The estate contains deliberate complexity: undocumented servers, unclear application status, shared Oracle instances, a broken pipeline with 10 bugs to find and fix, and a FinOps wrong-direction trap. Every deliverable is pushed to a real GitHub repository — your portfolio when complete targets AWS Solutions Architect roles in UK financial services paying £70,000–£125,000.",
+  "skills_tags": [
+    "AWS",
+    "AWS Organizations",
+    "Control Tower",
+    "Terraform",
+    "CloudFormation",
+    "VPC Design",
+    "Transit Gateway",
+    "IAM",
+    "KMS",
+    "GuardDuty",
+    "Security Hub",
+    "EKS",
+    "Kubernetes",
+    "Helm",
+    "ArgoCD",
+    "GitOps",
+    "GitHub Actions",
+    "DevSecOps",
+    "Trivy",
+    "Checkov",
+    "Python",
+    "Boto3",
+    "Aurora PostgreSQL",
+    "DynamoDB",
+    "Cloud Migration",
+    "6Rs Framework",
+    "Disaster Recovery",
+    "FinOps",
+    "AWS Well-Architected",
+    "FCA Compliance",
+    "Stakeholder Management",
+    "Architecture Decision Records"
+  ]
 }
