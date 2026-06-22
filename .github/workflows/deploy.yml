@@ -1,0 +1,202 @@
+# ============================================================
+# Tilington plc — GitHub Actions CI/CD Pipeline
+# STATUS: BROKEN — Candidate identifies and fixes all bugs in Phase 6
+# ============================================================
+#
+# Known issues (find and fix these):
+# 1. Security scan step is missing — no Trivy or Checkov scan
+# 2. The docker build uses wrong context path
+# 3. ECR push step has missing authentication
+# 4. The deploy step will fail — kubectl context not configured
+# 5. No environment protection rules
+# 6. No rollback step on deployment failure
+#
+# This pipeline should:
+# 1. Build Docker image
+# 2. Run security scan (Trivy for image, Checkov for IaC)
+# 3. Push to ECR
+# 4. Deploy to EKS (non-production first, then production with approval)
+# 5. Run smoke tests
+# 6. Roll back if smoke tests fail
+# ============================================================
+
+name: Customer Service Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - "microservices/customer-service/**"
+      - "kubernetes/customer-service/**"
+      - ".github/workflows/deploy.yml"
+  pull_request:
+    branches:
+      - main
+
+env:
+  AWS_REGION: eu-west-2
+  ECR_REGISTRY: # BUG: Missing ECR registry URI
+  IMAGE_NAME: tilington/customer-service
+  EKS_CLUSTER: tilington-production-eks
+
+jobs:
+  # ============================================================
+  # JOB 1: BUILD AND TEST
+  # ============================================================
+  build:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Docker image
+        run: |
+          docker build             -t $IMAGE_NAME:$GITHUB_SHA             -f customer-service/Dockerfile .
+          # BUG: Wrong build context — should be microservices/customer-service/
+          # Fix this so the Dockerfile can find its source files
+      
+      # BUG: No security scanning step here
+      # TODO: Candidate adds Trivy image scan
+      # The scan must fail the pipeline if CRITICAL vulnerabilities are found
+      # Allow HIGH vulnerabilities with a GitHub issue created automatically
+      
+      - name: Run unit tests
+        run: |
+          # BUG: Tests are not run — this step does nothing
+          echo "TODO: Candidate adds real test command"
+          # Should be something like: cd microservices/customer-service && python -m pytest tests/
+  
+  # ============================================================
+  # JOB 2: SECURITY SCAN
+  # ============================================================
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: build  # BUG: This job is defined but never runs — why?
+    # TODO: Candidate identifies the bug preventing this job from running
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Run Checkov IaC scan
+        # BUG: Wrong action version and missing required inputs
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: .
+          # TODO: Candidate adds: framework, output_format, soft_fail settings
+          # Should scan: terraform/, cloudformation/, kubernetes/
+      
+      # TODO: Candidate adds Trivy filesystem scan
+      # TODO: Candidate adds SAST scan (optional: Bandit for Python)
+  
+  # ============================================================
+  # JOB 3: PUSH TO ECR
+  # ============================================================
+  push-ecr:
+    name: Push to ECR
+    runs-on: ubuntu-latest
+    needs: [build, security-scan]
+    if: github.ref == "refs/heads/main" || github.ref == "refs/heads/develop"
+    
+    steps:
+      - name: Configure AWS credentials
+        # BUG: Using deprecated method — should use OIDC, not access keys
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+          # TODO: Candidate replaces with OIDC authentication:
+          # role-to-assume: arn:aws:iam::ACCOUNT:role/tilington-github-actions-role
+          # This eliminates long-lived credentials from GitHub secrets
+      
+      - name: Login to ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      
+      - name: Push image to ECR
+        run: |
+          # BUG: IMAGE_TAG not defined — what should it be?
+          docker push $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+          # TODO: Also push :latest tag? Document the tagging strategy.
+  
+  # ============================================================
+  # JOB 4: DEPLOY TO NON-PRODUCTION
+  # ============================================================
+  deploy-nonprod:
+    name: Deploy to Non-Production
+    runs-on: ubuntu-latest
+    needs: push-ecr
+    environment: non-production  # TODO: Define this environment in GitHub settings
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.NONPROD_DEPLOY_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: Update kubeconfig
+        run: |
+          # BUG: Wrong cluster name format
+          aws eks update-kubeconfig --name $EKS_CLUSTER-nonprod --region $AWS_REGION
+          # TODO: Should reference the non-production cluster, not production
+      
+      - name: Deploy to EKS
+        run: |
+          # BUG: Image tag undefined again
+          kubectl set image deployment/customer-service             customer-service=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG             -n tilington-nonprod
+          kubectl rollout status deployment/customer-service -n tilington-nonprod --timeout=300s
+  
+  # ============================================================
+  # JOB 5: DEPLOY TO PRODUCTION
+  # ============================================================
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: deploy-nonprod
+    environment: production  # TODO: Configure with required reviewers in GitHub settings
+    if: github.ref == "refs/heads/main"
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Deploy to EKS Production
+        run: |
+          # BUG: No AWS credentials configured for this job
+          # BUG: No kubectl rollback if deployment fails
+          # TODO: Candidate adds:
+          # 1. AWS credentials (OIDC, production role)
+          # 2. kubeconfig update for production cluster
+          # 3. Deployment with --record flag
+          # 4. Smoke test step
+          # 5. Automatic rollback: kubectl rollout undo if smoke tests fail
+          echo "TODO: Candidate implements production deployment with rollback"
+
+# ============================================================
+# KNOWN BUGS SUMMARY FOR CANDIDATE
+# Find and fix all of the following in Phase 6:
+#
+# BUG-001: ECR_REGISTRY env var is empty
+# BUG-002: docker build uses wrong context path
+# BUG-003: No Trivy security scan on built image
+# BUG-004: security-scan job never runs (find the root cause)
+# BUG-005: Deprecated AWS credentials method (access keys vs OIDC)
+# BUG-006: IMAGE_TAG variable never defined
+# BUG-007: deploy-production has no AWS credentials configured
+# BUG-008: No rollback step on failed deployment
+# BUG-009: No smoke test to validate successful deployment
+# BUG-010: No notification on pipeline failure
+# ============================================================
