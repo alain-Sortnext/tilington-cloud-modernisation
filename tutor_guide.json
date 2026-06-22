@@ -1,0 +1,290 @@
+{
+  "schema_version": "1.0",
+  "simulation_title": "Tilington plc Cloud Modernisation Programme",
+  "domain": "AWS / Cloud Architecture",
+  "role": "Senior AWS Solutions Architect",
+  "overview": "Tilington plc is a UK financial services firm migrating 90 servers and 28 applications from two on-premise datacentres to AWS before Q3 2027 lease expiry. The candidate acts as Lead AWS Solutions Architect across 9 delivery phases covering discovery, architecture, IaC, Kubernetes, CI/CD, databases, migration planning, and executive governance. Every deliverable is committed to a real GitHub repository forming the candidate's professional portfolio.",
+  "setup": {
+    "required_accounts": [
+      "AWS Free Tier (Organizations, Control Tower, EKS, Aurora, DynamoDB, CloudTrail, GuardDuty, Security Hub, WAF)",
+      "GitHub (free account, fork or clone starter repo)",
+      "Grafana Cloud (free tier — grafana.com/products/cloud)",
+      "Draw.io (free browser tool — app.diagrams.net)"
+    ],
+    "required_software": [
+      "Terraform (v1.6+)",
+      "AWS CLI (v2)",
+      "kubectl",
+      "Helm (v3)",
+      "Docker Desktop",
+      "Python 3.10+ with boto3",
+      "VS Code",
+      "Git"
+    ],
+    "starter_repo": "https://github.com/alain-Sortnext/tilington-cloud-modernisation",
+    "repo_note": "The repo is 15-20% complete by design. Files with # TODO: need candidate work. Files with # STARTER show the pattern to follow. Candidates must not delete starter files.",
+    "data_files": [
+      "migration/server-inventory.csv — 90 servers, contains deliberate traps",
+      "migration/application-inventory-template.csv — 28 apps",
+      "migration/dependency-map.csv — 68 dependencies, some undocumented",
+      "migration/aws_cost_report.csv — January 2026 costs, contains wrong-direction trap",
+      "migration/security-findings.csv — 20 Security Hub findings",
+      "migration/migration-wave-candidates.csv — wave sequencing"
+    ],
+    "key_answer_figures": {
+      "eol_os_server_count": "14 servers (Windows 2012 R2 x5-7 + RHEL 7 x7-9)",
+      "undocumented_servers": "SRV-086 and SRV-087 in DC1 Rack 21",
+      "shared_oracle_server": "SRV-076 hosts both ORCL-04 and ORCL-05 (undocumented)",
+      "ghost_database": "MSSQL-03 referenced by APP-006 and APP-018 but not in server inventory",
+      "app_027_status": "Unclear — Finance says decommissioned, Michael sees active DB sessions. Candidate must investigate.",
+      "cross_az_trap": "CloudWatch DataProcessing $89.40 is the distraction. Data Transfer Regional $156.30 is the real architectural problem. Fix: S3 + DynamoDB VPC gateway endpoints (free). Annual saving: $1,875.60.",
+      "payments_error_budget": "30 x 24 x 60 x 0.0005 = 21.6 minutes per month",
+      "oracle_annual_cost": "£1,400,000/year — £4,200,000 over 3 years if renewed",
+      "oracle_renewal_candidates": "ORCL-01, ORCL-02, ORCL-03 must migrate before Q2 2026 renewal decision",
+      "audit_trail_ttl": "NO TTL — FCA COBS record-keeping. Setting a TTL is a compliance failure.",
+      "payments_rpo_mechanism": "Aurora PITR (Point-in-Time Recovery) — not daily automated backups",
+      "january_total_spend": "~$10,100 USD — candidate must sum blended_cost_usd from CSV, not estimate"
+    }
+  },
+  "phases": [
+    {
+      "phase_id": "phase_1",
+      "phase_title": "Welcome to Tilington plc (Onboarding)",
+      "what_good_looks_like": "The candidate reads the company brief thoroughly and answers the orientation question correctly: only non-PII data is permitted in eu-west-1 (the DR region). They can name all four stakeholders and their primary concern, and correctly identify the three business drivers (DC lease expiry, FCA PS21/3 remediation, Oracle licensing cost).",
+      "common_mistakes": [
+        "Selecting eu-west-2 as the DR region instead of recognising eu-west-1 is DR and eu-west-2 is primary",
+        "Confusing the FCA operational resilience deadline (March 2025, already missed) with a future target",
+        "Not reading the GitHub repo structure before Phase 2 — candidates who skip this miss the deliberate CSV traps"
+      ],
+      "answer": "Orientation question correct answer: Option C — Non-PII configuration data and infrastructure state. eu-west-1 is the DR region and cannot hold customer PII under UK GDPR. Aurora customer data, DynamoDB AuditTrail replication, and encrypted payment history are all prohibited there.",
+      "phase_setup": {
+        "tutor_actions": [
+          "Confirm candidate has cloned the starter repo and can see the /migration/ CSV files",
+          "Confirm candidate has an AWS Free Tier account active",
+          "Remind candidate that the CMDB is intentionally incomplete — SRV-086/087 are not in it"
+        ]
+      }
+    },
+    {
+      "phase_id": "phase_2",
+      "phase_title": "Discovery & Current State Assessment",
+      "what_good_looks_like": "A strong submission identifies all four messy-reality items from the CSV data with specific server IDs and evidence. The discovery report has a board-readable executive summary. All 28 applications are classified with 6R reasoning. The MSSQL-03 finding and APP-027 recommendation are definitive, not hedged. The current-state diagram clearly shows DC1/DC2 separation with Oracle instances on their correct host servers.",
+      "common_mistakes": [
+        "Generic EOL OS statements without listing specific server IDs from the CSV",
+        "Classifying APP-027 as 'unclear' without making a recommendation — the brief requires a definitive answer",
+        "Missing MSSQL-03 entirely — it appears in dependency-map.csv but not server-inventory.csv",
+        "Missing the SRV-076 finding — ORCL-04 and ORCL-05 sharing a physical server has major migration implications",
+        "Classifying all 28 apps as Rehost to avoid detailed analysis — check for genuine complexity in trade processing and compliance apps",
+        "Not referencing specific data from the CSVs — generic answers that could apply to any estate score zero"
+      ],
+      "answer": "EOL OS servers: minimum 14 (SRV-001, 002, 012, 013, 014, 015, 018, 019, 022, 032, 038, 042, 059, 074, 077, 086, 087 — check CSV for full list). Undocumented servers: SRV-086 (RHEL 7, unknown purpose) and SRV-087 (Windows 2012, unknown owner) — both CRITICAL risk, require immediate investigation. MSSQL-03: referenced in dependency-map.csv by APP-006 and APP-018 but no corresponding server entry — likely consolidated during 2021 server consolidation, requires Michael Evans investigation. APP-027: recommend treating as active until proven otherwise — Michael Evans sees DB sessions on ORCL-05, Finance may have incorrect decommission records. SRV-076: hosts both ORCL-04 and ORCL-05 on one physical server in DC2 — must be addressed in migration sequencing, cannot migrate one without affecting the other.",
+      "phase_setup": {
+        "files_candidate_needs": [
+          "migration/server-inventory.csv",
+          "migration/application-inventory-template.csv",
+          "migration/dependency-map.csv",
+          "docs/company-brief.md"
+        ],
+        "tutor_prompts": [
+          "If candidate misses SRV-076: ask them to filter the server inventory by DC2 database servers and look for any server hosting multiple Oracle instances",
+          "If candidate hedges on APP-027: ask them what action they would recommend to Sarah Williams this week",
+          "If candidate misses MSSQL-03: ask them to cross-reference the dependency map with the server inventory for all database references"
+        ]
+      }
+    },
+    {
+      "phase_id": "phase_3",
+      "phase_title": "Target AWS Architecture & Landing Zone",
+      "what_good_looks_like": "Three or more SCPs written in valid JSON with correct Effect/Action/Resource structure. IAM Identity Centre configured with Azure AD federation and a minimum 6-role hierarchy. At least 3 ADRs in Nygard format with Tilington-specific trade-offs (not generic). Emma Clarke's data residency question answered with a specific AWS mechanism (SCP, not just a statement). The LLD contains implementable detail, not diagrams.",
+      "common_mistakes": [
+        "Describing SCPs in prose instead of writing them in JSON — prose descriptions score zero",
+        "ADR-005 (EKS vs ECS) using generic trade-offs not connected to Tilington's specific requirements",
+        "Answering Emma Clarke's data residency question with 'we will configure controls' instead of naming the specific SCP or AWS service",
+        "Using a single AWS account instead of the minimum 6-account structure",
+        "Forgetting to include Azure AD federation — Tilington uses Microsoft 365 and cannot create new IdP infrastructure"
+      ],
+      "answer": "Minimum 6 accounts: Management (billing only, no workloads), Security (GuardDuty master, Security Hub master), Logging (CloudTrail, Config, VPC Flow Logs — immutable), Shared Services (Transit Gateway, Route 53 Resolver), Production (all customer workloads), Non-Production (dev, test, staging). SCP examples: (1) Deny creating S3 buckets without block public access — Effect:Deny, Action:s3:CreateBucket, Condition:StringNotEquals s3:x-amz-acl private. (2) Deny disabling CloudTrail — Effect:Deny, Action:cloudtrail:DeleteTrail/StopLogging. (3) Deny eu-west-1 for PII services — Effect:Deny, Action:rds:CreateDBInstance, Condition:StringNotEquals aws:RequestedRegion eu-west-2. Emma Clarke data residency answer: SCP at OU level denying RDS/DynamoDB creation in eu-west-1, enforced at account level, with CloudTrail + Config rule as detective control if SCP is bypassed.",
+      "phase_setup": {
+        "tutor_prompts": [
+          "If SCPs are missing: ask the candidate to show you the JSON for the public S3 bucket denial SCP",
+          "If ADRs are generic: ask them to explain why EKS was chosen over ECS specifically for Tilington's team skills and GitOps requirements",
+          "If data residency answer is vague: ask Emma Clarke's exact question — 'what happens if the control fails?'"
+        ]
+      }
+    },
+    {
+      "phase_id": "phase_4",
+      "phase_title": "Networking, Security & Hybrid Cloud",
+      "what_good_looks_like": "Terraform networking module completes terraform plan with 0 errors. All 14 NCSC Cloud Security Principles are mapped to specific AWS controls with no blanks. The cross-AZ cost analysis correctly identifies Data Transfer Regional ($156.30) as the architectural problem — not CloudWatch ($89.40). VPC gateway endpoints named as the free fix. Emma Clarke's SF-002/SF-018 response includes an ICO Article 33 assessment.",
+      "common_mistakes": [
+        "Identifying CloudWatch DataProcessing ($89.40) as the cost problem — this is the wrong-direction trap. Data Transfer Regional ($156.30) is architectural and fixable for free.",
+        "Leaving any of the 14 NCSC principles blank or as TODO",
+        "Fixing SF-004 by restricting the SSH IP range instead of replacing SSH with SSM Session Manager entirely",
+        "Not calculating the annual saving from VPC gateway endpoints ($156.30 x 12 = $1,875.60)",
+        "Recommending Direct Connect for non-production environments — VPN is sufficient and significantly cheaper"
+      ],
+      "answer": "Cross-AZ root cause: services calling S3 and DynamoDB APIs are routing across availability zones because no VPC gateway endpoints exist. Fix: add aws_vpc_endpoint for S3 (gateway type, free) and DynamoDB (gateway type, free). These route traffic within the AZ, eliminating the $156.30/month charge. Annual saving: $1,875.60. CloudWatch at $89.40 is a monitoring verbosity issue and a secondary optimisation, not the root cause. SF-004 fix: remove the port 22 ingress rule from the EKS node security group entirely. Replace SSH access with AWS SSM Session Manager — requires SSM agent on nodes and appropriate IAM instance profile. SF-002/SF-018 ICO assessment: potential breach under UK GDPR Article 33 — 72-hour notification clock started when Macie detected NI numbers in a public bucket. Must assess: how many data subjects affected, what categories of PII, is it likely to result in risk to rights and freedoms. If yes, notify ICO within 72 hours.",
+      "phase_setup": {
+        "files_candidate_needs": [
+          "migration/aws_cost_report.csv",
+          "migration/security-findings.csv",
+          "terraform/networking/main.tf (starter)"
+        ],
+        "tutor_prompts": [
+          "If candidate picks CloudWatch as the problem: ask them which line item is architectural vs operational",
+          "If NCSC principles are incomplete: ask them to focus on principles 9 (secure user management) and 11 (external interface protection) first"
+        ]
+      }
+    },
+    {
+      "phase_id": "phase_5",
+      "phase_title": "Infrastructure as Code, Automation & Operations",
+      "what_good_looks_like": "terraform plan output shows 0 errors across all three modules. Python inventory tool produces an actual CSV output file (not mocked) with Oracle instances identified by engine type. Cost reporting tool identifies Data Transfer Regional as the root cause. Object Lock is set to COMPLIANCE mode (not GOVERNANCE) with a written explanation of the difference. All three incidents have root cause, containment, long-term fix, and evidence.",
+      "common_mistakes": [
+        "Setting CloudTrail S3 Object Lock to GOVERNANCE mode — COMPLIANCE mode is required because FCA audit records must be immutable even to root account holders",
+        "Submitting mocked Python output instead of actual tool output from a real AWS account",
+        "Identifying CloudWatch as the cross-AZ root cause instead of Data Transfer Regional",
+        "Incident 3 (untagged EC2): just terminating the instance without implementing the governance fix that prevents recurrence",
+        "Terraform plan errors from missing variable values or unresolved references in EKS module"
+      ],
+      "answer": "Object Lock COMPLIANCE vs GOVERNANCE: GOVERNANCE mode allows administrators with special IAM permissions to override retention settings. COMPLIANCE mode means no user, including root, can delete or shorten retention before the retention period expires. FCA audit records require COMPLIANCE mode because the regulator needs an immutable, tamper-proof audit trail. Incident 1 (SSH brute force SF-006): immediate containment — add Tor exit node IP to WAF block list, update security group to remove port 22. Long-term fix: SSM Session Manager replaces SSH entirely. Incident 2 (cross-AZ): add S3 and DynamoDB VPC gateway endpoints, saving $1,875.60/year. Incident 3 (untagged i-0nonprod003): investigate via CloudTrail who created it, assign to owner or terminate. Governance fix: SCP denying EC2 RunInstances without mandatory tags, or AWS Config rule 'required-tags' with auto-remediation.",
+      "phase_setup": {
+        "files_candidate_needs": [
+          "terraform/networking/main.tf",
+          "terraform/security/iam.tf",
+          "terraform/eks/main.tf",
+          "python/inventory-tool/inventory.py",
+          "python/cost-reporting-tool/cost_report.py",
+          "cloudformation/vpc.yaml"
+        ]
+      }
+    },
+    {
+      "phase_id": "phase_6",
+      "phase_title": "Kubernetes, Microservices & GitOps",
+      "what_good_looks_like": "All 4 microservices have Kubernetes manifests with correct security context on every deployment (runAsNonRoot: true, readOnlyRootFilesystem: true, allowPrivilegeEscalation: false). Helm chart passes helm template without errors — output pasted as evidence. ArgoCD ApplicationSet iterates over all 4 service names. Payments Service is isolated via NetworkPolicy or separate namespace. AuditTrail DynamoDB table has NO TTL with written FCA justification. Every ServiceAccount has the IRSA annotation.",
+      "common_mistakes": [
+        "Missing security context on one or more deployments — check all 4, not just customer-service",
+        "Helm chart templates that reference values not defined in values.yaml — causes helm template errors",
+        "ArgoCD application.yaml pointing at a non-existent cluster URL or overlay path",
+        "Setting TTL on AuditTrail DynamoDB — this is a compliance failure, not an optimisation",
+        "PCI isolation: creating a NetworkPolicy but forgetting to also restrict egress from Payments Service",
+        "ServiceAccount without the eks.amazonaws.com/role-arn annotation — IRSA will silently fail"
+      ],
+      "answer": "PCI isolation correct approach: create a dedicated namespace (e.g. tilington-payments) with NetworkPolicy ingress rules allowing only from ALB security group and customer-service namespace. Apply PodSecurityPolicy or OPA/Gatekeeper policy restricting capabilities. AuditTrail TTL: FCA SYSC 9.1 and COBS record-keeping requires certain records to be retained indefinitely. TTL attribute must not be set on the AuditTrail table — DynamoDB will automatically delete items when TTL expires, which would be a regulatory breach. IRSA: eks.amazonaws.com/role-arn annotation on the ServiceAccount allows pods to assume an IAM role via OIDC federation without storing credentials. Each microservice gets its own IAM role with minimum required permissions (e.g. customer-service gets SELECT/INSERT/UPDATE on Aurora customers table only).",
+      "phase_setup": {
+        "files_candidate_needs": [
+          "kubernetes/customer-service/deployment.yaml (starter)",
+          "kubernetes/helm/tilington-services/values.yaml (starter)",
+          "gitops/argocd/application.yaml (starter)"
+        ]
+      }
+    },
+    {
+      "phase_id": "phase_7",
+      "phase_title": "CI/CD, DevSecOps & Observability",
+      "what_good_looks_like": "All 10 pipeline bugs fixed with root cause explanation for each. BUG-004 explanation correctly identifies the needs:/if: skipped-job interaction — not a typo or missing step. Real Trivy JSON output committed (not mocked). Three Grafana dashboards created with correct panels and JSON exported. Payments Service error budget calculated correctly as 21.6 minutes/month with working shown. SLO framework connected to FCA PS21/3 evidence.",
+      "common_mistakes": [
+        "BUG-004: explaining it as a missing step rather than correctly identifying that GitHub Actions returns 'success' for skipped jobs, allowing downstream jobs to proceed",
+        "BUG-005: rotating the access keys instead of replacing them with OIDC federation entirely",
+        "Mocking Trivy output instead of running a real scan — easily spotted by looking for realistic CVE IDs",
+        "Calculating error budget incorrectly — common error is using hours instead of minutes (30 x 24 x 0.0005 = 0.36 hours, not 21.6 minutes)",
+        "SLO runbook that defines thresholds but doesn't connect them to FCA PS21/3 impact tolerances"
+      ],
+      "answer": "BUG-004 root cause: when a GitHub Actions job has an 'if:' condition that evaluates to false, the job is skipped and its status is reported as 'success' (not 'skipped' or 'failure'). A downstream job with 'needs: security-scan' sees success and proceeds regardless of whether the scan actually ran. Fix: remove the if: condition from security-scan so it runs on every branch. Payments Service error budget: SLO is 99.95% availability over a 30-day window. Error budget = (1 - 0.9995) x 30 x 24 x 60 = 0.0005 x 43,200 = 21.6 minutes per month. This means the Payments Service can be unavailable for a maximum of 21.6 minutes in any 30-day period before the SLO is breached. FCA connection: this 21.6-minute budget IS the FCA impact tolerance for the Payments important business service. Emma Clarke shows this to the FCA as quantified evidence that Tilington can detect, respond to, and recover from disruptions within defined tolerances.",
+      "phase_setup": {
+        "files_candidate_needs": [
+          ".github/workflows/deploy.yml (broken — 10 bugs)"
+        ],
+        "tutor_prompts": [
+          "If BUG-004 explanation is wrong: ask the candidate what GitHub Actions reports as the job status when an if: condition is false",
+          "If error budget calculation is wrong: ask them to show the formula step by step"
+        ]
+      }
+    },
+    {
+      "phase_id": "phase_8",
+      "phase_title": "Database Architecture",
+      "what_good_looks_like": "Aurora instance sizing justified against ORCL-01 workload analysis — not against SRV-006 server specs. AuditTrail DynamoDB has NO TTL with FCA COBS written justification. PaymentEvents hot partition problem resolved with a concrete mechanism (write sharding or equivalent) — not just flagged. Payments Service 15-minute RPO achieved via PITR specifically, not daily backups. Oracle renewal recommendation names ORCL-01/02/03 as Q2 2026 candidates with £4.2M saving quantified.",
+      "common_mistakes": [
+        "Aurora sizing: matching db.r6g instance to SRV-006 server specs (32 vCPU, 256GB) — Aurora manages memory differently, the right approach is workload analysis not server parity",
+        "Setting TTL on AuditTrail — see Phase 6 notes, this is a hard compliance failure",
+        "PaymentEvents hot partition: identifying the problem without proposing a concrete solution",
+        "Payments RPO: saying PITR achieves 15 minutes without explaining why daily backups do not (daily backups give 24-hour RPO, PITR gives sub-minute RPO by continuously streaming WAL to S3)",
+        "Oracle recommendation saying 'it depends' instead of making a specific renew or do not renew decision",
+        "Cross-region Aurora replication to eu-west-1 for DR — violates UK GDPR, customer PII cannot leave eu-west-2"
+      ],
+      "answer": "Aurora sizing: run AWS DMS Schema Conversion Tool against ORCL-01 first. Profile query patterns, connection counts, and peak transaction volume. Start with db.r6g.2xlarge (8 vCPU, 64GB) and validate with load testing — do not assume server RAM maps to Aurora instance RAM. PaymentEvents hot partition solution: write sharding — append a shard suffix (0-9) to the partition key for high-volume items, e.g. status#0 through status#9. Query all shards in parallel and merge results client-side. Aurora PITR vs daily backups: daily automated backups restore to a snapshot taken at a fixed point, giving RPO of up to 24 hours. Aurora PITR continuously streams transaction logs to S3, enabling restore to any second within the retention window — achieving sub-minute RPO in practice. Oracle recommendation: do NOT renew. Migrate ORCL-01, ORCL-02, ORCL-03 before Q2 2026 renewal decision. Accept risk on ORCL-04 and ORCL-05 (defer to Wave 5, maintain Oracle for those instances only). Saving: £1.4M/year x 3 years = £4.2M. Risk mitigation: 214 stored procedures requiring manual conversion — allocate dedicated DBA resource for customer_ledger_pkg.",
+      "phase_setup": {
+        "files_candidate_needs": [
+          "databases/aurora-design.md (starter with TODOs)",
+          "databases/dynamodb-design.md (starter with TODOs)",
+          "migration/server-inventory.csv (SRV-006 Oracle server specs)"
+        ]
+      }
+    },
+    {
+      "phase_id": "phase_9",
+      "phase_title": "Migration, Disaster Recovery & FinOps",
+      "what_good_looks_like": "January total spend is calculated by summing blended_cost_usd from the CSV — not estimated. All 5 specific FinOps findings identified and quantified. Cross-AZ $156.30 identified as architectural issue with $1,875.60 annual saving. AuditTrail excluded from DR replication with UK data residency and FCA rationale. Payments Service 15-minute RPO evidenced via Aurora PITR. APP-012 (Authentication Service) correctly placed in Wave 2 with all 25 dependent apps sequenced after it.",
+      "common_mistakes": [
+        "Estimating the January total instead of calculating from the CSV sum",
+        "Identifying the Aurora writer cost ($2,180.16) as overprovisioned without workload analysis — this may be correctly sized",
+        "Including AuditTrail DynamoDB in the eu-west-1 DR replication plan — FCA audit records must remain in UK jurisdiction",
+        "APP-012 in Wave 3 or later — with 25 dependents, this blocks all customer-facing and business-critical app migrations",
+        "DR architecture using Aurora Global Database for customer data — this would replicate PII to eu-west-1 in violation of UK GDPR",
+        "Well-Architected review that lists generic risks not backed by evidence from the CSV data"
+      ],
+      "answer": "January AWS spend: candidate must sum all rows in blended_cost_usd column from aws_cost_report.csv. Approximate total ~$10,100 USD — exact figure depends on summing all 45 rows. FinOps finding 5 (cross-AZ): Data Transfer Regional $156.30/month is architectural — services calling S3 and DynamoDB cross AZs because no VPC gateway endpoints exist. Fix: add gateway endpoints (free). Annual saving: $1,875.60. DR constraint on AuditTrail: DynamoDB Global Tables or cross-region replication would copy FCA audit records to eu-west-1 (Ireland). UK GDPR requires PII to remain in UK. Additionally, FCA audit records must be under UK regulatory jurisdiction — replication to Ireland creates legal and compliance risk. AuditTrail must stay in eu-west-2 only with no DR replication. APP-012 critical path: Authentication Service has 25 downstream dependencies. If it migrates in Wave 3, Waves 3-5 cannot complete. It must be Wave 2 with a parallel-run period where both on-premise and AWS auth are active simultaneously.",
+      "phase_setup": {
+        "files_candidate_needs": [
+          "migration/aws_cost_report.csv",
+          "migration/migration-wave-candidates.csv",
+          "migration/application-inventory-template.csv"
+        ],
+        "tutor_prompts": [
+          "If candidate estimates the total spend: ask them to open the CSV and use SUM(blended_cost_usd)",
+          "If AuditTrail is in DR plan: ask them under which jurisdiction FCA audit records must be stored"
+        ]
+      }
+    },
+    {
+      "phase_id": "phase_10",
+      "phase_title": "Architecture Review Board & Executive Presentation",
+      "what_good_looks_like": "ARB deck references January spend total calculated from CSV (not estimated) and £4.2M Oracle saving quantified. Emma Clarke's three questions answered with specific named AWS mechanisms — not prose assertions. Q1 data residency answer names all four controls. Q2 operational resilience covers Multi-AZ and eu-west-1 failover with Route 53 mechanism named. Q3 privileged access names specific IAM Identity Centre roles and break-glass procedure. Risk and trade-off summary documents all 5 required trade-offs with cost figures.",
+      "common_mistakes": [
+        "Emma Clarke Q1: stating 'we have data residency controls' instead of naming the SCP, Aurora snapshot-only strategy, AuditTrail exclusion, and CloudTrail detective control",
+        "Emma Clarke Q2: describing Multi-AZ as 'DR' — Multi-AZ is resilience within a region, not DR. eu-west-1 is the actual DR region for region-level failures.",
+        "Emma Clarke Q3: describing a generic access control policy instead of naming specific IAM Identity Centre permission sets and the break-glass procedure",
+        "ARB deck with estimated spend figures — the CFO will verify against Cost Explorer",
+        "Risk summary listing risks without stakeholder sign-off attribution",
+        "NAT Gateway trade-off without the ~£90/month cost figure per additional gateway"
+      ],
+      "answer": "Emma Clarke Q1 complete answer: (1) SCP at OU level denying RDS/DynamoDB/EKS creation in eu-west-1 for accounts handling PII. (2) Aurora: PITR snapshots only exported to eu-west-2 S3 — no Global Database or cross-region read replicas for customer data. (3) DynamoDB AuditTrail: no Global Tables, no replication — eu-west-2 only. (4) If SCP is bypassed: CloudTrail API logging detects the eu-west-1 API call, AWS Config rule 'restricted-regions' triggers a non-compliant finding, SNS alert to Priya Sharma within 5 minutes. Emma Clarke Q2: Multi-AZ (eu-west-2a/b/c) handles AZ-level failures automatically — EKS nodes spread across 3 AZs, Aurora failover in <30 seconds, DynamoDB inherently multi-AZ. For eu-west-2 region failure: Route 53 health checks detect unhealthy primary endpoints, failover routing policy switches to eu-west-1 warm standby within RTO target (4 hours for most services). In-flight payments during failover: Payments Service has PCI requirement for transaction integrity — implement idempotency keys on all payment API calls to prevent duplicate processing during failover. Emma Clarke Q3: Production account access via IAM Identity Centre permission sets: TilingtonPlatformEngineer (read/write non-production), TilingtonPlatformAdmin (production with MFA enforcement), TilingtonSecurityAuditor (read-only all accounts). Break-glass: dedicated IAM user stored in sealed envelope in physical safe, usage triggers immediate PagerDuty alert to CISO, CloudTrail logs every action, access reviewed within 1 hour.",
+      "phase_setup": {
+        "tutor_prompts": [
+          "If Q1 answer is vague: ask the candidate to name the specific AWS service that enforces the eu-west-1 restriction at organisation level",
+          "If Q2 conflates Multi-AZ with DR: ask what happens if the entire eu-west-2 region is unavailable for 6 hours",
+          "If Q3 lacks break-glass procedure: ask what happens when a 3am P1 incident requires production access and no IAM Identity Centre admin is awake"
+        ]
+      }
+    },
+    {
+      "phase_id": "phase_11",
+      "phase_title": "Programme Portfolio & Certificate",
+      "what_good_looks_like": "Candidate has committed evidence to the GitHub repo across all 9 phases. The portfolio summary is specific enough to use as a LinkedIn project description — names AWS services, quantifies outcomes, and maps to UK market salary ranges. Candidate can articulate the five key takeaways without prompting.",
+      "common_mistakes": [
+        "Portfolio summary too generic — says 'I worked on AWS migration' without naming specific services or quantifying outcomes",
+        "Missing GitHub commits for one or more phases — the repo is the portfolio, not just the submissions"
+      ],
+      "answer": "Strong portfolio summary includes: designed 6-account AWS landing zone with Control Tower and SCPs for FCA-regulated firm; completed Terraform networking and EKS modules; deployed 4 microservices (Customer, Payments, Notifications, Audit) to EKS with GitOps via ArgoCD; identified and fixed 10 CI/CD pipeline bugs including subtle GitHub Actions needs:/if: interaction; designed Aurora PostgreSQL migration from Oracle eliminating £4.2M 3-year licensing cost; calculated SLO error budgets (Payments: 21.6 min/month) as FCA PS21/3 operational resilience evidence. Target roles: AWS Solutions Architect at UK banks £70,000–£125,000.",
+      "phase_setup": {
+        "tutor_actions": [
+          "Verify GitHub repo has commits spanning all 9 phases",
+          "Check that simulation_landing shows correct skills and target roles",
+          "Issue certificate"
+        ]
+      }
+    }
+  ]
+}
