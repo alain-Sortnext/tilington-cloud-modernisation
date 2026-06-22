@@ -3,55 +3,47 @@
   "version": "1.0.0",
   "title": "Tilington plc Cloud Modernisation Programme",
   "sector": "UK Financial Services",
-  "difficulty": "Mid-Senior",
+  "difficulty": "senior",
   "shared_files": [
     {
       "file_id": "company_brief",
       "title": "Company Brief",
-      "description": "Tilington plc background, CTO mandate, £3.2M budget, regulatory context, stakeholders, and programme timeline.",
-      "file_type": "md"
+      "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/docs/company-brief.md"
     },
     {
       "file_id": "server_inventory",
-      "title": "Server Inventory CSV",
-      "description": "90-server inventory across DC1 London and DC2 Manchester. Contains messy reality: two undocumented servers (SRV-086/087), shared Oracle instance on SRV-076, EOL OS servers, and CRITICAL patch status entries.",
-      "file_type": "csv"
+      "title": "Server Inventory CSV (90 servers)",
+      "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/server-inventory.csv"
     },
     {
       "file_id": "application_inventory",
-      "title": "Application Inventory CSV",
-      "description": "All 28 applications with 6R classification, owners, database dependencies, and migration wave candidates.",
-      "file_type": "csv"
+      "title": "Application Inventory CSV (28 apps)",
+      "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/application-inventory-template.csv"
     },
     {
       "file_id": "dependency_map",
       "title": "Dependency Map CSV",
-      "description": "68 documented and undocumented application dependencies. Contains traps: APP-006 depends on MSSQL-03 which is not in the server inventory, and APP-002 uses an undocumented SMB file share with APP-003.",
-      "file_type": "csv"
+      "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/dependency-map.csv"
     },
     {
       "file_id": "aws_cost_report",
       "title": "AWS Cost Report — January 2026",
-      "description": "45-row cost report across 4 AWS accounts. Contains the cross-AZ wrong-direction trap: CloudWatch DataProcessing at $89.40 looks like the problem but Data Transfer Regional at $156.30 is the real architectural issue.",
-      "file_type": "csv"
+      "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/aws_cost_report.csv"
     },
     {
       "file_id": "security_findings",
-      "title": "Security Findings CSV",
-      "description": "20 Security Hub and GuardDuty findings. Includes SF-002 and SF-018 (public S3 bucket containing customer NI numbers — potential ICO notification), and SF-006 (active SSH brute force from Tor exit node).",
-      "file_type": "csv"
+      "title": "Security Findings CSV (20 findings)",
+      "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/security-findings.csv"
     },
     {
       "file_id": "migration_wave_candidates",
       "title": "Migration Wave Candidates CSV",
-      "description": "All 28 apps with recommended migration wave, complexity rating, sequencing rationale, and pre-migration task list.",
-      "file_type": "csv"
+      "url": "https://raw.githubusercontent.com/alain-Sortnext/tilington-cloud-modernisation/main/migration/migration-wave-candidates.csv"
     },
     {
       "file_id": "github_repo",
       "title": "Starter GitHub Repository",
-      "description": "15-20% complete starter repo at github.com/alain-Sortnext/tilington-cloud-modernisation. Contains incomplete Terraform modules, broken CI/CD pipeline with 10 documented bugs, partial Kubernetes manifests, and Python automation tool starters.",
-      "file_type": "link"
+      "url": "https://github.com/alain-Sortnext/tilington-cloud-modernisation"
     }
   ],
   "phases": [
@@ -64,148 +56,57 @@
         {
           "section_id": "p1_s1_context",
           "title": "Your Brief",
-          "type": "context",
+          "type": "rich_text_display",
           "content": {
             "text": "You have just joined Tilington plc as Lead AWS Solutions Architect on the Cloud Modernisation Programme.\n\nBefore designing anything, you must understand what Tilington actually has. The estate is messier than anyone admits.\n\nMichael Evans (Head of Infrastructure) has flagged two servers discovered in DC1 Rack 21 that are not in the CMDB — SRV-086 and SRV-087. Nobody knows what they are.\n\nAPP-027 (Legacy Fund Accounting) has unclear operational status. Finance says it was decommissioned 18 months ago. Michael sees active database sessions on ORCL-05 that suggest otherwise.\n\nAPP-006 (Document Management System) references MSSQL-03 in its dependency map, but MSSQL-03 does not appear anywhere in the server inventory.\n\nSRV-076 in DC2 Manchester appears to host both ORCL-04 and ORCL-05 on the same physical server — this is undocumented and was discovered only during the physical audit.\n\nYour job in this phase is to make sense of all of it before the Architecture Review Board on 14 April."
-          }
+          },
+          "order_index": 0
         },
         {
           "section_id": "p1_s2_inbox",
           "title": "Your Inbox",
-          "type": "inbox",
+          "type": "rich_text_display",
           "content": {
-            "messages": [
-              {
-                "from": "Sarah Williams",
-                "role": "CTO",
-                "colour": "purple",
-                "subject": "Welcome to the Tilington Cloud Programme",
-                "body": "Welcome aboard. I'll be direct: this programme has a hard deadline and I need it to succeed.\n\nYour first priority is discovery. I need to understand what we're dealing with before I commit publicly to the Oracle renewal decision in Q2. Michael will brief you on the estate — but I warn you, the documentation is patchy. Don't trust the CMDB without verifying it.\n\nI'd like to see your initial findings by the end of this phase. Please structure your report so I can hand the executive summary to the Board without editing it.\n\nOne request: if you find anything that changes the programme timeline or budget, tell me immediately. I'd rather know early than be surprised in front of the Board.\n\nSarah"
-              },
-              {
-                "from": "Michael Evans",
-                "role": "Head of Infrastructure",
-                "colour": "teal",
-                "subject": "Things you need to know before you start",
-                "body": "Hey — welcome. I've pushed the server inventory to the repo but fair warning: it's not complete.\n\nWe found two servers in DC1 Rack 21 during the physical audit last week that aren't in the CMDB. SRV-086 and SRV-087. Nobody owns them. Could be test boxes from 2022 or could be something important. I need your help figuring this out.\n\nAlso — APP-027 (Legacy Fund Accounting). Finance say they stopped using it 18 months ago. But I'm still seeing database sessions on ORCL-05 that look like it's still connecting. Can you help me nail down whether this is active or not?\n\nOne more thing: APP-006 (Document Management System) is listed as connecting to MSSQL-03 but I cannot find MSSQL-03 anywhere in the inventory. It might be a SQL Server instance that lives on the same box as something else, or it might be a ghost entry from when we consolidated servers in 2021.\n\nMichael"
-              },
-              {
-                "from": "Emma Clarke",
-                "role": "Chief Risk Officer",
-                "colour": "amber",
-                "subject": "Regulatory and Compliance Requirements",
-                "body": "I have reviewed the programme brief. I want to set out my requirements clearly so there are no surprises at the ARB.\n\nBefore any Tilington customer data is processed on AWS infrastructure, I require written confirmation of data residency controls (UK GDPR Article 44 compliance), FCA material outsourcing notification filed and acknowledged (FCA SYSC 8), and AWS CloudTrail enabled with immutable logs in a separate logging account with 7-year retention policy documented.\n\nThese are not negotiable. They are regulatory requirements, not preferences.\n\nI look forward to reviewing your discovery report.\n\nEmma Clarke\nChief Risk Officer"
-              }
-            ]
-          }
+            "text": "**From: Sarah Williams (CTO)** — Welcome to the Tilington Cloud Programme\n\nWelcome aboard. I'll be direct: this programme has a hard deadline and I need it to succeed.\n\nYour first priority is discovery. I need to understand what we're dealing with before I commit publicly to the Oracle renewal decision in Q2. Michael will brief you on the estate — but I warn you, the documentation is patchy. Don't trust the CMDB without verifying it.\n\nI'd like to see your initial findings by the end of this phase. Please structure your report so I can hand the executive summary to the Board without editing it.\n\nOne request: if you find anything that changes the programme timeline or budget, tell me immediately. I'd rather know early than be surprised in front of the Board.\n\nSarah\n\n---\n\n**From: Michael Evans (Head of Infrastructure)** — Things you need to know before you start\n\nHey — welcome. I've pushed the server inventory to the repo but fair warning: it's not complete.\n\nWe found two servers in DC1 Rack 21 during the physical audit last week that aren't in the CMDB. SRV-086 and SRV-087. Nobody owns them. Could be test boxes from 2022 or could be something important. I need your help figuring this out.\n\nAlso — APP-027 (Legacy Fund Accounting). Finance say they stopped using it 18 months ago. But I'm still seeing database sessions on ORCL-05 that look like it's still connecting. Can you help me nail down whether this is active or not?\n\nOne more thing: APP-006 (Document Management System) is listed as connecting to MSSQL-03 but I cannot find MSSQL-03 anywhere in the inventory. It might be a SQL Server instance that lives on the same box as something else, or it might be a ghost entry from when we consolidated servers in 2021.\n\nMichael\n\n---\n\n**From: Emma Clarke (Chief Risk Officer)** — Regulatory and Compliance Requirements\n\nI have reviewed the programme brief. I want to set out my requirements clearly so there are no surprises at the ARB.\n\nBefore any Tilington customer data is processed on AWS infrastructure, I require written confirmation of data residency controls (UK GDPR Article 44 compliance), FCA material outsourcing notification filed and acknowledged (FCA SYSC 8), and AWS CloudTrail enabled with immutable logs in a separate logging account with 7-year retention policy documented.\n\nThese are not negotiable. They are regulatory requirements, not preferences.\n\nI look forward to reviewing your discovery report.\n\nEmma Clarke\nChief Risk Officer"
+          },
+          "order_index": 0
         },
         {
           "section_id": "p1_s3_task",
           "title": "Your Tasks",
-          "type": "task_list",
+          "type": "rich_text_display",
           "content": {
-            "tasks": [
-              {
-                "task_id": "t1",
-                "title": "Discovery Assessment Report",
-                "description": "Write a structured discovery report covering: executive summary (board-readable, honest about timeline), infrastructure assessment (EOL OS count with server IDs, CRITICAL patch servers, VMware EOL risk, SRV-086/087 risk assessment), application portfolio assessment (6R classification for all 28 apps, APP-027 recommendation), dependency analysis (MSSQL-03 finding, ORCL-04/ORCL-05 shared server on SRV-076), compliance gap analysis, and extended risk register (5+ new risks beyond those in the company brief).",
-                "required": true
-              },
-              {
-                "task_id": "t2",
-                "title": "Current State Architecture Diagram",
-                "description": "Draw the current on-premise architecture in Draw.io (app.diagrams.net — free). Show DC1 London and DC2 Manchester as separate domains, key server tiers (DMZ, App, Data, Infra), MPLS connectivity between DCs, external connections, and all 5 Oracle database instances and their host servers. Export as .drawio and .png.",
-                "required": true
-              },
-              {
-                "task_id": "t3",
-                "title": "Application Inventory Assessment",
-                "description": "Complete the application inventory spreadsheet with your 6R classification for all 28 applications, migration wave assignment, complexity rating (LOW/MEDIUM/HIGH/VERY HIGH), and confidence rating. Flag applications where you need more information before committing to a classification.",
-                "required": true
-              },
-              {
-                "task_id": "t4",
-                "title": "Stakeholder Register",
-                "description": "Create a stakeholder register for all 6 named stakeholders. For each: name, role, interest level, influence level, key concern, communication preference, and potential conflict or blocker risk.",
-                "required": true
-              }
-            ]
-          }
+            "text": "**Discovery Assessment Report** *(required)*\n\nWrite a structured discovery report covering: executive summary (board-readable, honest about timeline), infrastructure assessment (EOL OS count with server IDs, CRITICAL patch servers, VMware EOL risk, SRV-086/087 risk assessment), application portfolio assessment (6R classification for all 28 apps, APP-027 recommendation), dependency analysis (MSSQL-03 finding, ORCL-04/ORCL-05 shared server on SRV-076), compliance gap analysis, and extended risk register (5+ new risks beyond those in the company brief).\n\n---\n\n**Current State Architecture Diagram** *(required)*\n\nDraw the current on-premise architecture in Draw.io (app.diagrams.net — free). Show DC1 London and DC2 Manchester as separate domains, key server tiers (DMZ, App, Data, Infra), MPLS connectivity between DCs, external connections, and all 5 Oracle database instances and their host servers. Export as .drawio and .png.\n\n---\n\n**Application Inventory Assessment** *(required)*\n\nComplete the application inventory spreadsheet with your 6R classification for all 28 applications, migration wave assignment, complexity rating (LOW/MEDIUM/HIGH/VERY HIGH), and confidence rating. Flag applications where you need more information before committing to a classification.\n\n---\n\n**Stakeholder Register** *(required)*\n\nCreate a stakeholder register for all 6 named stakeholders. For each: name, role, interest level, influence level, key concern, communication preference, and potential conflict or blocker risk."
+          },
+          "order_index": 0
         },
         {
           "section_id": "p1_s4_submission",
           "title": "Submit Your Work",
-          "type": "submission",
+          "type": "text_editor",
           "content": {
-            "instructions": "Upload your Discovery Assessment Report (Markdown or PDF) and your Current State Architecture Diagram (.drawio or .png). Then use the text editor below to summarise your key findings — specifically your answers to the four messy reality questions Sarah and Michael raised.",
-            "submission_types": [
-              "text_editor",
-              "file_upload"
-            ]
-          }
+            "text": "Upload your Discovery Assessment Report (Markdown or PDF) and your Current State Architecture Diagram (.drawio or .png). Then use the text editor below to summarise your key findings — specifically your answers to the four messy reality questions Sarah and Michael raised."
+          },
+          "review_mode": "instant_ai",
+          "order_index": 0
         },
         {
           "section_id": "p1_s5_tools",
           "title": "Tools & Resources",
-          "type": "tools",
+          "type": "rich_text_display",
           "content": {
-            "items": [
-              {
-                "name": "Draw.io",
-                "url": "https://app.diagrams.net",
-                "description": "Free browser-based diagramming tool. Use for current state architecture diagram. No install required."
-              },
-              {
-                "name": "GitHub Repository",
-                "url": "https://github.com/alain-Sortnext/tilington-cloud-modernisation",
-                "description": "Starter repo. Read the server-inventory.csv, application-inventory-template.csv, and dependency-map.csv files in /migration/ — these are your primary data sources for this phase."
-              },
-              {
-                "name": "Google Sheets or Excel",
-                "description": "Use for the application inventory assessment spreadsheet. Free with Google account."
-              }
-            ]
-          }
+            "text": "**Draw.io** — [https://app.diagrams.net](https://app.diagrams.net)\n\nFree browser-based diagramming tool. Use for current state architecture diagram. No install required.\n\n**GitHub Repository** — [https://github.com/alain-Sortnext/tilington-cloud-modernisation](https://github.com/alain-Sortnext/tilington-cloud-modernisation)\n\nStarter repo. Read the server-inventory.csv, application-inventory-template.csv, and dependency-map.csv files in /migration/ — these are your primary data sources for this phase.\n\n**Google Sheets or Excel**\n\nUse for the application inventory assessment spreadsheet. Free with Google account."
+          },
+          "order_index": 0
         },
         {
           "section_id": "p1_s6_rubric",
           "title": "Rubric",
-          "type": "rubric",
+          "type": "rich_text_display",
           "content": {
-            "total_points": 100,
-            "criteria": [
-              {
-                "criterion_id": "c1",
-                "criterion_label": "Infrastructure analysis — EOL OS count correct with server IDs, CRITICAL patch servers identified, SRV-086/087 risk assessed, ORCL-04/05 shared server (SRV-076) noted",
-                "points": 20
-              },
-              {
-                "criterion_id": "c2",
-                "criterion_label": "Application 6R classification — all 28 apps classified with reasoning, APP-027 status investigated and recommendation given, confidence levels flagged",
-                "points": 20
-              },
-              {
-                "criterion_id": "c3",
-                "criterion_label": "Dependency analysis — MSSQL-03 mystery identified and recommendation made, at least one undocumented dependency chain named from the CSV data",
-                "points": 20
-              },
-              {
-                "criterion_id": "c4",
-                "criterion_label": "Risk register — 5 or more new risks beyond the company brief, each with impact, likelihood, owner, and mitigation",
-                "points": 15
-              },
-              {
-                "criterion_id": "c5",
-                "criterion_label": "Current state architecture diagram — shows DC1/DC2 separation, Oracle instances, external connections, and server tiers",
-                "points": 15
-              },
-              {
-                "criterion_id": "c6",
-                "criterion_label": "Executive summary — board-readable, honest about timeline feasibility, specific risk calls with evidence from the CSV data",
-                "points": 10
-              }
-            ]
-          }
+            "text": "**Total: 100 points**\n\n- **Infrastructure analysis — EOL OS count correct with server IDs, CRITICAL patch servers identified, SRV-086/087 risk assessed, ORCL-04/05 shared server (SRV-076) noted** — 20 pts\n- **Application 6R classification — all 28 apps classified with reasoning, APP-027 status investigated and recommendation given, confidence levels flagged** — 20 pts\n- **Dependency analysis — MSSQL-03 mystery identified and recommendation made, at least one undocumented dependency chain named from the CSV data** — 20 pts\n- **Risk register — 5 or more new risks beyond the company brief, each with impact, likelihood, owner, and mitigation** — 15 pts\n- **Current state architecture diagram — shows DC1/DC2 separation, Oracle instances, external connections, and server tiers** — 15 pts\n- **Executive summary — board-readable, honest about timeline feasibility, specific risk calls with evidence from the CSV data** — 10 pts"
+          },
+          "order_index": 0
         }
       ]
     },
@@ -218,124 +119,48 @@
         {
           "section_id": "p2_s1_context",
           "title": "Your Brief",
-          "type": "context",
+          "type": "rich_text_display",
           "content": {
             "text": "Discovery is complete. Sarah Williams has approved your findings and given you the green light to design the target AWS architecture.\n\nThe Architecture Review Board is confirmed for 14 April. Emma Clarke, Priya Sharma (Head of Information Security), and David Okafor (Head of Retail Technology) will be on the panel. The CFO will also be present.\n\nYour starting points are the starter files already in the repo: ADR-001 (AWS selected) and ADR-002 (multi-account structure) are accepted decisions — build on them.\n\nThe architecture must support a minimum of 6 AWS accounts, SCPs enforcing key guardrails, identity federation with Tilington's existing Azure AD, and full compliance with FCA, UK GDPR, and NCSC Cloud Security Principles.\n\nEmma Clarke has already told you she wants written confirmation — not verbal — that no customer PII will leave eu-west-2 under any scenario, including DR failover."
-          }
+          },
+          "order_index": 0
         },
         {
           "section_id": "p2_s2_inbox",
           "title": "Your Inbox",
-          "type": "inbox",
+          "type": "rich_text_display",
           "content": {
-            "messages": [
-              {
-                "from": "Sarah Williams",
-                "role": "CTO",
-                "colour": "purple",
-                "subject": "ARB Date — 14 April",
-                "body": "The Architecture Review Board is confirmed for 14 April. You will present your target architecture and answer questions from Emma Clarke (risk), Priya Sharma (security), and David Okafor (retail technology).\n\nEmma is particularly focused on the data residency question — she wants written confirmation that no customer PII will leave eu-west-2 under any scenario, including the DR failover to eu-west-1.\n\nThe Board CFO will also be in the room. He will ask about cost. Have your numbers ready.\n\nSarah"
-              },
-              {
-                "from": "James Patel",
-                "role": "Cloud Platform Lead",
-                "colour": "coral",
-                "subject": "Architecture decisions we need ADRs for",
-                "body": "A few things we need Architecture Decision Records for before the ARB:\n\n1. eu-west-2 as primary region — obvious but needs to be written down with the UK GDPR rationale\n2. Terraform as primary IaC — I want this locked in before anyone suggests CloudFormation-only\n3. EKS vs ECS — I've already committed us to EKS mentally but we need the documented trade-off\n\nAlso: the NAT Gateway question. Do we run 1 NAT GW (cost) or 3 NAT GWs (one per AZ, HA)? This is an ADR decision. ~£90/month per additional NAT GW. Document it.\n\nJames"
-              }
-            ]
-          }
+            "text": "**From: Sarah Williams (CTO)** — ARB Date — 14 April\n\nThe Architecture Review Board is confirmed for 14 April. You will present your target architecture and answer questions from Emma Clarke (risk), Priya Sharma (security), and David Okafor (retail technology).\n\nEmma is particularly focused on the data residency question — she wants written confirmation that no customer PII will leave eu-west-2 under any scenario, including the DR failover to eu-west-1.\n\nThe Board CFO will also be in the room. He will ask about cost. Have your numbers ready.\n\nSarah\n\n---\n\n**From: James Patel (Cloud Platform Lead)** — Architecture decisions we need ADRs for\n\nA few things we need Architecture Decision Records for before the ARB:\n\n1. eu-west-2 as primary region — obvious but needs to be written down with the UK GDPR rationale\n2. Terraform as primary IaC — I want this locked in before anyone suggests CloudFormation-only\n3. EKS vs ECS — I've already committed us to EKS mentally but we need the documented trade-off\n\nAlso: the NAT Gateway question. Do we run 1 NAT GW (cost) or 3 NAT GWs (one per AZ, HA)? This is an ADR decision. ~£90/month per additional NAT GW. Document it.\n\nJames"
+          },
+          "order_index": 0
         },
         {
           "section_id": "p2_s3_task",
           "title": "Your Tasks",
-          "type": "task_list",
+          "type": "rich_text_display",
           "content": {
-            "tasks": [
-              {
-                "task_id": "t1",
-                "title": "High-Level Design (HLD)",
-                "description": "Write the HLD document covering: solution overview with architecture principles applied, AWS account structure (minimum 6 accounts with OU hierarchy), SCP strategy (at minimum: deny eu-west-2 exit for PII, deny root account usage, deny public S3 buckets — write at least 3 SCPs in actual JSON), identity and access model (IAM Identity Centre + Azure AD federation, 6 IAM roles defined), and governance controls (Control Tower guardrails, tagging strategy, budget alerts).",
-                "required": true
-              },
-              {
-                "task_id": "t2",
-                "title": "Low-Level Design (LLD)",
-                "description": "The LLD must contain specific implementable detail: per-account service list, IAM role policies with trust conditions, and at least 3 SCPs written in full JSON (not described — actually written). Address Emma Clarke's data residency requirement with a specific technical mechanism.",
-                "required": true
-              },
-              {
-                "task_id": "t3",
-                "title": "Landing Zone Architecture Diagram",
-                "description": "Draw the target AWS organisation in Draw.io: AWS Organisation root → OUs → Accounts, Control Tower in management account, each account with primary services, cross-account trust relationships, and on-premise connectivity placeholder.",
-                "required": true
-              },
-              {
-                "task_id": "t4",
-                "title": "Architecture Decision Records",
-                "description": "Add at least 3 new ADRs to /docs/adrs/ in the GitHub repo: ADR-003 (eu-west-2 primary region), ADR-004 (Terraform as primary IaC), ADR-005 (EKS for container orchestration). Each must follow the Nygard format: Context, Decision, Consequences, Alternatives Considered.",
-                "required": true
-              },
-              {
-                "task_id": "t5",
-                "title": "Governance Framework",
-                "description": "Write the governance framework covering change management process, IaC-only policy (define what constitutes ClickOps and what happens), security exception process, cost governance thresholds, and continuous compliance monitoring approach.",
-                "required": false
-              }
-            ]
-          }
+            "text": "**High-Level Design (HLD)** *(required)*\n\nWrite the HLD document covering: solution overview with architecture principles applied, AWS account structure (minimum 6 accounts with OU hierarchy), SCP strategy (at minimum: deny eu-west-2 exit for PII, deny root account usage, deny public S3 buckets — write at least 3 SCPs in actual JSON), identity and access model (IAM Identity Centre + Azure AD federation, 6 IAM roles defined), and governance controls (Control Tower guardrails, tagging strategy, budget alerts).\n\n---\n\n**Low-Level Design (LLD)** *(required)*\n\nThe LLD must contain specific implementable detail: per-account service list, IAM role policies with trust conditions, and at least 3 SCPs written in full JSON (not described — actually written). Address Emma Clarke's data residency requirement with a specific technical mechanism.\n\n---\n\n**Landing Zone Architecture Diagram** *(required)*\n\nDraw the target AWS organisation in Draw.io: AWS Organisation root → OUs → Accounts, Control Tower in management account, each account with primary services, cross-account trust relationships, and on-premise connectivity placeholder.\n\n---\n\n**Architecture Decision Records** *(required)*\n\nAdd at least 3 new ADRs to /docs/adrs/ in the GitHub repo: ADR-003 (eu-west-2 primary region), ADR-004 (Terraform as primary IaC), ADR-005 (EKS for container orchestration). Each must follow the Nygard format: Context, Decision, Consequences, Alternatives Considered.\n\n---\n\n**Governance Framework**\n\nWrite the governance framework covering change management process, IaC-only policy (define what constitutes ClickOps and what happens), security exception process, cost governance thresholds, and continuous compliance monitoring approach."
+          },
+          "order_index": 0
         },
         {
           "section_id": "p2_s4_submission",
           "title": "Submit Your Work",
-          "type": "submission",
+          "type": "text_editor",
           "content": {
-            "instructions": "Upload your HLD, LLD, and Architecture Diagram. Use the text editor to paste your 3 SCPs in JSON and explain the data residency control you have designed to satisfy Emma Clarke's written confirmation requirement.",
-            "submission_types": [
-              "text_editor",
-              "file_upload"
-            ]
-          }
+            "text": "Upload your HLD, LLD, and Architecture Diagram. Use the text editor to paste your 3 SCPs in JSON and explain the data residency control you have designed to satisfy Emma Clarke's written confirmation requirement."
+          },
+          "review_mode": "instant_ai",
+          "order_index": 0
         },
         {
           "section_id": "p2_s5_rubric",
           "title": "Rubric",
-          "type": "rubric",
+          "type": "rich_text_display",
           "content": {
-            "total_points": 100,
-            "criteria": [
-              {
-                "criterion_id": "c1",
-                "criterion_label": "AWS account structure — 6+ accounts, OU hierarchy documented, rationale for each account's separation",
-                "points": 20
-              },
-              {
-                "criterion_id": "c2",
-                "criterion_label": "SCPs written in valid JSON — minimum 3 SCPs, correct deny/allow structure, appropriate resource and condition scoping",
-                "points": 20
-              },
-              {
-                "criterion_id": "c3",
-                "criterion_label": "Identity and access model — IAM Identity Centre configured, Azure AD federation approach documented, 6 role hierarchy defined",
-                "points": 20
-              },
-              {
-                "criterion_id": "c4",
-                "criterion_label": "ADRs — minimum 3 new ADRs in correct Nygard format, Tilington-specific trade-offs documented (not generic)",
-                "points": 20
-              },
-              {
-                "criterion_id": "c5",
-                "criterion_label": "Architecture diagram — shows organisation structure, accounts, services, and is readable",
-                "points": 10
-              },
-              {
-                "criterion_id": "c6",
-                "criterion_label": "Data residency — written technical mechanism answering Emma Clarke's requirement, names specific AWS control",
-                "points": 10
-              }
-            ]
-          }
+            "text": "**Total: 100 points**\n\n- **AWS account structure — 6+ accounts, OU hierarchy documented, rationale for each account's separation** — 20 pts\n- **SCPs written in valid JSON — minimum 3 SCPs, correct deny/allow structure, appropriate resource and condition scoping** — 20 pts\n- **Identity and access model — IAM Identity Centre configured, Azure AD federation approach documented, 6 role hierarchy defined** — 20 pts\n- **ADRs — minimum 3 new ADRs in correct Nygard format, Tilington-specific trade-offs documented (not generic)** — 20 pts\n- **Architecture diagram — shows organisation structure, accounts, services, and is readable** — 10 pts\n- **Data residency — written technical mechanism answering Emma Clarke's requirement, names specific AWS control** — 10 pts"
+          },
+          "order_index": 0
         }
       ]
     },
@@ -348,118 +173,48 @@
         {
           "section_id": "p3_s1_context",
           "title": "Your Brief",
-          "type": "context",
+          "type": "rich_text_display",
           "content": {
             "text": "The Landing Zone is approved. Now you must design the network architecture that connects Tilington's two datacentres to AWS, and the security controls that satisfy Emma Clarke, Priya Sharma, and the NCSC Cloud Security Principles.\n\nThe Terraform networking module in `/terraform/networking/main.tf` has the VPC and public subnets — but private subnets, NAT Gateways, route tables, security groups, and VPC Flow Logs are all marked as TODO.\n\nThe security requirements in `/docs/security-requirements.md` list the AWS services required but leave the specific controls empty.\n\nCritical issue from the security findings CSV: SF-004 shows an EKS node security group with port 22 open to 0.0.0.0/0. This must be fixed in your architecture — not just noted as a known risk.\n\nJames Patel also flagged the January cost report. CloudWatch DataProcessing is $89.40 — it looks like a monitoring verbosity problem. But the real issue is Data Transfer Regional at $156.30. This is cross-AZ traffic that can be eliminated with free VPC gateway endpoints for S3 and DynamoDB. Your network design must address this."
-          }
+          },
+          "order_index": 0
         },
         {
           "section_id": "p3_s2_inbox",
           "title": "Your Inbox",
-          "type": "inbox",
+          "type": "rich_text_display",
           "content": {
-            "messages": [
-              {
-                "from": "Emma Clarke",
-                "role": "Chief Risk Officer",
-                "colour": "amber",
-                "subject": "URGENT — S3 Public Bucket and PII Exposure",
-                "body": "I have been made aware of findings SF-002 and SF-018.\n\nTo confirm I understand the situation correctly: we have a production S3 bucket (tilington-temp-uploads-prod) that is publicly accessible and contains objects in which Macie has detected National Insurance numbers.\n\nI need the following within 24 hours:\n\n1. Confirmation that public access has been blocked\n2. A list of all objects in the bucket and their classification\n3. A data lineage note explaining how NI numbers ended up in this bucket\n4. A preliminary assessment of whether ICO notification is required under UK GDPR Article 33\n\nThis is a potential data breach. I am notifying the CEO.\n\nEmma Clarke"
-              },
-              {
-                "from": "James Patel",
-                "role": "Cloud Platform Lead",
-                "colour": "coral",
-                "subject": "January Cost Report — Something Looks Wrong",
-                "body": "I was reviewing the January cost report and something caught my eye.\n\nCloudWatch DataProcessing is $89.40 for the month. At first I thought it was a monitoring verbosity issue — maybe we're ingesting too many logs.\n\nBut then I noticed AWS Data Transfer Regional is $156.30. That's cross-AZ data transfer. For a cluster the size of ours that seems high.\n\nMy theory: we have something making a lot of cross-AZ calls that should be using VPC endpoints or staying within an AZ. It's architectural, not just a monitoring config problem.\n\nCan you investigate and give me your analysis? If I'm right, fixing the architecture (VPC endpoints for S3 and DynamoDB) should bring both costs down.\n\nJames"
-              }
-            ]
-          }
+            "text": "**From: Emma Clarke (Chief Risk Officer)** — URGENT — S3 Public Bucket and PII Exposure\n\nI have been made aware of findings SF-002 and SF-018.\n\nTo confirm I understand the situation correctly: we have a production S3 bucket (tilington-temp-uploads-prod) that is publicly accessible and contains objects in which Macie has detected National Insurance numbers.\n\nI need the following within 24 hours:\n\n1. Confirmation that public access has been blocked\n2. A list of all objects in the bucket and their classification\n3. A data lineage note explaining how NI numbers ended up in this bucket\n4. A preliminary assessment of whether ICO notification is required under UK GDPR Article 33\n\nThis is a potential data breach. I am notifying the CEO.\n\nEmma Clarke\n\n---\n\n**From: James Patel (Cloud Platform Lead)** — January Cost Report — Something Looks Wrong\n\nI was reviewing the January cost report and something caught my eye.\n\nCloudWatch DataProcessing is $89.40 for the month. At first I thought it was a monitoring verbosity issue — maybe we're ingesting too many logs.\n\nBut then I noticed AWS Data Transfer Regional is $156.30. That's cross-AZ data transfer. For a cluster the size of ours that seems high.\n\nMy theory: we have something making a lot of cross-AZ calls that should be using VPC endpoints or staying within an AZ. It's architectural, not just a monitoring config problem.\n\nCan you investigate and give me your analysis? If I'm right, fixing the architecture (VPC endpoints for S3 and DynamoDB) should bring both costs down.\n\nJames"
+          },
+          "order_index": 0
         },
         {
           "section_id": "p3_s3_task",
           "title": "Your Tasks",
-          "type": "task_list",
+          "type": "rich_text_display",
           "content": {
-            "tasks": [
-              {
-                "task_id": "t1",
-                "title": "Complete the Terraform Networking Module",
-                "description": "Complete all TODOs in `/terraform/networking/main.tf`: private application subnets (3 AZs), private data subnets (3 AZs), NAT Gateway(s) with your HA vs cost ADR, route tables (public to IGW, private to NAT GW), VPC Flow Logs with CloudWatch destination, and security groups for ALB, EKS nodes, and Aurora (all least-privilege — no 0.0.0.0/0 ingress except ALB). The VPC CIDR must not conflict with DC1 (10.10.0.0/16), DC2 (10.20.0.0/16), or non-prod (10.40.0.0/16).",
-                "required": true
-              },
-              {
-                "task_id": "t2",
-                "title": "Network Architecture Diagram",
-                "description": "Draw the full network architecture: DC1 and DC2 connectivity to AWS, VPC with 3 tiers across 3 AZs, Transit Gateway for multi-account networking, Route 53 private hosted zones, VPC gateway endpoints for S3 and DynamoDB (explain how this fixes the $156.30 cross-AZ cost), and hybrid connectivity design (Direct Connect vs VPN — make a justified recommendation citing the $380/month Direct Connect cost from the January cost report).",
-                "required": true
-              },
-              {
-                "task_id": "t3",
-                "title": "Security Architecture Document",
-                "description": "Complete `/docs/security-requirements.md` into a full security architecture document covering: configuration for each required service (CloudTrail, Config, GuardDuty, Security Hub, KMS, WAF, Macie), KMS CMK strategy (how many keys, for what purpose, rotation policy), security group design fixing SF-004 (replace SSH with SSM Session Manager), and all 14 NCSC Cloud Security Principles mapped to specific AWS controls — no blanks permitted.",
-                "required": true
-              },
-              {
-                "task_id": "t4",
-                "title": "Incident Response — SF-002 and SF-018",
-                "description": "Respond to Emma Clarke's email. Provide: confirmation of public access block, assessment of ICO notification requirement under UK GDPR Article 33 (72-hour clock), data lineage analysis of how NI numbers reached a public bucket, and the governance fix (which SCP or AWS Config rule prevents recurrence).",
-                "required": true
-              }
-            ]
-          }
+            "text": "**Complete the Terraform Networking Module** *(required)*\n\nComplete all TODOs in `/terraform/networking/main.tf`: private application subnets (3 AZs), private data subnets (3 AZs), NAT Gateway(s) with your HA vs cost ADR, route tables (public to IGW, private to NAT GW), VPC Flow Logs with CloudWatch destination, and security groups for ALB, EKS nodes, and Aurora (all least-privilege — no 0.0.0.0/0 ingress except ALB). The VPC CIDR must not conflict with DC1 (10.10.0.0/16), DC2 (10.20.0.0/16), or non-prod (10.40.0.0/16).\n\n---\n\n**Network Architecture Diagram** *(required)*\n\nDraw the full network architecture: DC1 and DC2 connectivity to AWS, VPC with 3 tiers across 3 AZs, Transit Gateway for multi-account networking, Route 53 private hosted zones, VPC gateway endpoints for S3 and DynamoDB (explain how this fixes the $156.30 cross-AZ cost), and hybrid connectivity design (Direct Connect vs VPN — make a justified recommendation citing the $380/month Direct Connect cost from the January cost report).\n\n---\n\n**Security Architecture Document** *(required)*\n\nComplete `/docs/security-requirements.md` into a full security architecture document covering: configuration for each required service (CloudTrail, Config, GuardDuty, Security Hub, KMS, WAF, Macie), KMS CMK strategy (how many keys, for what purpose, rotation policy), security group design fixing SF-004 (replace SSH with SSM Session Manager), and all 14 NCSC Cloud Security Principles mapped to specific AWS controls — no blanks permitted.\n\n---\n\n**Incident Response — SF-002 and SF-018** *(required)*\n\nRespond to Emma Clarke's email. Provide: confirmation of public access block, assessment of ICO notification requirement under UK GDPR Article 33 (72-hour clock), data lineage analysis of how NI numbers reached a public bucket, and the governance fix (which SCP or AWS Config rule prevents recurrence)."
+          },
+          "order_index": 0
         },
         {
           "section_id": "p3_s4_submission",
           "title": "Submit Your Work",
-          "type": "submission",
+          "type": "text_editor",
           "content": {
-            "instructions": "Upload your network diagram and security architecture document. Use the code panel to paste your completed Terraform networking module. In the text editor, provide your written response to Emma Clarke on SF-002/SF-018, and your cross-AZ cost analysis explaining why Data Transfer Regional ($156.30) is the real problem and how VPC gateway endpoints fix it.",
-            "submission_types": [
-              "text_editor",
-              "file_upload"
-            ]
-          }
+            "text": "Upload your network diagram and security architecture document. Use the code panel to paste your completed Terraform networking module. In the text editor, provide your written response to Emma Clarke on SF-002/SF-018, and your cross-AZ cost analysis explaining why Data Transfer Regional ($156.30) is the real problem and how VPC gateway endpoints fix it."
+          },
+          "review_mode": "instant_ai",
+          "order_index": 0
         },
         {
           "section_id": "p3_s5_rubric",
           "title": "Rubric",
-          "type": "rubric",
+          "type": "rich_text_display",
           "content": {
-            "total_points": 100,
-            "criteria": [
-              {
-                "criterion_id": "c1",
-                "criterion_label": "Terraform networking — private subnets, NAT GW, route tables, flow logs, security groups all completed with no 0.0.0.0/0 ingress",
-                "points": 20
-              },
-              {
-                "criterion_id": "c2",
-                "criterion_label": "Network diagram — VPC tiers, AZ spread, DC connectivity, VPC endpoints, Transit Gateway all shown",
-                "points": 15
-              },
-              {
-                "criterion_id": "c3",
-                "criterion_label": "NCSC 14 principles — all 14 mapped to specific AWS controls, no blanks",
-                "points": 20
-              },
-              {
-                "criterion_id": "c4",
-                "criterion_label": "Security architecture — all services configured, KMS strategy defined, SF-004 remediated via SSM",
-                "points": 20
-              },
-              {
-                "criterion_id": "c5",
-                "criterion_label": "SF-002/SF-018 response — ICO assessment made, data lineage explained, governance fix named",
-                "points": 15
-              },
-              {
-                "criterion_id": "c6",
-                "criterion_label": "Cross-AZ cost analysis — correctly identifies Data Transfer Regional (not CloudWatch) as the root cause, names S3 and DynamoDB gateway endpoints as the free fix",
-                "points": 10
-              }
-            ]
-          }
+            "text": "**Total: 100 points**\n\n- **Terraform networking — private subnets, NAT GW, route tables, flow logs, security groups all completed with no 0.0.0.0/0 ingress** — 20 pts\n- **Network diagram — VPC tiers, AZ spread, DC connectivity, VPC endpoints, Transit Gateway all shown** — 15 pts\n- **NCSC 14 principles — all 14 mapped to specific AWS controls, no blanks** — 20 pts\n- **Security architecture — all services configured, KMS strategy defined, SF-004 remediated via SSM** — 20 pts\n- **SF-002/SF-018 response — ICO assessment made, data lineage explained, governance fix named** — 15 pts\n- **Cross-AZ cost analysis — correctly identifies Data Transfer Regional (not CloudWatch) as the root cause, names S3 and DynamoDB gateway endpoints as the free fix** — 10 pts"
+          },
+          "order_index": 0
         }
       ]
     },
@@ -472,108 +227,39 @@
         {
           "section_id": "p4_s1_context",
           "title": "Your Brief",
-          "type": "context",
+          "type": "rich_text_display",
           "content": {
             "text": "The architecture is approved. Now you must build it.\n\nJames Patel has reviewed the starter Terraform and left you code review comments. The Python tools in `/python/` need completing. There is also a simulated operational incident for you to diagnose and resolve.\n\nThis is the most hands-on technical phase. Every deliverable requires working code pushed to GitHub.\n\nThree incidents need your attention this phase:\n\nIncident 1 — SSH Brute Force (SF-006): An active attack from a known Tor exit node. 847 failed SSH attempts in 10 minutes on SRV-086. Diagnose, contain, and remediate.\n\nIncident 2 — Cross-AZ Cost Anomaly: James identified that Data Transfer Regional at $156.30/month is the real issue — not CloudWatch at $89.40. Confirm the root cause and implement the VPC endpoint fix.\n\nIncident 3 — Untagged EC2 Instance: i-0nonprod003 has no tags, no application, no owner. It costs $98.40/month. Investigate who owns it and implement the governance fix."
-          }
+          },
+          "order_index": 0
         },
         {
           "section_id": "p4_s2_task",
           "title": "Your Tasks",
-          "type": "task_list",
+          "type": "rich_text_display",
           "content": {
-            "tasks": [
-              {
-                "task_id": "t1",
-                "title": "Complete the Terraform Repository",
-                "description": "Complete all TODOs across the three Terraform modules. The networking module must `terraform plan` with 0 errors (use `-var=\"environment=non-production\"`). The security/IAM module must tighten the KMS key policy from root wildcard to specific principals, and add S3 Object Lock in COMPLIANCE mode on the CloudTrail bucket (not GOVERNANCE — explain the difference). The EKS module must add an OIDC provider, at least one managed node group, and the aws-load-balancer-controller addon. Push all Terraform to GitHub and include your `terraform plan` output as evidence.",
-                "required": true
-              },
-              {
-                "task_id": "t2",
-                "title": "Complete the Python Inventory Tool",
-                "description": "Complete all TODO functions in `/python/inventory-tool/inventory.py`: `get_rds_inventory()` must identify Oracle instances (engine oracle-ee or oracle-se2), `get_s3_inventory()` must flag unencrypted buckets and public buckets as HIGH severity, and `get_eks_inventory()` must flag public API server endpoints. Run the tool against an AWS account (free tier or the Tilington non-prod account) and commit the actual CSV output to `/python/inventory-tool/sample-output.csv`.",
-                "required": true
-              },
-              {
-                "task_id": "t3",
-                "title": "Complete the Python Cost Reporting Tool",
-                "description": "Complete `get_cost_by_service()` and `get_cost_by_tag()` in `/python/cost-reporting-tool/cost_report.py`. Your analysis must identify that Data Transfer Regional at $156.30/month is the architectural problem (not CloudWatch at $89.40) and recommend S3 and DynamoDB VPC gateway endpoints as the free fix. Include this analysis as a comment in the code and in your incident report.",
-                "required": true
-              },
-              {
-                "task_id": "t4",
-                "title": "Complete CloudFormation Templates",
-                "description": "Complete all TODO sections in `/cloudformation/vpc.yaml` (non-production VPC — all subnets, NAT GW, routes). Create a new `/cloudformation/security.yaml` that enables Security Hub, AWS Foundational Security Best Practices standard, CIS AWS Foundations Benchmark, and GuardDuty with a detector.",
-                "required": true
-              },
-              {
-                "task_id": "t5",
-                "title": "Incident Resolution Report",
-                "description": "Document all three incidents: root cause for each, immediate containment action, long-term remediation, and evidence (before/after Security Hub finding status or cost report line). For the untagged instance i-0nonprod003 ($98.40/month): name the SCP or AWS Config rule that prevents recurrence.",
-                "required": true
-              },
-              {
-                "task_id": "t6",
-                "title": "Operations Runbook",
-                "description": "Write an operations runbook covering: EKS node drain and node group rolling update, Aurora manual failover and restore from snapshot, Terraform safe apply workflow and state drift recovery, and the incident escalation path at Tilington (from alert to on-call to Michael Evans to Sarah Williams).",
-                "required": false
-              }
-            ]
-          }
+            "text": "**Complete the Terraform Repository** *(required)*\n\nComplete all TODOs across the three Terraform modules. The networking module must `terraform plan` with 0 errors (use `-var=\"environment=non-production\"`). The security/IAM module must tighten the KMS key policy from root wildcard to specific principals, and add S3 Object Lock in COMPLIANCE mode on the CloudTrail bucket (not GOVERNANCE — explain the difference). The EKS module must add an OIDC provider, at least one managed node group, and the aws-load-balancer-controller addon. Push all Terraform to GitHub and include your `terraform plan` output as evidence.\n\n---\n\n**Complete the Python Inventory Tool** *(required)*\n\nComplete all TODO functions in `/python/inventory-tool/inventory.py`: `get_rds_inventory()` must identify Oracle instances (engine oracle-ee or oracle-se2), `get_s3_inventory()` must flag unencrypted buckets and public buckets as HIGH severity, and `get_eks_inventory()` must flag public API server endpoints. Run the tool against an AWS account (free tier or the Tilington non-prod account) and commit the actual CSV output to `/python/inventory-tool/sample-output.csv`.\n\n---\n\n**Complete the Python Cost Reporting Tool** *(required)*\n\nComplete `get_cost_by_service()` and `get_cost_by_tag()` in `/python/cost-reporting-tool/cost_report.py`. Your analysis must identify that Data Transfer Regional at $156.30/month is the architectural problem (not CloudWatch at $89.40) and recommend S3 and DynamoDB VPC gateway endpoints as the free fix. Include this analysis as a comment in the code and in your incident report.\n\n---\n\n**Complete CloudFormation Templates** *(required)*\n\nComplete all TODO sections in `/cloudformation/vpc.yaml` (non-production VPC — all subnets, NAT GW, routes). Create a new `/cloudformation/security.yaml` that enables Security Hub, AWS Foundational Security Best Practices standard, CIS AWS Foundations Benchmark, and GuardDuty with a detector.\n\n---\n\n**Incident Resolution Report** *(required)*\n\nDocument all three incidents: root cause for each, immediate containment action, long-term remediation, and evidence (before/after Security Hub finding status or cost report line). For the untagged instance i-0nonprod003 ($98.40/month): name the SCP or AWS Config rule that prevents recurrence.\n\n---\n\n**Operations Runbook**\n\nWrite an operations runbook covering: EKS node drain and node group rolling update, Aurora manual failover and restore from snapshot, Terraform safe apply workflow and state drift recovery, and the incident escalation path at Tilington (from alert to on-call to Michael Evans to Sarah Williams)."
+          },
+          "order_index": 0
         },
         {
           "section_id": "p4_s3_submission",
           "title": "Submit Your Work",
-          "type": "submission",
+          "type": "code_panel",
           "content": {
-            "instructions": "Use the code panel to paste your completed Terraform plan output (showing 0 errors) and your key Python functions. Upload your incident resolution report, CloudFormation templates, and the Python tool sample output CSV. Your GitHub repo must show commits for all completed code.",
-            "submission_types": [
-              "code_panel",
-              "file_upload",
-              "text_editor"
-            ]
-          }
+            "text": "Use the code panel to paste your completed Terraform plan output (showing 0 errors) and your key Python functions. Upload your incident resolution report, CloudFormation templates, and the Python tool sample output CSV. Your GitHub repo must show commits for all completed code."
+          },
+          "review_mode": "instant_ai",
+          "order_index": 0
         },
         {
           "section_id": "p4_s4_rubric",
           "title": "Rubric",
-          "type": "rubric",
+          "type": "rich_text_display",
           "content": {
-            "total_points": 100,
-            "criteria": [
-              {
-                "criterion_id": "c1",
-                "criterion_label": "Terraform — all modules complete, terraform plan shows 0 errors, remote state configured, CloudTrail S3 has Object Lock COMPLIANCE mode",
-                "points": 25
-              },
-              {
-                "criterion_id": "c2",
-                "criterion_label": "Python inventory tool — RDS/S3/EKS functions implemented, Oracle instances identified, unencrypted buckets flagged, actual CSV output committed",
-                "points": 20
-              },
-              {
-                "criterion_id": "c3",
-                "criterion_label": "Python cost tool — per-service breakdown implemented, cross-AZ root cause correctly identified as Data Transfer Regional not CloudWatch, VPC endpoints named as the free fix",
-                "points": 15
-              },
-              {
-                "criterion_id": "c4",
-                "criterion_label": "CloudFormation — vpc.yaml complete with all subnets and routes, security.yaml creates Security Hub and GuardDuty",
-                "points": 15
-              },
-              {
-                "criterion_id": "c5",
-                "criterion_label": "Incident resolution — all 3 incidents with root cause, containment, remediation, and evidence; untagged instance governance fix named",
-                "points": 15
-              },
-              {
-                "criterion_id": "c6",
-                "criterion_label": "Operations runbook — EKS, Aurora, Terraform, and escalation path all covered",
-                "points": 10
-              }
-            ]
-          }
+            "text": "**Total: 100 points**\n\n- **Terraform — all modules complete, terraform plan shows 0 errors, remote state configured, CloudTrail S3 has Object Lock COMPLIANCE mode** — 25 pts\n- **Python inventory tool — RDS/S3/EKS functions implemented, Oracle instances identified, unencrypted buckets flagged, actual CSV output committed** — 20 pts\n- **Python cost tool — per-service breakdown implemented, cross-AZ root cause correctly identified as Data Transfer Regional not CloudWatch, VPC endpoints named as the free fix** — 15 pts\n- **CloudFormation — vpc.yaml complete with all subnets and routes, security.yaml creates Security Hub and GuardDuty** — 15 pts\n- **Incident resolution — all 3 incidents with root cause, containment, remediation, and evidence; untagged instance governance fix named** — 15 pts\n- **Operations runbook — EKS, Aurora, Terraform, and escalation path all covered** — 10 pts"
+          },
+          "order_index": 0
         }
       ]
     },
@@ -586,102 +272,39 @@
         {
           "section_id": "p5_s1_context",
           "title": "Your Brief",
-          "type": "context",
+          "type": "rich_text_display",
           "content": {
             "text": "The IaC platform is operational. Now you must decompose Tilington's legacy Customer Platform into four microservices and deploy them to EKS using GitOps.\n\nThe four microservices:\n\nCustomer Service — customer profiles, accounts, KYC status. Data store: Aurora PostgreSQL. FCA scope: PII.\n\nPayments Service — payment initiation and routing. Data store: Aurora PostgreSQL + DynamoDB PaymentEvents. PCI DSS scope.\n\nNotifications Service — email, SMS, push. Data store: DynamoDB NotificationDelivery. No regulatory scope.\n\nAudit Service — immutable audit trail for all service actions. Data store: DynamoDB AuditTrail. FCA scope: must be append-only, no TTL, 7-year retention.\n\nThe starter files in `/kubernetes/` and `/gitops/` are 15-20% complete. The Helm chart has values defined but no templates. The ArgoCD application points at a non-existent overlay path. James Patel's code review from Phase 4 has items you must address.\n\nCritical: the Payments Service is in PCI DSS scope and must be network-isolated. Use a separate Kubernetes namespace or NetworkPolicy to restrict inbound traffic to only the ALB and Customer Service."
-          }
+          },
+          "order_index": 0
         },
         {
           "section_id": "p5_s2_task",
           "title": "Your Tasks",
-          "type": "task_list",
+          "type": "rich_text_display",
           "content": {
-            "tasks": [
-              {
-                "task_id": "t1",
-                "title": "Kubernetes Manifests — All 4 Microservices",
-                "description": "Complete the incomplete starter and add all missing services. For each of the 4 microservices create: deployment.yaml (with correct image URI format, resource limits, liveness/readiness probes, security context — runAsNonRoot: true, readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, topology spread constraints across 3 AZs), service.yaml (ClusterIP), hpa.yaml (with minReplicas, maxReplicas, CPU target), pdb.yaml (minAvailable: 2), and serviceaccount.yaml (with IRSA annotation eks.amazonaws.com/role-arn). Complete ingress.yaml with ACM certificate ARN placeholder, WAF ACL ARN, and HTTP to HTTPS redirect.",
-                "required": true
-              },
-              {
-                "task_id": "t2",
-                "title": "Helm Chart Templates",
-                "description": "Create actual Helm templates that use the values.yaml already defined. Required: templates/deployment.yaml, templates/service.yaml, templates/hpa.yaml, templates/ingress.yaml, templates/serviceaccount.yaml, templates/pdb.yaml. The chart must pass `helm template .` without errors — include evidence of this.",
-                "required": true
-              },
-              {
-                "task_id": "t3",
-                "title": "ArgoCD GitOps Configuration",
-                "description": "Fix the ArgoCD application.yaml (set a real EKS cluster URL format and correct overlay path). Create /gitops/overlays/production/kustomization.yaml and /gitops/overlays/non-production/kustomization.yaml. Create an ArgoCD ApplicationSet at /gitops/argocd/applicationset.yaml that templates an Application for all 4 microservices.",
-                "required": true
-              },
-              {
-                "task_id": "t4",
-                "title": "Service Boundary and API Design Documents",
-                "description": "Write /docs/service-boundaries.md defining for each service: what data entities it owns, what it reads from other services via API, what domain events it publishes, and what events it subscribes to. Write /docs/api-design.md with the full REST API for the Customer Service: method, path, request/response JSON schema, HTTP status codes, authentication mechanism, and PII fields flagged.",
-                "required": true
-              },
-              {
-                "task_id": "t5",
-                "title": "Microservices Architecture Diagram",
-                "description": "Draw the microservices architecture in Draw.io: all 4 services with their boundaries, synchronous API calls, asynchronous event flows, external dependencies, ALB ingress routing, and PCI scope boundary around the Payments Service.",
-                "required": true
-              }
-            ]
-          }
+            "text": "**Kubernetes Manifests — All 4 Microservices** *(required)*\n\nComplete the incomplete starter and add all missing services. For each of the 4 microservices create: deployment.yaml (with correct image URI format, resource limits, liveness/readiness probes, security context — runAsNonRoot: true, readOnlyRootFilesystem: true, allowPrivilegeEscalation: false, topology spread constraints across 3 AZs), service.yaml (ClusterIP), hpa.yaml (with minReplicas, maxReplicas, CPU target), pdb.yaml (minAvailable: 2), and serviceaccount.yaml (with IRSA annotation eks.amazonaws.com/role-arn). Complete ingress.yaml with ACM certificate ARN placeholder, WAF ACL ARN, and HTTP to HTTPS redirect.\n\n---\n\n**Helm Chart Templates** *(required)*\n\nCreate actual Helm templates that use the values.yaml already defined. Required: templates/deployment.yaml, templates/service.yaml, templates/hpa.yaml, templates/ingress.yaml, templates/serviceaccount.yaml, templates/pdb.yaml. The chart must pass `helm template .` without errors — include evidence of this.\n\n---\n\n**ArgoCD GitOps Configuration** *(required)*\n\nFix the ArgoCD application.yaml (set a real EKS cluster URL format and correct overlay path). Create /gitops/overlays/production/kustomization.yaml and /gitops/overlays/non-production/kustomization.yaml. Create an ArgoCD ApplicationSet at /gitops/argocd/applicationset.yaml that templates an Application for all 4 microservices.\n\n---\n\n**Service Boundary and API Design Documents** *(required)*\n\nWrite /docs/service-boundaries.md defining for each service: what data entities it owns, what it reads from other services via API, what domain events it publishes, and what events it subscribes to. Write /docs/api-design.md with the full REST API for the Customer Service: method, path, request/response JSON schema, HTTP status codes, authentication mechanism, and PII fields flagged.\n\n---\n\n**Microservices Architecture Diagram** *(required)*\n\nDraw the microservices architecture in Draw.io: all 4 services with their boundaries, synchronous API calls, asynchronous event flows, external dependencies, ALB ingress routing, and PCI scope boundary around the Payments Service."
+          },
+          "order_index": 0
         },
         {
           "section_id": "p5_s3_submission",
           "title": "Submit Your Work",
-          "type": "submission",
+          "type": "code_panel",
           "content": {
-            "instructions": "Use the code panel to paste your Helm chart deployment template and your ArgoCD ApplicationSet YAML. Upload your microservices architecture diagram and service boundary document. In the text editor, paste your `helm template .` output confirming it produces valid YAML without errors.",
-            "submission_types": [
-              "code_panel",
-              "file_upload",
-              "text_editor"
-            ]
-          }
+            "text": "Use the code panel to paste your Helm chart deployment template and your ArgoCD ApplicationSet YAML. Upload your microservices architecture diagram and service boundary document. In the text editor, paste your `helm template .` output confirming it produces valid YAML without errors."
+          },
+          "review_mode": "instant_ai",
+          "order_index": 0
         },
         {
           "section_id": "p5_s4_rubric",
           "title": "Rubric",
-          "type": "rubric",
+          "type": "rich_text_display",
           "content": {
-            "total_points": 100,
-            "criteria": [
-              {
-                "criterion_id": "c1",
-                "criterion_label": "Kubernetes manifests — all 4 services have correct security context (runAsNonRoot, readOnlyRootFilesystem, allowPrivilegeEscalation: false), topology spread constraints, HPA, PDB, and IRSA ServiceAccount",
-                "points": 25
-              },
-              {
-                "criterion_id": "c2",
-                "criterion_label": "Helm chart — all 6 template types created, helm template produces valid YAML without errors (evidence required), Payments Service PCI isolation implemented",
-                "points": 20
-              },
-              {
-                "criterion_id": "c3",
-                "criterion_label": "ArgoCD ApplicationSet — iterates over all 4 microservice names, production and non-production overlays created",
-                "points": 15
-              },
-              {
-                "criterion_id": "c4",
-                "criterion_label": "Service boundaries — all 4 services have owns/reads/publishes/subscribes defined, no shared databases between services",
-                "points": 20
-              },
-              {
-                "criterion_id": "c5",
-                "criterion_label": "API design — Customer Service REST API complete with request/response schemas, PII fields flagged, HTTP status codes for success and error cases",
-                "points": 10
-              },
-              {
-                "criterion_id": "c6",
-                "criterion_label": "Architecture diagram — 4 service boundaries, event flows, PCI scope boundary, ALB routing all shown",
-                "points": 10
-              }
-            ]
-          }
+            "text": "**Total: 100 points**\n\n- **Kubernetes manifests — all 4 services have correct security context (runAsNonRoot, readOnlyRootFilesystem, allowPrivilegeEscalation: false), topology spread constraints, HPA, PDB, and IRSA ServiceAccount** — 25 pts\n- **Helm chart — all 6 template types created, helm template produces valid YAML without errors (evidence required), Payments Service PCI isolation implemented** — 20 pts\n- **ArgoCD ApplicationSet — iterates over all 4 microservice names, production and non-production overlays created** — 15 pts\n- **Service boundaries — all 4 services have owns/reads/publishes/subscribes defined, no shared databases between services** — 20 pts\n- **API design — Customer Service REST API complete with request/response schemas, PII fields flagged, HTTP status codes for success and error cases** — 10 pts\n- **Architecture diagram — 4 service boundaries, event flows, PCI scope boundary, ALB routing all shown** — 10 pts"
+          },
+          "order_index": 0
         }
       ]
     },
@@ -694,91 +317,39 @@
         {
           "section_id": "p6_s1_context",
           "title": "Your Brief",
-          "type": "context",
+          "type": "rich_text_display",
           "content": {
             "text": "The microservices platform is deployed. Now you must build the delivery pipeline and the observability stack.\n\nThe GitHub Actions pipeline in `/.github/workflows/deploy.yml` has 10 documented bugs (BUG-001 through BUG-010). Find and fix all of them.\n\nBUG-004 is the most subtle. The security-scan job is defined but never actually blocks the pipeline. Read how GitHub Actions `needs:` and `if:` conditions interact when a job is skipped on non-main branches — the skip returns a success status that allows downstream jobs to proceed regardless.\n\nSLO definitions for the four Tilington services:\n\nCustomer Service: 99.9% availability, P99 latency under 500ms, error rate under 0.1% — 30-day rolling window.\n\nPayments Service: 99.95% availability, P99 latency under 250ms, error rate under 0.05% — 30-day rolling window.\n\nNotifications Service: 99.5% availability, P99 latency under 2000ms — 30-day rolling window.\n\nAudit Service: 99.9% availability, P99 latency under 1000ms — 30-day rolling window.\n\nThe Payments Service error budget calculation: 30 × 24 × 60 × 0.0005 = 21.6 minutes per month. This is the number Emma Clarke needs to understand Tilington's operational resilience posture."
-          }
+          },
+          "order_index": 0
         },
         {
           "section_id": "p6_s2_task",
           "title": "Your Tasks",
-          "type": "task_list",
+          "type": "rich_text_display",
           "content": {
-            "tasks": [
-              {
-                "task_id": "t1",
-                "title": "Fix All 10 Pipeline Bugs",
-                "description": "Fix every bug in `/.github/workflows/deploy.yml`. For each bug: identify the root cause, show the specific lines changed, and explain why the original code failed. BUG-001: ECR_REGISTRY env var empty. BUG-002: docker build wrong context path. BUG-003: no Trivy scan on built image. BUG-004: security-scan job never blocks the pipeline (needs:/if: interaction). BUG-005: AWS credentials via long-lived access keys not OIDC. BUG-006: IMAGE_TAG never defined. BUG-007: deploy-production has no AWS credentials step. BUG-008: no rollback on failed deployment. BUG-009: no smoke test after deployment. BUG-010: no notification on pipeline failure.",
-                "required": true
-              },
-              {
-                "task_id": "t2",
-                "title": "Security Scanning Evidence",
-                "description": "Run Trivy against a real Docker image (any Alpine or Ubuntu-based image) and commit the output to `/ci-cd/security-scan-results/trivy-scan-output.json`. Run Checkov against the Kubernetes manifests and commit to `/ci-cd/security-scan-results/checkov-k8s-scan.txt`. For each FAILED Checkov check: document what it flagged, why it matters, and what you changed to fix it.",
-                "required": true
-              },
-              {
-                "task_id": "t3",
-                "title": "Grafana Cloud Dashboards",
-                "description": "Create 3 dashboards in Grafana Cloud free tier (grafana.com/products/cloud/). Dashboard 1 — Service Health Overview: request rate, error rate, P95 latency for all 4 services. Dashboard 2 — Reliability and SLO: SLO compliance, error budget remaining, error budget burn rate for all 4 services. Dashboard 3 — EKS Infrastructure: node CPU/memory, pod scheduling, HPA scaling events. Export each as JSON and commit to `/observability/grafana/dashboards/`.",
-                "required": true
-              },
-              {
-                "task_id": "t4",
-                "title": "SLO and Reliability Runbook",
-                "description": "Define the SLO framework for all 4 services with error budget calculations. Calculate the Payments Service error budget (99.95% over 30 days = 21.6 minutes/month — show your working). Define fast burn alert threshold (consuming 5% of 30-day budget in 1 hour triggers a page) and slow burn alert threshold (consuming 10% in 6 hours triggers a ticket). Define the escalation path from alert to on-call to Michael Evans to Sarah Williams. Explain how this SLO framework provides evidence for FCA PS21/3 operational resilience.",
-                "required": true
-              }
-            ]
-          }
+            "text": "**Fix All 10 Pipeline Bugs** *(required)*\n\nFix every bug in `/.github/workflows/deploy.yml`. For each bug: identify the root cause, show the specific lines changed, and explain why the original code failed. BUG-001: ECR_REGISTRY env var empty. BUG-002: docker build wrong context path. BUG-003: no Trivy scan on built image. BUG-004: security-scan job never blocks the pipeline (needs:/if: interaction). BUG-005: AWS credentials via long-lived access keys not OIDC. BUG-006: IMAGE_TAG never defined. BUG-007: deploy-production has no AWS credentials step. BUG-008: no rollback on failed deployment. BUG-009: no smoke test after deployment. BUG-010: no notification on pipeline failure.\n\n---\n\n**Security Scanning Evidence** *(required)*\n\nRun Trivy against a real Docker image (any Alpine or Ubuntu-based image) and commit the output to `/ci-cd/security-scan-results/trivy-scan-output.json`. Run Checkov against the Kubernetes manifests and commit to `/ci-cd/security-scan-results/checkov-k8s-scan.txt`. For each FAILED Checkov check: document what it flagged, why it matters, and what you changed to fix it.\n\n---\n\n**Grafana Cloud Dashboards** *(required)*\n\nCreate 3 dashboards in Grafana Cloud free tier (grafana.com/products/cloud/). Dashboard 1 — Service Health Overview: request rate, error rate, P95 latency for all 4 services. Dashboard 2 — Reliability and SLO: SLO compliance, error budget remaining, error budget burn rate for all 4 services. Dashboard 3 — EKS Infrastructure: node CPU/memory, pod scheduling, HPA scaling events. Export each as JSON and commit to `/observability/grafana/dashboards/`.\n\n---\n\n**SLO and Reliability Runbook** *(required)*\n\nDefine the SLO framework for all 4 services with error budget calculations. Calculate the Payments Service error budget (99.95% over 30 days = 21.6 minutes/month — show your working). Define fast burn alert threshold (consuming 5% of 30-day budget in 1 hour triggers a page) and slow burn alert threshold (consuming 10% in 6 hours triggers a ticket). Define the escalation path from alert to on-call to Michael Evans to Sarah Williams. Explain how this SLO framework provides evidence for FCA PS21/3 operational resilience."
+          },
+          "order_index": 0
         },
         {
           "section_id": "p6_s3_submission",
           "title": "Submit Your Work",
-          "type": "submission",
+          "type": "code_panel",
           "content": {
-            "instructions": "Use the code panel to paste your fixed deploy.yml with each BUG-001 through BUG-010 annotated. Upload your Trivy scan output JSON and Checkov results. Upload your Grafana dashboard JSON exports. In the text editor, provide your SLO calculations showing the Payments Service error budget working (30 × 24 × 60 × 0.0005 = 21.6 minutes/month).",
-            "submission_types": [
-              "code_panel",
-              "file_upload",
-              "text_editor"
-            ]
-          }
+            "text": "Use the code panel to paste your fixed deploy.yml with each BUG-001 through BUG-010 annotated. Upload your Trivy scan output JSON and Checkov results. Upload your Grafana dashboard JSON exports. In the text editor, provide your SLO calculations showing the Payments Service error budget working (30 × 24 × 60 × 0.0005 = 21.6 minutes/month)."
+          },
+          "review_mode": "instant_ai",
+          "order_index": 0
         },
         {
           "section_id": "p6_s4_rubric",
           "title": "Rubric",
-          "type": "rubric",
+          "type": "rich_text_display",
           "content": {
-            "total_points": 100,
-            "criteria": [
-              {
-                "criterion_id": "c1",
-                "criterion_label": "All 10 bugs fixed — each with root cause explanation and specific lines changed, BUG-004 correctly identifies the needs:/if: interaction as the root cause",
-                "points": 30
-              },
-              {
-                "criterion_id": "c2",
-                "criterion_label": "Security scanning — real Trivy output committed (not mocked), Checkov failed checks documented with remediation",
-                "points": 20
-              },
-              {
-                "criterion_id": "c3",
-                "criterion_label": "Grafana dashboards — 3 dashboards created with correct panels and exported as JSON",
-                "points": 20
-              },
-              {
-                "criterion_id": "c4",
-                "criterion_label": "SLO framework — all 4 services defined, Payments error budget correctly calculated as 21.6 minutes/month, burn rate alerts and escalation path defined",
-                "points": 20
-              },
-              {
-                "criterion_id": "c5",
-                "criterion_label": "FCA connection — SLO framework explicitly connected to FCA PS21/3 operational resilience requirements",
-                "points": 10
-              }
-            ]
-          }
+            "text": "**Total: 100 points**\n\n- **All 10 bugs fixed — each with root cause explanation and specific lines changed, BUG-004 correctly identifies the needs:/if: interaction as the root cause** — 30 pts\n- **Security scanning — real Trivy output committed (not mocked), Checkov failed checks documented with remediation** — 20 pts\n- **Grafana dashboards — 3 dashboards created with correct panels and exported as JSON** — 20 pts\n- **SLO framework — all 4 services defined, Payments error budget correctly calculated as 21.6 minutes/month, burn rate alerts and escalation path defined** — 20 pts\n- **FCA connection — SLO framework explicitly connected to FCA PS21/3 operational resilience requirements** — 10 pts"
+          },
+          "order_index": 0
         }
       ]
     },
@@ -791,90 +362,39 @@
         {
           "section_id": "p7_s1_context",
           "title": "Your Brief",
-          "type": "context",
+          "type": "rich_text_display",
           "content": {
             "text": "The microservices platform is live. Now you must design the data layer — the databases that power the four microservices and the migration path from Oracle.\n\nSarah Williams is waiting for your Oracle renewal recommendation. The Q2 2026 deadline is approaching. ORCL-01, ORCL-02, and ORCL-03 are the instances to migrate before the renewal decision. ORCL-04 and ORCL-05 can be deferred.\n\nMichael Evans has warned you: ORCL-01 has 847 stored procedures, of which 214 require manual conversion according to the AWS Schema Conversion Tool. The most complex is `customer_ledger_pkg`.\n\nCritical design constraints:\n\nAuditTrail DynamoDB table must have NO TTL. FCA COBS record-keeping requirements mean some audit records must be retained indefinitely. Setting TTL on AuditTrail is a compliance failure.\n\nAurora cross-region replication of customer data to eu-west-1 (Ireland) would violate UK GDPR. Customer PII must stay in eu-west-2 only. Your DR strategy must address this constraint explicitly.\n\nPayments Service needs a 15-minute RPO. Aurora automated backups alone do not achieve this. Aurora Point-in-Time Recovery (PITR) does — it continuously backs up to S3, enabling restore to any second within the retention period."
-          }
+          },
+          "order_index": 0
         },
         {
           "section_id": "p7_s2_task",
           "title": "Your Tasks",
-          "type": "task_list",
+          "type": "rich_text_display",
           "content": {
-            "tasks": [
-              {
-                "task_id": "t1",
-                "title": "Complete Aurora PostgreSQL Design",
-                "description": "Complete all TODOs in `/databases/aurora-design.md`. Instance class selection must be justified against the ORCL-01 workload (not against SRV-006 server specs — Aurora manages memory differently). Complete the SQL schema for customers, accounts, and transactions tables with all columns, constraints, and indexes. For Oracle migration: list the specific PL/SQL features in customer_ledger_pkg that require manual conversion, and document the DMS task configuration for ORCL-01 to Aurora migration.",
-                "required": true
-              },
-              {
-                "task_id": "t2",
-                "title": "Complete DynamoDB Design — All 3 Tables",
-                "description": "Complete all 3 DynamoDB tables in `/databases/dynamodb-design.md`. PaymentEvents: resolve the hot partition problem on the status GSI (write sharding or alternative — propose a concrete solution, not just flag the problem). NotificationDelivery: design from scratch with partition key, sort key, 2 GSIs with query patterns documented, TTL set to 90 days. AuditTrail: design from scratch with NO TTL (explain the FCA rationale), separate KMS key `alias/tilington-audit`, access model (audit-service write-only, compliance-viewer read-only).",
-                "required": true
-              },
-              {
-                "task_id": "t3",
-                "title": "Backup and Recovery Strategy",
-                "description": "Write `/docs/backup-recovery-strategy.md` covering Aurora (backup retention with FCA justification, PITR as the mechanism for Payments Service 15-minute RPO, cross-region snapshot strategy that avoids PII going to eu-west-1) and DynamoDB (PITR for AuditTrail, no Global Tables for AuditTrail due to UK data residency, cost calculation for PITR on AuditTrail at $0.20/GB/month). Show how the Payments Service 15-minute RPO is achieved via PITR.",
-                "required": true
-              },
-              {
-                "task_id": "t4",
-                "title": "Oracle Renewal Recommendation",
-                "description": "Write a one-page recommendation for Sarah Williams on whether to renew the Oracle contract (£1.4M/year, 3-year renewal = £4.2M). Name ORCL-01, ORCL-02, ORCL-03 as the Q2 2026 migration candidates. Address Michael Evans's PL/SQL complexity warning (847 stored procedures, 214 requiring manual conversion). Give a clear recommendation — renew or do not renew — with explicit risk acknowledgement.",
-                "required": true
-              }
-            ]
-          }
+            "text": "**Complete Aurora PostgreSQL Design** *(required)*\n\nComplete all TODOs in `/databases/aurora-design.md`. Instance class selection must be justified against the ORCL-01 workload (not against SRV-006 server specs — Aurora manages memory differently). Complete the SQL schema for customers, accounts, and transactions tables with all columns, constraints, and indexes. For Oracle migration: list the specific PL/SQL features in customer_ledger_pkg that require manual conversion, and document the DMS task configuration for ORCL-01 to Aurora migration.\n\n---\n\n**Complete DynamoDB Design — All 3 Tables** *(required)*\n\nComplete all 3 DynamoDB tables in `/databases/dynamodb-design.md`. PaymentEvents: resolve the hot partition problem on the status GSI (write sharding or alternative — propose a concrete solution, not just flag the problem). NotificationDelivery: design from scratch with partition key, sort key, 2 GSIs with query patterns documented, TTL set to 90 days. AuditTrail: design from scratch with NO TTL (explain the FCA rationale), separate KMS key `alias/tilington-audit`, access model (audit-service write-only, compliance-viewer read-only).\n\n---\n\n**Backup and Recovery Strategy** *(required)*\n\nWrite `/docs/backup-recovery-strategy.md` covering Aurora (backup retention with FCA justification, PITR as the mechanism for Payments Service 15-minute RPO, cross-region snapshot strategy that avoids PII going to eu-west-1) and DynamoDB (PITR for AuditTrail, no Global Tables for AuditTrail due to UK data residency, cost calculation for PITR on AuditTrail at $0.20/GB/month). Show how the Payments Service 15-minute RPO is achieved via PITR.\n\n---\n\n**Oracle Renewal Recommendation** *(required)*\n\nWrite a one-page recommendation for Sarah Williams on whether to renew the Oracle contract (£1.4M/year, 3-year renewal = £4.2M). Name ORCL-01, ORCL-02, ORCL-03 as the Q2 2026 migration candidates. Address Michael Evans's PL/SQL complexity warning (847 stored procedures, 214 requiring manual conversion). Give a clear recommendation — renew or do not renew — with explicit risk acknowledgement."
+          },
+          "order_index": 0
         },
         {
           "section_id": "p7_s3_submission",
           "title": "Submit Your Work",
-          "type": "submission",
+          "type": "text_editor",
           "content": {
-            "instructions": "Upload your completed Aurora design, DynamoDB design, and backup/recovery strategy documents. In the text editor, write your Oracle renewal recommendation for Sarah Williams and explain how you have addressed the AuditTrail TTL=NONE requirement with FCA justification.",
-            "submission_types": [
-              "text_editor",
-              "file_upload"
-            ]
-          }
+            "text": "Upload your completed Aurora design, DynamoDB design, and backup/recovery strategy documents. In the text editor, write your Oracle renewal recommendation for Sarah Williams and explain how you have addressed the AuditTrail TTL=NONE requirement with FCA justification."
+          },
+          "review_mode": "instant_ai",
+          "order_index": 0
         },
         {
           "section_id": "p7_s4_rubric",
           "title": "Rubric",
-          "type": "rubric",
+          "type": "rich_text_display",
           "content": {
-            "total_points": 100,
-            "criteria": [
-              {
-                "criterion_id": "c1",
-                "criterion_label": "Aurora design — instance sizing justified against workload not server specs, SQL schema complete, Oracle migration specifics documented including customer_ledger_pkg",
-                "points": 25
-              },
-              {
-                "criterion_id": "c2",
-                "criterion_label": "DynamoDB — all 3 tables fully designed, PaymentEvents hot partition solved with concrete mechanism, AuditTrail has NO TTL with FCA justification",
-                "points": 30
-              },
-              {
-                "criterion_id": "c3",
-                "criterion_label": "Backup and recovery — Payments Service 15-minute RPO achieved via PITR (not just backups), cross-region PII dilemma resolved (not just flagged)",
-                "points": 20
-              },
-              {
-                "criterion_id": "c4",
-                "criterion_label": "Oracle recommendation — names ORCL-01/02/03 as Q2 candidates, addresses PL/SQL complexity honestly, gives a specific recommendation",
-                "points": 15
-              },
-              {
-                "criterion_id": "c5",
-                "criterion_label": "Data security — KMS keys per classification, access model least-privilege, pgaudit for column-level audit",
-                "points": 10
-              }
-            ]
-          }
+            "text": "**Total: 100 points**\n\n- **Aurora design — instance sizing justified against workload not server specs, SQL schema complete, Oracle migration specifics documented including customer_ledger_pkg** — 25 pts\n- **DynamoDB — all 3 tables fully designed, PaymentEvents hot partition solved with concrete mechanism, AuditTrail has NO TTL with FCA justification** — 30 pts\n- **Backup and recovery — Payments Service 15-minute RPO achieved via PITR (not just backups), cross-region PII dilemma resolved (not just flagged)** — 20 pts\n- **Oracle recommendation — names ORCL-01/02/03 as Q2 candidates, addresses PL/SQL complexity honestly, gives a specific recommendation** — 15 pts\n- **Data security — KMS keys per classification, access model least-privilege, pgaudit for column-level audit** — 10 pts"
+          },
+          "order_index": 0
         }
       ]
     },
@@ -887,96 +407,39 @@
         {
           "section_id": "p8_s1_context",
           "title": "Your Brief",
-          "type": "context",
+          "type": "rich_text_display",
           "content": {
             "text": "The platform is built and the databases are designed. Now you must plan the migration, validate cost, and design the disaster recovery architecture.\n\nKey FinOps findings from the January cost report you must address:\n\nAurora writer db.r6g.2xlarge costs $2,180.16/month. Is this right-sized? SRV-006 (the Oracle server) has 32 vCPU and 256GB RAM. The db.r6g.2xlarge has 8 vCPU and 64GB. Aurora manages memory differently to bare-metal Oracle — this is not necessarily under-provisioned, but you must justify the choice with workload analysis.\n\nDirect Connect costs $380/month. This is a real cost but relatively small as a proportion of the £56,667/month programme budget — the business case still holds.\n\nNon-prod EKS nodes running 24/7: two nodes at $28.08/month each. Potential saving if scheduled off nights/weekends: $28.08 × 2 × (5/7) = approximately $40/month.\n\nTotal January spend: sum the blended_cost_usd column from the CSV. Do not estimate — calculate from the data.\n\nCritical DR constraint: the AuditTrail DynamoDB table must NOT be in the DR replication plan. FCA audit records must remain in eu-west-2 (UK jurisdiction) only. This is the same constraint that prevents Aurora customer data from replicating to eu-west-1."
-          }
+          },
+          "order_index": 0
         },
         {
           "section_id": "p8_s2_task",
           "title": "Your Tasks",
-          "type": "task_list",
+          "type": "rich_text_display",
           "content": {
-            "tasks": [
-              {
-                "task_id": "t1",
-                "title": "Complete Migration Strategy",
-                "description": "Complete all TODO sections in `/migration/migration-strategy.md`. Define all 5 migration waves with specific applications assigned to each wave, entry and exit criteria, and rationale for sequencing. Resolve every application with a `???` strategy in the wave candidates CSV. Address APP-012 (Authentication Service) as Wave 2 critical path — all 25 dependent apps cannot migrate until it does.",
-                "required": true
-              },
-              {
-                "task_id": "t2",
-                "title": "FinOps Assessment",
-                "description": "Analyse the January 2026 cost report CSV and produce a FinOps assessment at `/finops/finops-assessment.md`. Calculate the total January AWS spend by summing the blended_cost_usd column (do not estimate). Identify the top 5 costs by service. Identify all 5 specific findings: Aurora sizing question, Direct Connect cost, non-prod scheduling saving (~$40/month), untagged instance governance gap, and cross-AZ fix ($156.30/month via free VPC endpoints saving $1,875.60/year). Provide quick wins, medium-term, and long-term recommendations.",
-                "required": true
-              },
-              {
-                "task_id": "t3",
-                "title": "DR Architecture",
-                "description": "Design and diagram the DR architecture at `/architecture/dr.drawio`. Primary: eu-west-2. DR: eu-west-1 (no customer PII). Show: Aurora strategy (PITR snapshots only — no live PII replica in eu-west-1), DynamoDB AuditTrail excluded from replication (UK data residency), EKS warm or cold standby in eu-west-1, Route 53 health checks and failover routing. Define RTO and RPO targets for all 4 services.",
-                "required": true
-              },
-              {
-                "task_id": "t4",
-                "title": "RTO/RPO Matrix",
-                "description": "Complete the RTO/RPO matrix for all 4 services. For each: FCA requirement, target achieved, AWS mechanism used, and any gap with proposed remediation. Payments Service 15-minute RPO must be evidenced with PITR as the specific mechanism.",
-                "required": true
-              },
-              {
-                "task_id": "t5",
-                "title": "AWS Well-Architected Review",
-                "description": "Conduct a self-assessment against all 5 pillars (Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimisation). Minimum 2 evidence-based risks per pillar drawn from the security findings CSV and cost report. Include remediation for each risk.",
-                "required": false
-              }
-            ]
-          }
+            "text": "**Complete Migration Strategy** *(required)*\n\nComplete all TODO sections in `/migration/migration-strategy.md`. Define all 5 migration waves with specific applications assigned to each wave, entry and exit criteria, and rationale for sequencing. Resolve every application with a `???` strategy in the wave candidates CSV. Address APP-012 (Authentication Service) as Wave 2 critical path — all 25 dependent apps cannot migrate until it does.\n\n---\n\n**FinOps Assessment** *(required)*\n\nAnalyse the January 2026 cost report CSV and produce a FinOps assessment at `/finops/finops-assessment.md`. Calculate the total January AWS spend by summing the blended_cost_usd column (do not estimate). Identify the top 5 costs by service. Identify all 5 specific findings: Aurora sizing question, Direct Connect cost, non-prod scheduling saving (~$40/month), untagged instance governance gap, and cross-AZ fix ($156.30/month via free VPC endpoints saving $1,875.60/year). Provide quick wins, medium-term, and long-term recommendations.\n\n---\n\n**DR Architecture** *(required)*\n\nDesign and diagram the DR architecture at `/architecture/dr.drawio`. Primary: eu-west-2. DR: eu-west-1 (no customer PII). Show: Aurora strategy (PITR snapshots only — no live PII replica in eu-west-1), DynamoDB AuditTrail excluded from replication (UK data residency), EKS warm or cold standby in eu-west-1, Route 53 health checks and failover routing. Define RTO and RPO targets for all 4 services.\n\n---\n\n**RTO/RPO Matrix** *(required)*\n\nComplete the RTO/RPO matrix for all 4 services. For each: FCA requirement, target achieved, AWS mechanism used, and any gap with proposed remediation. Payments Service 15-minute RPO must be evidenced with PITR as the specific mechanism.\n\n---\n\n**AWS Well-Architected Review**\n\nConduct a self-assessment against all 5 pillars (Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimisation). Minimum 2 evidence-based risks per pillar drawn from the security findings CSV and cost report. Include remediation for each risk."
+          },
+          "order_index": 0
         },
         {
           "section_id": "p8_s3_submission",
           "title": "Submit Your Work",
-          "type": "submission",
+          "type": "text_editor",
           "content": {
-            "instructions": "Upload your DR architecture diagram and RTO/RPO matrix. In the text editor, provide your FinOps assessment with the total January spend calculated from the CSV (show the sum, not an estimate), the 5 specific cost findings, and your Oracle renewal recommendation summary if not already provided in Phase 7.",
-            "submission_types": [
-              "text_editor",
-              "file_upload"
-            ]
-          }
+            "text": "Upload your DR architecture diagram and RTO/RPO matrix. In the text editor, provide your FinOps assessment with the total January spend calculated from the CSV (show the sum, not an estimate), the 5 specific cost findings, and your Oracle renewal recommendation summary if not already provided in Phase 7."
+          },
+          "review_mode": "instant_ai",
+          "order_index": 0
         },
         {
           "section_id": "p8_s4_rubric",
           "title": "Rubric",
-          "type": "rubric",
+          "type": "rich_text_display",
           "content": {
-            "total_points": 100,
-            "criteria": [
-              {
-                "criterion_id": "c1",
-                "criterion_label": "Migration strategy — all 28 apps assigned to waves, APP-012 in Wave 2, all 5 waves with entry/exit criteria",
-                "points": 20
-              },
-              {
-                "criterion_id": "c2",
-                "criterion_label": "FinOps — total January spend calculated from CSV (not estimated), all 5 specific findings identified, cross-AZ $156.30 fix named with $1,875.60 annual saving",
-                "points": 25
-              },
-              {
-                "criterion_id": "c3",
-                "criterion_label": "DR architecture — eu-west-1 design, AuditTrail excluded from replication with UK data residency rationale, Aurora PII constraint addressed",
-                "points": 20
-              },
-              {
-                "criterion_id": "c4",
-                "criterion_label": "RTO/RPO matrix — all 4 services, Payments 15-minute RPO evidenced via PITR specifically",
-                "points": 20
-              },
-              {
-                "criterion_id": "c5",
-                "criterion_label": "Well-Architected review — 5 pillars, 2+ evidence-based risks each from CSV data",
-                "points": 15
-              }
-            ]
-          }
+            "text": "**Total: 100 points**\n\n- **Migration strategy — all 28 apps assigned to waves, APP-012 in Wave 2, all 5 waves with entry/exit criteria** — 20 pts\n- **FinOps — total January spend calculated from CSV (not estimated), all 5 specific findings identified, cross-AZ $156.30 fix named with $1,875.60 annual saving** — 25 pts\n- **DR architecture — eu-west-1 design, AuditTrail excluded from replication with UK data residency rationale, Aurora PII constraint addressed** — 20 pts\n- **RTO/RPO matrix — all 4 services, Payments 15-minute RPO evidenced via PITR specifically** — 20 pts\n- **Well-Architected review — 5 pillars, 2+ evidence-based risks each from CSV data** — 15 pts"
+          },
+          "order_index": 0
         }
       ]
     },
@@ -989,119 +452,48 @@
         {
           "section_id": "p9_s1_context",
           "title": "Your Brief",
-          "type": "context",
+          "type": "rich_text_display",
           "content": {
             "text": "You have completed the full technical programme. Now you must synthesise everything into board-level governance deliverables and defend your architecture at the Architecture Review Board.\n\nThe ARB panel: Emma Clarke (CRO), Priya Sharma (Head of Information Security), David Okafor (Head of Retail Technology), and the CFO.\n\nEmma Clarke has already sent you her three questions. These must be answered in writing in the ARB pack — not just verbally on the day.\n\nQuestion 1: Confirm that during DR failover to eu-west-1, no customer PII is replicated to or processed in that region. What technical controls enforce this? What happens if the control fails?\n\nQuestion 2: How does your architecture maintain operational resilience if AWS eu-west-2 experiences an availability event?\n\nQuestion 3: Who within Tilington has administrative access to the AWS Production account? How is privileged access managed and audited?\n\nThe CFO will ask about cost. Have the January spend total from the CSV ready. Have the Oracle saving (£1.4M/year or £4.2M over 3 years) ready. Have the cross-AZ saving ($1,875.60/year from free VPC endpoints) ready."
-          }
+          },
+          "order_index": 0
         },
         {
           "section_id": "p9_s2_inbox",
           "title": "Your Inbox",
-          "type": "inbox",
+          "type": "rich_text_display",
           "content": {
-            "messages": [
-              {
-                "from": "Emma Clarke",
-                "role": "Chief Risk Officer",
-                "colour": "amber",
-                "subject": "ARB Pack — Data Residency and DR Policy Questions",
-                "body": "For the ARB on 14 April, I will be asking the following questions. I recommend you prepare written answers in your ARB pack rather than answering verbally on the day.\n\nQuestion 1: Confirm that during DR failover to eu-west-1 (Ireland), no customer PII is replicated to or processed in that region. What technical controls enforce this? What happens if the control fails?\n\nQuestion 2: The FCA expects that important business services can operate within impact tolerances even when a third-party (AWS) is experiencing an incident. How does your architecture maintain operational resilience if AWS eu-west-2 experiences an availability event?\n\nQuestion 3: Who within Tilington has administrative access to the AWS Production account? How is privileged access managed and audited?\n\nI expect specific, evidenced answers — not architectural assertions.\n\nEmma Clarke\nChief Risk Officer"
-              },
-              {
-                "from": "Sarah Williams",
-                "role": "CTO",
-                "colour": "purple",
-                "subject": "Oracle Renewal — Decision Needed This Week",
-                "body": "Our Oracle renewal window closes 30 April. I need your recommendation: do we renew or not renew?\n\nThe CFO wants a business case. If we don't renew, what's the risk? If we do renew, what does that cost us and what does it signal to the programme?\n\nI need a clear recommendation with numbers by Thursday.\n\nSarah"
-              }
-            ]
-          }
+            "text": "**From: Emma Clarke (Chief Risk Officer)** — ARB Pack — Data Residency and DR Policy Questions\n\nFor the ARB on 14 April, I will be asking the following questions. I recommend you prepare written answers in your ARB pack rather than answering verbally on the day.\n\nQuestion 1: Confirm that during DR failover to eu-west-1 (Ireland), no customer PII is replicated to or processed in that region. What technical controls enforce this? What happens if the control fails?\n\nQuestion 2: The FCA expects that important business services can operate within impact tolerances even when a third-party (AWS) is experiencing an incident. How does your architecture maintain operational resilience if AWS eu-west-2 experiences an availability event?\n\nQuestion 3: Who within Tilington has administrative access to the AWS Production account? How is privileged access managed and audited?\n\nI expect specific, evidenced answers — not architectural assertions.\n\nEmma Clarke\nChief Risk Officer\n\n---\n\n**From: Sarah Williams (CTO)** — Oracle Renewal — Decision Needed This Week\n\nOur Oracle renewal window closes 30 April. I need your recommendation: do we renew or not renew?\n\nThe CFO wants a business case. If we don't renew, what's the risk? If we do renew, what does that cost us and what does it signal to the programme?\n\nI need a clear recommendation with numbers by Thursday.\n\nSarah"
+          },
+          "order_index": 0
         },
         {
           "section_id": "p9_s3_task",
           "title": "Your Tasks",
-          "type": "task_list",
+          "type": "rich_text_display",
           "content": {
-            "tasks": [
-              {
-                "task_id": "t1",
-                "title": "Architecture Review Board Presentation Pack",
-                "description": "Create a PowerPoint or Google Slides ARB pack (12-16 slides maximum). Required slides: programme title and executive summary, AWS architecture overview diagram, multi-account structure and governance model, security posture with Security Hub findings closed and NCSC compliance status, written answer to Emma Clarke's data residency question (slide 6), operational resilience — RTO/RPO matrix and DR design (Emma Clarke question 2), migration progress and wave plan status, FinOps — January spend total from CSV with budget vs actual, Oracle renewal recommendation for the CFO, outstanding risks (honest summary for the Board), and next steps to DC exit.",
-                "required": true
-              },
-              {
-                "task_id": "t2",
-                "title": "Answer Emma Clarke's Three Questions in Writing",
-                "description": "Provide written answers to all 3 of Emma Clarke's ARB questions. Each answer must name specific technical mechanisms — not prose assertions. Question 1 data residency answer must name: the S3 bucket replication policy (or absence), the Aurora snapshot-only strategy (no live PII replica), the DynamoDB AuditTrail exclusion, the SCP preventing eu-west-1 PII use, and the CloudTrail detective control. Question 2 must cover Multi-AZ (AZ failure), eu-west-1 warm standby (region failure), Route 53 failover, and in-flight payment handling. Question 3 must name specific IAM Identity Centre roles, the break-glass procedure, and the monthly access review.",
-                "required": true
-              },
-              {
-                "task_id": "t3",
-                "title": "Architecture Decision Log",
-                "description": "Compile every ADR from all phases into a single decision log at `/docs/architecture-decision-log.md`. Format as a table: ADR number, title, status, date, decided by, and one-sentence summary. For any ADR that was revised or superseded during the programme, document what changed and why.",
-                "required": true
-              },
-              {
-                "task_id": "t4",
-                "title": "Risk and Trade-Off Summary",
-                "description": "Document accepted risks (each with stakeholder sign-off and residual controls) and key trade-offs made during the programme. Required trade-offs: NAT Gateway 1 vs 3 (cite the ~£90/month figure), Aurora instance sizing, Direct Connect vs VPN, rehost vs refactor timing for APP-002, public vs private EKS API endpoint.",
-                "required": true
-              },
-              {
-                "task_id": "t5",
-                "title": "Final Portfolio Summary",
-                "description": "Write a one-page professional portfolio summary at `/docs/final-portfolio-summary.md` suitable for a CV or LinkedIn project description. Must name specific AWS services, quantify outcomes (Oracle cost saving, FCA compliance achieved, DC exit enabled), and map skills to the UK job market roles paying £70,000-£125,000.",
-                "required": true
-              }
-            ]
-          }
+            "text": "**Architecture Review Board Presentation Pack** *(required)*\n\nCreate a PowerPoint or Google Slides ARB pack (12-16 slides maximum). Required slides: programme title and executive summary, AWS architecture overview diagram, multi-account structure and governance model, security posture with Security Hub findings closed and NCSC compliance status, written answer to Emma Clarke's data residency question (slide 6), operational resilience — RTO/RPO matrix and DR design (Emma Clarke question 2), migration progress and wave plan status, FinOps — January spend total from CSV with budget vs actual, Oracle renewal recommendation for the CFO, outstanding risks (honest summary for the Board), and next steps to DC exit.\n\n---\n\n**Answer Emma Clarke's Three Questions in Writing** *(required)*\n\nProvide written answers to all 3 of Emma Clarke's ARB questions. Each answer must name specific technical mechanisms — not prose assertions. Question 1 data residency answer must name: the S3 bucket replication policy (or absence), the Aurora snapshot-only strategy (no live PII replica), the DynamoDB AuditTrail exclusion, the SCP preventing eu-west-1 PII use, and the CloudTrail detective control. Question 2 must cover Multi-AZ (AZ failure), eu-west-1 warm standby (region failure), Route 53 failover, and in-flight payment handling. Question 3 must name specific IAM Identity Centre roles, the break-glass procedure, and the monthly access review.\n\n---\n\n**Architecture Decision Log** *(required)*\n\nCompile every ADR from all phases into a single decision log at `/docs/architecture-decision-log.md`. Format as a table: ADR number, title, status, date, decided by, and one-sentence summary. For any ADR that was revised or superseded during the programme, document what changed and why.\n\n---\n\n**Risk and Trade-Off Summary** *(required)*\n\nDocument accepted risks (each with stakeholder sign-off and residual controls) and key trade-offs made during the programme. Required trade-offs: NAT Gateway 1 vs 3 (cite the ~£90/month figure), Aurora instance sizing, Direct Connect vs VPN, rehost vs refactor timing for APP-002, public vs private EKS API endpoint.\n\n---\n\n**Final Portfolio Summary** *(required)*\n\nWrite a one-page professional portfolio summary at `/docs/final-portfolio-summary.md` suitable for a CV or LinkedIn project description. Must name specific AWS services, quantify outcomes (Oracle cost saving, FCA compliance achieved, DC exit enabled), and map skills to the UK job market roles paying £70,000-£125,000."
+          },
+          "order_index": 0
         },
         {
           "section_id": "p9_s4_submission",
           "title": "Submit Your Work",
-          "type": "submission",
+          "type": "text_editor",
           "content": {
-            "instructions": "Upload your ARB presentation deck (PDF or PPTX). In the text editor, write your three written answers to Emma Clarke's questions — specific technical mechanisms only, no prose assertions. These answers will be assessed as if Emma Clarke is reading them herself.",
-            "submission_types": [
-              "text_editor",
-              "file_upload"
-            ]
-          }
+            "text": "Upload your ARB presentation deck (PDF or PPTX). In the text editor, write your three written answers to Emma Clarke's questions — specific technical mechanisms only, no prose assertions. These answers will be assessed as if Emma Clarke is reading them herself."
+          },
+          "review_mode": "instant_ai",
+          "order_index": 0
         },
         {
           "section_id": "p9_s5_rubric",
           "title": "Rubric",
-          "type": "rubric",
+          "type": "rich_text_display",
           "content": {
-            "total_points": 100,
-            "criteria": [
-              {
-                "criterion_id": "c1",
-                "criterion_label": "ARB presentation — 12+ slides, board-level language, January spend total from CSV referenced, Oracle saving quantified",
-                "points": 30
-              },
-              {
-                "criterion_id": "c2",
-                "criterion_label": "Emma Clarke's 3 questions — all answered with specific technical mechanisms: data residency names the SCP and CloudTrail detective control, DR names Route 53 failover and in-flight payment handling, access management names IAM Identity Centre roles and break-glass procedure",
-                "points": 25
-              },
-              {
-                "criterion_id": "c3",
-                "criterion_label": "Architecture decision log — all ADRs from programme compiled, superseded ADRs noted",
-                "points": 15
-              },
-              {
-                "criterion_id": "c4",
-                "criterion_label": "Risk and trade-off summary — accepted risks with stakeholder sign-off, all 5 required trade-offs documented with cost figures",
-                "points": 20
-              },
-              {
-                "criterion_id": "c5",
-                "criterion_label": "Portfolio summary — CV-ready, specific AWS services named, outcomes quantified, maps to UK market salaries",
-                "points": 10
-              }
-            ]
-          }
+            "text": "**Total: 100 points**\n\n- **ARB presentation — 12+ slides, board-level language, January spend total from CSV referenced, Oracle saving quantified** — 30 pts\n- **Emma Clarke's 3 questions — all answered with specific technical mechanisms: data residency names the SCP and CloudTrail detective control, DR names Route 53 failover and in-flight payment handling, access management names IAM Identity Centre roles and break-glass procedure** — 25 pts\n- **Architecture decision log — all ADRs from programme compiled, superseded ADRs noted** — 15 pts\n- **Risk and trade-off summary — accepted risks with stakeholder sign-off, all 5 required trade-offs documented with cost figures** — 20 pts\n- **Portfolio summary — CV-ready, specific AWS services named, outcomes quantified, maps to UK market salaries** — 10 pts"
+          },
+          "order_index": 0
         }
       ]
     },
@@ -1144,7 +536,8 @@
               "AWS Cloud Architect at Big-4 Consultancy — £80,000–£140,000 (Accenture, KPMG, Deloitte)",
               "AWS Cloud Architect Contract — £600–£750 per day (inside or outside IR35)"
             ]
-          }
+          },
+          "order_index": 0
         },
         {
           "section_id": "p10_s2_takeaways",
@@ -1158,7 +551,8 @@
               "Cost anomalies are architectural problems, not monitoring problems. The January report showed CloudWatch DataProcessing at $89.40 as the apparent issue, but Data Transfer Regional at $156.30 was the real root cause. Free VPC gateway endpoints for S3 and DynamoDB eliminated $1,875.60/year. Real FinOps work requires reading the data correctly.",
               "The completion phase of any cloud programme is governance, not technology. The ARB presentation, Emma Clarke's written answers, the architecture decision log, and the risk and trade-off summary are what regulators, boards, and senior stakeholders actually read. Building excellent infrastructure that you cannot explain in board language is not enough."
             ]
-          }
+          },
+          "order_index": 0
         },
         {
           "section_id": "p10_s3_cert",
@@ -1177,7 +571,8 @@
               "AWS FinOps & Cost Optimisation",
               "Architecture Review Board Governance & Executive Communication"
             ]
-          }
+          },
+          "order_index": 0
         }
       ]
     }
@@ -1188,5 +583,205 @@
     "brief": "Tilington plc is a UK-regulated financial services firm (asset management + retail banking, 1,200 staff) migrating from two on-premise datacentres to AWS. Both DC leases expire Q3 2027 — a hard deadline. The candidate acts as Lead AWS Solutions Architect responsible for designing a scalable, secure, reliable AWS platform with microservices, Kubernetes, CI/CD, observability, migration planning, DR, and cost optimisation.",
     "logo_initials": "TL",
     "logo_color": "#0d1b2a"
+  },
+  "domain": "cloud_architecture",
+  "estimated_hours": 80,
+  "personas": [
+    {
+      "persona_id": "sarah_williams",
+      "first_name": "Sarah",
+      "last_name": "Williams",
+      "relationship": "manager",
+      "inbox_messages": [
+        {
+          "message_id": "sw_001",
+          "subject": "Welcome to the Tilington Cloud Programme",
+          "body": "Welcome aboard. I'll be direct: this programme has a hard deadline and I need it to succeed.\n\nYour first priority is discovery. I need to understand what we're dealing with before I commit publicly to the Oracle renewal decision in Q2. Michael will brief you on the estate — but I warn you, the documentation is patchy. Don't trust the CMDB without verifying it.\n\nI'd like to see your initial findings by the end of Phase 1. Please structure your report so I can hand the executive summary to the Board without editing it.\n\nOne request: if you find anything that changes the programme timeline or budget, tell me immediately.\n\nSarah"
+        },
+        {
+          "message_id": "sw_002",
+          "subject": "ARB Date — 14 April",
+          "body": "The Architecture Review Board is confirmed for 14 April. You will present your target architecture and answer questions from Emma Clarke (risk), Priya Sharma (security), and David Okafor (retail technology).\n\nEmma is particularly focused on the data residency question — she wants written confirmation that no customer PII will leave eu-west-2 under any scenario, including the DR failover to eu-west-1.\n\nThe Board CFO will also be in the room. He will ask about cost. Have your numbers ready.\n\nSarah"
+        },
+        {
+          "message_id": "sw_003",
+          "subject": "Oracle Renewal — Decision Needed This Week",
+          "body": "Our Oracle renewal window closes 30 April. I need your recommendation: do we renew or not renew?\n\nThe CFO wants a business case. If we don't renew, what's the risk? If we do renew, what does that cost us and what does it signal to the programme?\n\nI need a clear recommendation with numbers by Thursday.\n\nSarah"
+        }
+      ]
+    },
+    {
+      "persona_id": "michael_evans",
+      "first_name": "Michael",
+      "last_name": "Evans",
+      "relationship": "colleague",
+      "inbox_messages": [
+        {
+          "message_id": "me_001",
+          "subject": "Things you need to know before you start",
+          "body": "Hey — welcome. I've pushed the server inventory to the repo but fair warning: it's not complete.\n\nWe found two servers in DC1 Rack 21 during the physical audit last week that aren't in the CMDB. SRV-086 and SRV-087. Nobody owns them. Could be test boxes from 2022 or could be something important.\n\nAlso — APP-027 (Legacy Fund Accounting). Finance say they stopped using it 18 months ago. But I'm still seeing database sessions on ORCL-05. Can you help me nail down whether this is active or not?\n\nOne more thing: APP-006 references MSSQL-03 in the dependency map but I cannot find MSSQL-03 anywhere in the server inventory.\n\nMichael"
+        },
+        {
+          "message_id": "me_002",
+          "subject": "Oracle — We Need to Talk",
+          "body": "I need to flag something before it becomes a problem.\n\nORCL-01 has 847 stored procedures. I've done a rough pass with the Oracle Schema Conversion Tool and it's flagging 214 of them as requiring manual conversion. Some of them are PL/SQL packages that took our DBA six months to write.\n\nORCL-02 is even more complex — it has custom scheduler jobs and 3 database links to external systems.\n\nI'm not saying we can't do it. I'm saying Sarah's timeline assumes this is straightforward and it isn't. Can you factor this into your Phase 7 database planning?\n\nMichael"
+        }
+      ]
+    },
+    {
+      "persona_id": "emma_clarke",
+      "first_name": "Emma",
+      "last_name": "Clarke",
+      "relationship": "stakeholder",
+      "inbox_messages": [
+        {
+          "message_id": "ec_001",
+          "subject": "Regulatory and Compliance Requirements",
+          "body": "I have reviewed the programme brief. I want to set out my requirements clearly so there are no surprises at the ARB.\n\nBefore any Tilington customer data is processed on AWS infrastructure, I require: written confirmation of data residency controls (UK GDPR Article 44), FCA material outsourcing notification filed and acknowledged (FCA SYSC 8), and AWS CloudTrail enabled with immutable logs in a separate logging account with 7-year retention.\n\nThese are not negotiable. They are regulatory requirements, not preferences.\n\nEmma Clarke\nChief Risk Officer"
+        },
+        {
+          "message_id": "ec_002",
+          "subject": "URGENT — S3 Public Bucket and PII Exposure",
+          "body": "I have been made aware of findings SF-002 and SF-018.\n\nWe have a production S3 bucket (tilington-temp-uploads-prod) that is publicly accessible and contains objects in which Macie has detected National Insurance numbers.\n\nI need within 24 hours: confirmation that public access has been blocked, a data lineage note explaining how NI numbers ended up in this bucket, and a preliminary assessment of whether ICO notification is required under UK GDPR Article 33.\n\nThis is a potential data breach. I am notifying the CEO.\n\nEmma Clarke"
+        },
+        {
+          "message_id": "ec_003",
+          "subject": "ARB Pack — Data Residency and DR Policy Questions",
+          "body": "For the ARB on 14 April, I will be asking the following questions. Prepare written answers in your ARB pack.\n\nQuestion 1: Confirm that during DR failover to eu-west-1, no customer PII is replicated to or processed in that region. What technical controls enforce this? What happens if the control fails?\n\nQuestion 2: How does your architecture maintain operational resilience if AWS eu-west-2 experiences an availability event?\n\nQuestion 3: Who within Tilington has administrative access to the AWS Production account? How is privileged access managed and audited?\n\nI expect specific, evidenced answers — not architectural assertions.\n\nEmma Clarke"
+        }
+      ]
+    },
+    {
+      "persona_id": "james_patel",
+      "first_name": "James",
+      "last_name": "Patel",
+      "relationship": "colleague",
+      "inbox_messages": [
+        {
+          "message_id": "jp_001",
+          "subject": "Repo access and things to know",
+          "body": "Hey! Welcome. I've set you up with read access to the AWS accounts. Repo is at github.com/alain-Sortnext/tilington-cloud-modernisation.\n\nQuick heads up: the Terraform networking module is about 20% done — private subnets and NAT GWs are commented out TODOs. The GitHub Actions pipeline has 10 bugs I deliberately left in for you to find and fix. The ArgoCD application.yaml is pointing at a cluster URL that doesn't exist yet.\n\nAlso: check the January cost report in migration/aws_cost_report.csv. There's something that looks like a monitoring cost problem but I think is actually an architectural problem. See if you spot it.\n\nJames"
+        },
+        {
+          "message_id": "jp_002",
+          "subject": "January Cost Report — Something Looks Wrong",
+          "body": "I was reviewing the January cost report and something caught my eye.\n\nCloudWatch DataProcessing is $89.40. At first I thought it was a monitoring verbosity issue.\n\nBut then I noticed AWS Data Transfer Regional is $156.30. That's cross-AZ data transfer. For a cluster the size of ours that seems high.\n\nMy theory: something is making a lot of cross-AZ calls that should be using VPC endpoints. It's architectural, not a monitoring config problem.\n\nCan you investigate? If I'm right, VPC gateway endpoints for S3 and DynamoDB should fix it — and they're free.\n\nJames"
+        },
+        {
+          "message_id": "jp_003",
+          "subject": "Architecture decisions we need ADRs for",
+          "body": "A few things we need Architecture Decision Records for before the ARB:\n\n1. eu-west-2 as primary region — needs to be written down with the UK GDPR rationale\n2. Terraform as primary IaC — I want this locked in before anyone suggests CloudFormation-only\n3. EKS vs ECS — I've committed us to EKS but we need the documented trade-off\n\nAlso the NAT Gateway question. Do we run 1 NAT GW (cost) or 3 (one per AZ, HA)? ~£90/month per additional NAT GW. Document it as an ADR.\n\nJames"
+        }
+      ]
+    }
+  ],
+  "eva": {
+    "persona": {
+      "name": "Eva",
+      "voice": "nova"
+    },
+    "simulation_context": "Tilington plc is a UK financial services firm migrating 90 servers and 28 applications from two on-premise datacentres to AWS before Q3 2027 lease expiry. The candidate is the Lead AWS Solutions Architect responsible for discovery, architecture, IaC, Kubernetes, CI/CD, database design, migration planning, and board-level governance across 9 phases.",
+    "answer_key_summary": "Key figures: 14 EOL OS servers, SRV-086/087 undocumented, SRV-076 hosts ORCL-04+ORCL-05, MSSQL-03 not in inventory, APP-027 status unclear. January AWS spend ~$10,100 USD. Cross-AZ trap: Data Transfer Regional $156.30 is the real issue (not CloudWatch $89.40) — fix with free S3+DynamoDB VPC gateway endpoints saving $1,875.60/year. AuditTrail DynamoDB must have NO TTL (FCA). Payments Service 15-min RPO requires Aurora PITR specifically.",
+    "phases": [
+      {
+        "phase_id": "phase_1",
+        "eva_context": "The candidate is conducting discovery of Tilington's legacy estate. Key messy reality items: SRV-086/087 undocumented servers, APP-027 unclear status, MSSQL-03 ghost reference, ORCL-04/05 sharing SRV-076.",
+        "eva_guidance": "Help the candidate understand what to look for in the CSV files. If they ask about APP-027, remind them to check both Finance's claim (decommissioned) and Michael's observation (active DB sessions). Do not give away the answer — guide them to investigate.",
+        "common_questions": [
+          "How do I classify an application using 6Rs?",
+          "What does EOL OS mean for the risk register?",
+          "How do I find MSSQL-03?"
+        ]
+      },
+      {
+        "phase_id": "phase_2",
+        "eva_context": "The candidate is designing the target AWS architecture and landing zone. ADR-001 and ADR-002 are already accepted. They need to write SCPs in JSON and design IAM Identity Centre with Azure AD federation.",
+        "eva_guidance": "Help with SCP JSON syntax if asked. Remind them Emma Clarke needs a written data residency mechanism — not a diagram. If they ask about EKS vs ECS, prompt them to document the trade-off in ADR-005.",
+        "common_questions": [
+          "How do I write an SCP to deny public S3 buckets?",
+          "How does IAM Identity Centre federate with Azure AD?",
+          "What goes in the LLD vs HLD?"
+        ]
+      },
+      {
+        "phase_id": "phase_3",
+        "eva_context": "Networking, security, and hybrid cloud. The cross-AZ cost trap is active here — CloudWatch $89.40 looks like the problem but Data Transfer Regional $156.30 is architectural and fixed by free VPC gateway endpoints.",
+        "eva_guidance": "If the candidate focuses on CloudWatch costs, ask them to look at the Data Transfer Regional line in the cost report. Do not tell them the answer directly. For SF-002/SF-018, remind them Emma Clarke mentioned a 72-hour ICO notification clock.",
+        "common_questions": [
+          "What is a VPC gateway endpoint and is it free?",
+          "How do I fix SF-004 without SSH?",
+          "What is the NCSC 14 Cloud Security Principles?"
+        ]
+      },
+      {
+        "phase_id": "phase_4",
+        "eva_context": "IaC, automation, and operations. The candidate must complete Terraform modules, Python tools, and CloudFormation templates. Three incidents to resolve.",
+        "eva_guidance": "If they ask about Object Lock COMPLIANCE vs GOVERNANCE: COMPLIANCE means not even the root account can delete logs before the retention period expires — this is what FCA audit requires. GOVERNANCE allows admin override. Help with Terraform syntax if stuck but do not write the code for them.",
+        "common_questions": [
+          "What is the difference between Object Lock COMPLIANCE and GOVERNANCE?",
+          "How do I run terraform plan for a specific variable?",
+          "How do I make the Python Boto3 inventory tool identify Oracle RDS instances?"
+        ]
+      },
+      {
+        "phase_id": "phase_5",
+        "eva_context": "Kubernetes, microservices, and GitOps. Four microservices to deploy to EKS. Helm chart templates to create. ArgoCD ApplicationSet to configure.",
+        "eva_guidance": "If they ask about PCI DSS isolation for the Payments Service: a separate Kubernetes namespace with NetworkPolicy restricting inbound is the correct approach. Remind them every ServiceAccount needs the IRSA annotation. If helm template fails, check for missing required values in values.yaml.",
+        "common_questions": [
+          "What is IRSA and why does every ServiceAccount need it?",
+          "How do I write a Helm deployment template that uses values.yaml?",
+          "What is an ArgoCD ApplicationSet?"
+        ]
+      },
+      {
+        "phase_id": "phase_6",
+        "eva_context": "CI/CD, DevSecOps, and observability. 10 bugs to find and fix in the GitHub Actions pipeline. BUG-004 is the most subtle — the security-scan job is skipped on non-main branches and returns success, allowing downstream jobs to proceed.",
+        "eva_guidance": "For BUG-004: ask the candidate what happens to the `needs:` dependency when a job is skipped due to an `if:` condition. The answer is it counts as passed, not blocked. For the SLO error budget: 30 × 24 × 60 × 0.0005 = 21.6 minutes. Guide them to show their working.",
+        "common_questions": [
+          "Why does BUG-004 cause the security scan to never block the pipeline?",
+          "How do I calculate the Payments Service error budget?",
+          "What is the difference between a fast burn and slow burn alert?"
+        ]
+      },
+      {
+        "phase_id": "phase_7",
+        "eva_context": "Database architecture. Aurora PostgreSQL replaces Oracle. DynamoDB for event data. AuditTrail must have NO TTL. Payments Service needs 15-minute RPO via PITR specifically.",
+        "eva_guidance": "If they set TTL on AuditTrail: explain FCA COBS record-keeping — some records must be retained indefinitely, so TTL is not permitted. For the 15-minute RPO: daily backups give 24-hour RPO, PITR gives sub-minute RPO — only PITR achieves 15 minutes. For the hot partition problem on PaymentEvents: guide them to write sharding.",
+        "common_questions": [
+          "Why can't AuditTrail have a TTL?",
+          "How does Aurora PITR achieve a 15-minute RPO?",
+          "What is write sharding in DynamoDB?"
+        ]
+      },
+      {
+        "phase_id": "phase_8",
+        "eva_context": "Migration, DR, and FinOps. The January total spend must be calculated from the CSV — not estimated. AuditTrail must not replicate to eu-west-1. The cross-AZ VPC endpoint fix saves $1,875.60/year.",
+        "eva_guidance": "If they estimate the January total instead of calculating from the CSV, remind them the rubric requires the calculated sum. For the DR architecture: if they propose Aurora Global Tables for customer data, remind them that would put PII in eu-west-1 which violates UK GDPR.",
+        "common_questions": [
+          "How do I sum the blended_cost_usd column?",
+          "Why can't Aurora customer data replicate to eu-west-1?",
+          "What is the annual saving from VPC gateway endpoints?"
+        ]
+      },
+      {
+        "phase_id": "phase_9",
+        "eva_context": "Architecture Review Board and executive presentation. Emma Clarke has three specific questions that must be answered in writing with named technical mechanisms.",
+        "eva_guidance": "For Emma Clarke's data residency question: the answer must name the SCP preventing eu-west-1 PII use, the CloudTrail detective control, and the Aurora snapshot-only strategy. Prose assertions like 'we have controls in place' will fail. Help the candidate be specific.",
+        "common_questions": [
+          "What technical mechanism enforces the data residency constraint during DR?",
+          "How do I explain the error budget to the Board CFO?",
+          "What should go in the risk and trade-off summary?"
+        ]
+      },
+      {
+        "phase_id": "phase_10",
+        "eva_context": "Completion phase. The candidate has finished all 9 phases.",
+        "eva_guidance": "Congratulate the candidate. Help them reflect on the key takeaways and how their portfolio maps to UK financial services AWS Solutions Architect roles paying £70,000–£125,000.",
+        "common_questions": [
+          "How do I present this portfolio to a recruiter?",
+          "Which phase deliverables are most important for interviews?"
+        ]
+      }
+    ]
   }
 }
