@@ -355,10 +355,58 @@
         },
         "sections": [
           {
+            "section_id": "p1_s1_landing",
+            "title": "Welcome to Tilington plc",
+            "type": "simulation_landing",
+            "order_index": 0,
+            "content": {
+              "headline": "Migrate Tilington plc's Infrastructure to AWS — Safely, Compliantly, On Time.",
+              "description": "You are the Lead AWS Solutions Architect at Tilington plc. The Board has approved £3.2M to migrate 90 servers and 28 applications from two ageing datacentres to AWS before Q3 2027 — with FCA regulators watching. Nine phases of real work. A GitHub portfolio at the end.",
+              "cta_label": "Begin Onboarding",
+              "metadata": {
+                "format": "Async, self-paced",
+                "estimated_hours": 80,
+                "phases": "9 delivery phases",
+                "difficulty": "Senior"
+              },
+              "employer_section_title": "Why This Simulation Exists",
+              "employer_context": "UK banks and financial services firms face multi-million pound cloud migration programmes under active FCA operational resilience enforcement. This simulation replicates the exact environment — legacy Oracle estate, FCA scrutiny, multi-stakeholder governance, and an 18-month hard deadline.",
+              "employer_tags": [
+                "AWS",
+                "FCA Regulated",
+                "Enterprise Scale",
+                "Multi-Stakeholder",
+                "UK Financial Services"
+              ],
+              "how_it_works": [
+                {
+                  "title": "Onboard",
+                  "description": "Meet your team, review project files, and understand the regulatory constraints before any work begins."
+                },
+                {
+                  "title": "Discover",
+                  "description": "Audit a messy legacy estate — 90 servers, 28 apps, undocumented dependencies, and two servers nobody owns."
+                },
+                {
+                  "title": "Design",
+                  "description": "Produce the target AWS architecture, landing zone, network design, and security controls."
+                },
+                {
+                  "title": "Build",
+                  "description": "Complete Terraform modules, Python tools, Kubernetes manifests, and a CI/CD pipeline with 10 bugs to find and fix."
+                },
+                {
+                  "title": "Certify",
+                  "description": "Present to the Architecture Review Board, earn your certificate, and leave with 23 GitHub-committed deliverables."
+                }
+              ]
+            }
+          },
+          {
             "section_id": "p1_s2_company",
             "title": "About Tilington plc",
             "type": "rich_text_display",
-            "order_index": 0,
+            "order_index": 1,
             "content": {
               "text": "## About Tilington plc\n\nTilington plc operates two business lines:\n\n- **Tilington Asset Management** — institutional asset management, £4.2bn AUM\n\n- **Tilington Retail Financial Services** — ISAs, savings, and investment products for approximately 180,000 individual customers\n\nOffices in London (head office), Manchester (operations), and Edinburgh (fund management). 1,200 employees. Regulated by the FCA and PRA.\n\n---\n\n## Why This Programme Exists\n\nThree drivers make this migration urgent — not optional:\n\n**Driver 1 — Datacentre Lease Expiry (Hard Deadline)**\n\nBoth DC leases expire Q3 2027. No renewal option. All workloads must migrate or decommission.\n\n**Driver 2 — FCA Operational Resilience (Active Enforcement)**\n\nFCA PS21/3 required firms to set and test impact tolerances by March 2025. Tilington is in remediation. Cloud migration is the primary fix.\n\n**Driver 3 — Oracle Licensing Cost**\n\nOracle contract: £1.4M per year. 3-year renewal due Q2 2026. Target: migrate to Aurora PostgreSQL and eliminate this cost. Potential saving: £4.2M over 3 years.\n\n---\n\n## Programme Budget\n\nBoard-approved budget: £3,200,000 over 18 months — approximately £56,667 per month."
             }
@@ -367,7 +415,7 @@
             "section_id": "p1_s2b_regions",
             "title": "AWS Region Strategy",
             "type": "data_table",
-            "order_index": 1,
+            "order_index": 2,
             "content": {
               "headers": [
                 "Region",
@@ -393,7 +441,7 @@
             "section_id": "p1_s3_team",
             "title": "Meet Your Team",
             "type": "meet_the_team",
-            "order_index": 2,
+            "order_index": 3,
             "content": {
               "intro": "You will work with four key stakeholders throughout this programme. Each has different priorities — and sometimes conflicting ones. Understanding who they are and what they care about is essential to navigating this project."
             }
@@ -402,7 +450,7 @@
             "section_id": "p1_s4_conflicts",
             "title": "Stakeholder Dynamics",
             "type": "rich_text_display",
-            "order_index": 3,
+            "order_index": 4,
             "content": {
               "text": "## Stakeholder Conflicts to Be Aware Of\n\nThese conflicts are real and will surface throughout the programme. You will need to navigate them.\n\n**Sarah vs Emma — Speed vs Compliance**\n\nSarah wants to move fast. Emma requires written controls and evidence before any production migration. Emma has veto power. Sarah has budget authority. You are in the middle.\n\n**Sarah vs Michael — Timeline Realism**\n\nSarah set an 18-month timeline. Michael privately thinks it is too tight, particularly given the Oracle PL/SQL complexity (847 stored procedures, 214 requiring manual conversion). He raises this in private but softens it in programme calls.\n\n**James vs Emma — Dev Data**\n\nJames wanted to use production-like customer data in the dev environment for testing. Emma blocked it on UK GDPR grounds. James complied but uses synthetic data. This means testing is less representative.\n\n**Michael vs James — Rehost vs Refactor**\n\nMichael wants to rehost workloads quickly and refactor later. James wants cloud-native from Day 1. The simulation requires you to make an ADR on this trade-off."
             }
@@ -411,7 +459,7 @@
             "section_id": "p1_s5_files",
             "title": "Your Project Files",
             "type": "file_library",
-            "order_index": 4,
+            "order_index": 5,
             "content": {
               "file_ids": [
                 "company_brief",
@@ -424,7 +472,7 @@
             "section_id": "p1_s6_repo",
             "title": "Understanding the GitHub Repository",
             "type": "rich_text_display",
-            "order_index": 5,
+            "order_index": 6,
             "content": {
               "text": "## Your GitHub Repository\n\nThe starter repository is at **github.com/alain-Sortnext/tilington-cloud-modernisation**\n\nThis repository is 15-20% complete by design. Your job across 9 phases is to complete it.\n\n- Files marked `# TODO:` need your work\n\n- Files marked `# STARTER` show you the pattern — extend them\n\n- Files with `???` are your architectural decisions to make\n\n- Do not delete starter files. Build on them.\n\n---\n\n## Data Files in /migration/\n\nSix CSV files drive the simulation. Read them carefully before Phase 2.\n\nEach file contains deliberate complexity and hidden traps that you must surface during discovery."
             }
@@ -433,7 +481,7 @@
             "section_id": "p1_s6b_datafiles",
             "title": "Simulation Data Files",
             "type": "data_table",
-            "order_index": 6,
+            "order_index": 7,
             "content": {
               "headers": [
                 "File",
@@ -478,7 +526,7 @@
             "section_id": "p1_s7_inbox_sarah",
             "title": "First Message from Sarah Williams",
             "type": "inbox_message",
-            "order_index": 7,
+            "order_index": 8,
             "content": {
               "persona_id": "sarah_williams",
               "message_id": "sw_001"
@@ -488,7 +536,7 @@
             "section_id": "p1_s8_inbox_james",
             "title": "First Message from James Patel",
             "type": "inbox_message",
-            "order_index": 8,
+            "order_index": 9,
             "content": {
               "persona_id": "james_patel",
               "message_id": "jp_001"
@@ -498,7 +546,7 @@
             "section_id": "p1_s9_orientation",
             "title": "Orientation Check",
             "type": "multiple_choice",
-            "order_index": 9,
+            "order_index": 10,
             "review_mode": "instant_ai",
             "content": {
               "question": "Tilington has chosen eu-west-1 (Ireland) as its DR region. Which of the following is permitted in eu-west-1 under the programme's data residency policy?",
@@ -523,7 +571,7 @@
             "section_id": "phase_1_results",
             "title": "Phase Complete",
             "type": "phase_results",
-            "order_index": 10,
+            "order_index": 11,
             "content": {
               "text": "## Onboarding Complete\n\nYou now have full situational awareness of the Tilington plc engagement. You have met your team, reviewed the project files, and understood the key constraints.\n\nPhase 2 — Discovery begins now."
             }
