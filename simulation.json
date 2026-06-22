@@ -404,11 +404,18 @@
           },
           {
             "section_id": "p1_s2_company",
-            "title": "About Tilington plc",
-            "type": "rich_text_display",
+            "title": "Company Overview",
+            "type": "company_overview",
             "order_index": 1,
             "content": {
-              "text": "## About Tilington plc\n\nTilington plc operates two business lines:\n\n- **Tilington Asset Management** — institutional asset management, £4.2bn AUM\n\n- **Tilington Retail Financial Services** — ISAs, savings, and investment products for approximately 180,000 individual customers\n\nOffices in London (head office), Manchester (operations), and Edinburgh (fund management). 1,200 employees. Regulated by the FCA and PRA.\n\n---\n\n## Why This Programme Exists\n\nThree drivers make this migration urgent — not optional:\n\n**Driver 1 — Datacentre Lease Expiry (Hard Deadline)**\n\nBoth DC leases expire Q3 2027. No renewal option. All workloads must migrate or decommission.\n\n**Driver 2 — FCA Operational Resilience (Active Enforcement)**\n\nFCA PS21/3 required firms to set and test impact tolerances by March 2025. Tilington is in remediation. Cloud migration is the primary fix.\n\n**Driver 3 — Oracle Licensing Cost**\n\nOracle contract: £1.4M per year. 3-year renewal due Q2 2026. Target: migrate to Aurora PostgreSQL and eliminate this cost. Potential saving: £4.2M over 3 years.\n\n---\n\n## Programme Budget\n\nBoard-approved budget: £3,200,000 over 18 months — approximately £56,667 per month."
+              "company_name": "Tilington plc",
+              "logo_initials": "TL",
+              "logo_color": "#0d1b2a",
+              "industry": "Financial Services — Asset Management & Retail Banking",
+              "city": "London, UK",
+              "about": "Tilington plc operates two business lines: Tilington Asset Management (institutional asset management, £4.2bn AUM) and Tilington Retail Financial Services (ISAs, savings, and investment products for approximately 180,000 individual customers). Offices in London, Manchester, and Edinburgh. 1,200 employees. Regulated by the FCA and PRA.",
+              "team_size": "1,200",
+              "role_context": "You have been appointed Lead AWS Solutions Architect on the Cloud Modernisation Programme. The Board has approved £3.2M to migrate all workloads to AWS before Q3 2027, when both datacentre leases expire. FCA operational resilience enforcement is active. Oracle licensing runs £1.4M per year with a renewal decision due Q2 2026."
             }
           },
           {
