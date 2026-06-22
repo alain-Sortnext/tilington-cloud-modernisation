@@ -1,0 +1,75 @@
+app_id,app_name,depends_on_app_id,depends_on_app_name,dependency_type,protocol,port,direction,criticality,documented,notes
+APP-001,Customer Portal,APP-012,Authentication Service,Auth,LDAPS,636,outbound,CRITICAL,YES,All logins via til-auth-01
+APP-001,Customer Portal,ORCL-01,Oracle customer DB,Database,JDBC,1521,outbound,CRITICAL,YES,Primary data store
+APP-001,Customer Portal,APP-005,Email Notification Service,Async,SMTP,25,outbound,HIGH,YES,Sends confirmation emails
+APP-001,Customer Portal,APP-006,Document Management System,Sync,HTTPS,443,outbound,HIGH,PARTIAL,KYC document upload
+APP-001,Customer Portal,APP-022,Customer Onboarding Portal,Shared DB,JDBC,1521,outbound,HIGH,NO,Share ORCL-01 - undocumented
+APP-001,Customer Portal,APP-016,Payments Gateway,API,HTTPS,8443,outbound,CRITICAL,YES,Initiate payments
+APP-001,Customer Portal,APP-017,Mobile Banking App Backend,Shared Code,N/A,N/A,bidirectional,MEDIUM,NO,Shared auth library - undocumented coupling
+APP-002,Trade Processing Engine,ORCL-02,Oracle trade DB,Database,JDBC,1521,outbound,CRITICAL,YES,Primary trade store
+APP-002,Trade Processing Engine,APP-012,Authentication Service,Auth,LDAPS,636,outbound,CRITICAL,YES,
+APP-002,Trade Processing Engine,APP-007,FX Rate Feed,API,HTTP,8080,inbound,CRITICAL,YES,Requires live FX rates for execution
+APP-002,Trade Processing Engine,APP-021,Trade Confirmation Engine,Async,MQ,1414,outbound,CRITICAL,YES,IBM MQ Series
+APP-002,Trade Processing Engine,APP-018,Internal Audit System,Async,MQ,1414,outbound,HIGH,NO,Audit events - undocumented
+APP-002,Trade Processing Engine,APP-016,Payments Gateway,API,HTTPS,8443,outbound,CRITICAL,YES,Settlement payments
+APP-002,Trade Processing Engine,APP-003,Risk Calculation Engine,Async,File share,445,bidirectional,HIGH,NO,File-based integration - risky
+APP-003,Risk Calculation Engine,ORCL-05,Oracle risk DB,Database,JDBC,1521,outbound,CRITICAL,YES,
+APP-003,Risk Calculation Engine,APP-002,Trade Processing Engine,File,SMB,445,inbound,HIGH,NO,Receives position files via file share
+APP-003,Risk Calculation Engine,APP-007,FX Rate Feed,API,HTTP,8080,inbound,CRITICAL,YES,FX rates for risk calcs
+APP-003,Risk Calculation Engine,ORCL-04,Oracle reporting DB,Database,JDBC,1521,outbound,MEDIUM,NO,Writes risk results to reporting DB
+APP-004,Internal Reporting Portal,MSSQL-01,SQL Server reporting,Database,JDBC,1433,outbound,HIGH,YES,
+APP-004,Internal Reporting Portal,ORCL-04,Oracle reporting DB,Database,JDBC,1521,outbound,HIGH,NO,Also reads Oracle - undocumented
+APP-004,Internal Reporting Portal,APP-012,Authentication Service,Auth,LDAPS,636,outbound,HIGH,YES,
+APP-005,Email Notification Service,MYSQL-01,MySQL notifications DB,Database,JDBC,3306,outbound,HIGH,YES,
+APP-005,Email Notification Service,APP-001,Customer Portal,Async,SMTP,25,inbound,HIGH,YES,Receives send requests
+APP-005,Email Notification Service,APP-022,Customer Onboarding Portal,Async,SMTP,25,inbound,MEDIUM,YES,Onboarding emails
+APP-005,Email Notification Service,APP-024,Statement Generator,Async,SMTP,25,inbound,MEDIUM,NO,Statement delivery - undocumented
+APP-006,Document Management System,MSSQL-03,SQL Server doc metadata,Database,JDBC,1433,outbound,HIGH,NO,MSSQL-03 not in server inventory!
+APP-006,Document Management System,APP-001,Customer Portal,API,HTTPS,443,inbound,HIGH,PARTIAL,
+APP-006,Document Management System,APP-015,Compliance Screening,API,HTTPS,443,outbound,HIGH,YES,KYC doc submission for screening
+APP-007,FX Rate Feed,ORCL-03,Oracle reference data DB,Database,JDBC,1521,outbound,CRITICAL,YES,Stores rates
+APP-007,FX Rate Feed,APP-002,Trade Processing Engine,API,HTTP,8080,outbound,CRITICAL,YES,Pushes rates
+APP-007,FX Rate Feed,APP-003,Risk Calculation Engine,API,HTTP,8080,outbound,CRITICAL,YES,Pushes rates
+APP-007,FX Rate Feed,External:Refinitiv,Refinitiv Eikon data feed,External,FIX,9876,inbound,CRITICAL,YES,Third-party market data
+APP-008,Batch Reporting Suite,ORCL-04,Oracle reporting DB,Database,JDBC,1521,outbound,CRITICAL,YES,
+APP-008,Batch Reporting Suite,APP-012,Authentication Service,Auth,LDAPS,636,outbound,MEDIUM,YES,
+APP-009,IT Service Management Portal,MSSQL-02,SQL Server ITSM,Database,JDBC,1433,outbound,MEDIUM,YES,
+APP-010,HR Portal,MYSQL-01,MySQL HR,Database,JDBC,3306,outbound,LOW,YES,Separate MySQL schema
+APP-011,Network Monitoring Dashboard,Infrastructure,All servers,ICMP+SNMP,SNMP,161,outbound,MEDIUM,YES,
+APP-012,Authentication Service,External:AzureAD,Azure Active Directory,Federation,SAML,443,outbound,CRITICAL,YES,SSO source
+APP-012,Authentication Service,APP-001,Customer Portal,Auth,LDAPS,636,inbound,CRITICAL,YES,
+APP-012,Authentication Service,APP-002,Trade Processing Engine,Auth,LDAPS,636,inbound,CRITICAL,YES,
+APP-012,Authentication Service,APP-003,Risk Calculation Engine,Auth,LDAPS,636,inbound,CRITICAL,YES,
+APP-012,Authentication Service,APP-004,Internal Reporting Portal,Auth,LDAPS,636,inbound,CRITICAL,YES,
+APP-012,Authentication Service,APP-006,Document Management System,Auth,LDAPS,636,inbound,HIGH,YES,
+APP-012,Authentication Service,APP-016,Payments Gateway,Auth,LDAPS,636,inbound,CRITICAL,YES,
+APP-012,Authentication Service,APP-017,Mobile Banking App Backend,Auth,LDAPS,636,inbound,CRITICAL,YES,
+APP-013,File Transfer Gateway,External:Counterparties,External trading counterparties,External,SFTP,22,bidirectional,HIGH,YES,
+APP-013,File Transfer Gateway,APP-002,Trade Processing Engine,File,SMB,445,outbound,HIGH,NO,Trade file delivery
+APP-013,File Transfer Gateway,APP-021,Trade Confirmation Engine,File,SMB,445,outbound,HIGH,NO,
+APP-015,Compliance Screening,ORCL-01,Oracle customer DB,Database,JDBC,1521,outbound,CRITICAL,NO,Reads customer data - undocumented
+APP-015,Compliance Screening,External:WorldCheck,Refinitiv World-Check,External,HTTPS,443,outbound,CRITICAL,YES,AML/PEP screening API
+APP-016,Payments Gateway,ORCL-02,Oracle trade DB,Database,JDBC,1521,outbound,CRITICAL,YES,
+APP-016,Payments Gateway,External:VocaLink,VocaLink Faster Payments,External,HTTPS,443,outbound,CRITICAL,YES,Faster Payments scheme
+APP-016,Payments Gateway,External:SWIFT,SWIFT CAT gateway,External,MQ,1414,bidirectional,CRITICAL,YES,Cross-border payments
+APP-016,Payments Gateway,APP-018,Internal Audit System,Async,MQ,1414,outbound,CRITICAL,YES,PCI audit trail
+APP-017,Mobile Banking App Backend,ORCL-01,Oracle customer DB,Database,JDBC,1521,outbound,CRITICAL,YES,
+APP-017,Mobile Banking App Backend,APP-012,Authentication Service,Auth,LDAPS,636,outbound,CRITICAL,YES,
+APP-017,Mobile Banking App Backend,APP-016,Payments Gateway,API,HTTPS,8443,outbound,CRITICAL,YES,Mobile payment initiation
+APP-017,Mobile Banking App Backend,APP-005,Email Notification Service,Async,SMTP,25,outbound,MEDIUM,NO,Push notification fallback
+APP-018,Internal Audit System,MSSQL-03,SQL Server audit,Database,JDBC,1433,outbound,CRITICAL,NO,MSSQL-03 missing from server inventory
+APP-018,Internal Audit System,APP-002,Trade Processing Engine,Async,MQ,1414,inbound,CRITICAL,NO,
+APP-018,Internal Audit System,APP-016,Payments Gateway,Async,MQ,1414,inbound,CRITICAL,YES,PCI events
+APP-021,Trade Confirmation Engine,ORCL-02,Oracle trade DB,Database,JDBC,1521,outbound,CRITICAL,YES,
+APP-021,Trade Confirmation Engine,External:SWIFT,SWIFT confirmation,External,MQ,1414,outbound,CRITICAL,YES,
+APP-021,Trade Confirmation Engine,External:DTCC,DTCC TradeSuite,External,HTTPS,443,outbound,HIGH,YES,
+APP-022,Customer Onboarding Portal,ORCL-01,Oracle customer DB,Database,JDBC,1521,outbound,CRITICAL,YES,
+APP-022,Customer Onboarding Portal,External:Onfido,Onfido ID verification,External,HTTPS,443,outbound,CRITICAL,YES,
+APP-022,Customer Onboarding Portal,APP-015,Compliance Screening,API,HTTPS,443,outbound,CRITICAL,YES,
+APP-023,Interest Rate Calculator,MSSQL-01,SQL Server reporting,Database,JDBC,1433,outbound,MEDIUM,YES,Writes calculated rates
+APP-023,Interest Rate Calculator,ORCL-01,Oracle customer DB,Database,JDBC,1521,inbound,MEDIUM,NO,Reads account balances - undocumented
+APP-024,Statement Generator,ORCL-01,Oracle customer DB,Database,JDBC,1521,outbound,HIGH,YES,
+APP-024,Statement Generator,APP-005,Email Notification Service,Async,SMTP,25,outbound,MEDIUM,NO,
+APP-027,Legacy Fund Accounting System,ORCL-05,Oracle risk DB,Database,JDBC,1521,outbound,MEDIUM,NO,Still running? Unverified.
+APP-027,Legacy Fund Accounting System,APP-002,Trade Processing Engine,File,SMB,445,bidirectional,MEDIUM,NO,
+APP-028,Printing and Correspondence,External:PrintHouse,External print provider,External,SFTP,22,outbound,MEDIUM,YES,Contains customer PII
