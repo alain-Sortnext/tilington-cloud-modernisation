@@ -1,0 +1,50 @@
+# ============================================================
+# Tilington plc — Kubernetes Ingress
+# STATUS: INCOMPLETE — Candidate completes in Phase 5
+# Uses AWS Load Balancer Controller (ALB Ingress)
+# ============================================================
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: tilington-ingress
+  namespace: tilington-prod
+  annotations:
+    kubernetes.io/ingress.class: "alb"
+    alb.ingress.kubernetes.io/scheme: "internet-facing"
+    alb.ingress.kubernetes.io/target-type: "ip"
+    alb.ingress.kubernetes.io/certificate-arn: # TODO: Candidate adds ACM certificate ARN
+    alb.ingress.kubernetes.io/ssl-policy: "ELBSecurityPolicy-TLS13-1-2-2021-06"
+    alb.ingress.kubernetes.io/wafv2-acl-arn: # TODO: Candidate adds WAF ACL ARN
+    # TODO: Candidate adds:
+    # - alb.ingress.kubernetes.io/listen-ports for HTTP redirect to HTTPS
+    # - alb.ingress.kubernetes.io/actions.redirect-to-https
+    # - alb.ingress.kubernetes.io/group.name (for shared ALB)
+    # - alb.ingress.kubernetes.io/healthcheck-path per service
+spec:
+  rules:
+    - host: api.tilington.co.uk
+      http:
+        paths:
+          - path: /api/v1/customers
+            pathType: Prefix
+            backend:
+              service:
+                name: customer-service
+                port:
+                  number: 80
+          - path: /api/v1/payments
+            pathType: Prefix
+            backend:
+              service:
+                name: payments-service
+                port:
+                  number: 80
+          # TODO: Candidate adds routes for:
+          # - /api/v1/notifications -> notifications-service
+          # - /api/v1/audit -> audit-service
+  tls:
+    - hosts:
+        - api.tilington.co.uk
+      # Note: TLS terminated at ALB — ACM cert used via annotation above
+      # No secretName needed when using ALB TLS termination
