@@ -1,0 +1,46 @@
+month,aws_account,account_type,service,usage_type,resource_id,resource_name,region,environment,application_tag,cost_centre_tag,owner_tag,blended_cost_usd,unblended_cost_usd,usage_quantity,usage_unit,notes
+2026-01,123456789012,Production,Amazon EC2,BoxUsage:m5.xlarge,i-0abc123def456789,til-prod-app-01,eu-west-2,production,CustomerPortal,CC-001,David Okafor,487.20,487.20,720,Hrs,Running 24/7 - consider Savings Plan
+2026-01,123456789012,Production,Amazon EC2,BoxUsage:m5.xlarge,i-0abc123def456780,til-prod-app-02,eu-west-2,production,CustomerPortal,CC-001,David Okafor,487.20,487.20,720,Hrs,
+2026-01,123456789012,Production,Amazon EC2,BoxUsage:r5.2xlarge,i-0abc123def456781,til-prod-db-proxy,eu-west-2,production,TradeProcessing,CC-002,Michael Evans,1164.72,1164.72,720,Hrs,DB proxy layer - overprovisioned?
+2026-01,123456789012,Production,Amazon RDS,InstanceUsage:db.r6g.2xlarge,,tilington-customers-aurora,eu-west-2,production,CustomerPortal,CC-001,Michael Evans,2180.16,2180.16,720,Hrs,Aurora cluster writer - largest single cost
+2026-01,123456789012,Production,Amazon RDS,InstanceUsage:db.r6g.xlarge,,tilington-customers-aurora-reader-1,eu-west-2,production,CustomerPortal,CC-001,Michael Evans,1090.08,1090.08,720,Hrs,Aurora reader 1
+2026-01,123456789012,Production,Amazon RDS,InstanceUsage:db.r6g.xlarge,,tilington-customers-aurora-reader-2,eu-west-2,production,CustomerPortal,CC-001,Michael Evans,1090.08,1090.08,720,Hrs,Aurora reader 2
+2026-01,123456789012,Production,Amazon EKS,AmazonEKS-Hours:perCluster,,tilington-production-eks,eu-west-2,production,Platform,CC-003,James Patel,72.00,72.00,720,Hrs,EKS control plane fixed cost
+2026-01,123456789012,Production,Amazon EC2,BoxUsage:m5.2xlarge,i-0node001,til-eks-node-001,eu-west-2,production,Platform,CC-003,James Patel,279.36,279.36,720,Hrs,EKS worker node 1 of 6
+2026-01,123456789012,Production,Amazon EC2,BoxUsage:m5.2xlarge,i-0node002,til-eks-node-002,eu-west-2,production,Platform,CC-003,James Patel,279.36,279.36,720,Hrs,EKS worker node 2 of 6
+2026-01,123456789012,Production,Amazon EC2,BoxUsage:m5.2xlarge,i-0node003,til-eks-node-003,eu-west-2,production,Platform,CC-003,James Patel,279.36,279.36,720,Hrs,EKS worker node 3 of 6
+2026-01,123456789012,Production,Amazon EC2,BoxUsage:m5.2xlarge,i-0node004,til-eks-node-004,eu-west-2,production,Platform,CC-003,James Patel,279.36,279.36,720,Hrs,EKS worker node 4 of 6
+2026-01,123456789012,Production,Amazon EC2,BoxUsage:m5.2xlarge,i-0node005,til-eks-node-005,eu-west-2,production,Platform,CC-003,James Patel,279.36,279.36,720,Hrs,EKS worker node 5 of 6
+2026-01,123456789012,Production,Amazon EC2,BoxUsage:m5.2xlarge,i-0node006,til-eks-node-006,eu-west-2,production,Platform,CC-003,James Patel,279.36,279.36,720,Hrs,EKS worker node 6 of 6
+2026-01,123456789012,Production,Amazon S3,TimedStorage-ByteHrs,,tilington-production-data,eu-west-2,production,Platform,CC-003,James Patel,42.18,42.18,1482000,GB-Mo,Application data storage
+2026-01,123456789012,Production,Amazon S3,TimedStorage-ByteHrs,,tilington-audit-logs,eu-west-2,production,Security,CC-004,Priya Sharma,8.92,8.92,314000,GB-Mo,Audit logs - CloudTrail
+2026-01,123456789012,Production,AWS KMS,KMS-Requests,,N/A,eu-west-2,production,Security,CC-004,Priya Sharma,18.40,18.40,184000,Requests,CMK API calls
+2026-01,123456789012,Production,Amazon CloudFront,DataTransfer-Out-Bytes,,N/A,eu-west-2,production,CustomerPortal,CC-001,David Okafor,124.50,124.50,832000,GB,CDN egress - consider Reserved pricing
+2026-01,123456789012,Production,AWS WAF,WebACL-Rules,,tilington-waf,eu-west-2,production,Security,CC-004,Priya Sharma,27.00,27.00,9,Rules,WAF rules - fixed monthly
+2026-01,123456789012,Production,Amazon Route 53,HostedZone,,tilington.co.uk,us-east-1,production,Platform,CC-003,James Patel,0.50,0.50,1,Zones,Hosted zone monthly
+2026-01,123456789012,Production,Amazon Route 53,DNS-Queries,,tilington.co.uk,us-east-1,production,Platform,CC-003,James Patel,5.23,5.23,52300,Queries per million,
+2026-01,123456789012,Production,AWS Direct Connect,DataXfer-Out-Bytes,,tilington-dx-london,eu-west-2,production,Platform,CC-003,Michael Evans,380.00,380.00,3800000,GB,DC1 connectivity - major cost. Evaluate VPN alternative for non-prod.
+2026-01,123456789012,Production,Amazon DynamoDB,TimedStorage-ByteHrs,,PaymentEvents,eu-west-2,production,Payments,CC-002,James Patel,28.45,28.45,94800,GB-Mo,Payment events table
+2026-01,123456789012,Production,Amazon DynamoDB,WriteCapacityUnit-Hrs,,PaymentEvents,eu-west-2,production,Payments,CC-002,James Patel,42.00,42.00,420,WCU-Hrs,Write capacity - consider PAY_PER_REQUEST
+2026-01,123456789012,Production,Amazon DynamoDB,ReadCapacityUnit-Hrs,,AuditTrail,eu-west-2,production,Compliance,CC-004,Emma Clarke,18.90,18.90,189,RCU-Hrs,Audit trail reads - FCA audit queries
+2026-01,123456789012,Production,Amazon GuardDuty,DataScanned-Bytes,,N/A,eu-west-2,production,Security,CC-004,Priya Sharma,31.20,31.20,32000,GB,GuardDuty scanning - S3 + CloudTrail
+2026-01,123456789012,Production,AWS Security Hub,SecurityHub-Findings,,N/A,eu-west-2,production,Security,CC-004,Priya Sharma,12.50,12.50,12500,Findings,Security Hub findings processed
+2026-01,123456789012,Production,Amazon CloudWatch,DataProcessing-Bytes,,N/A,eu-west-2,production,Platform,CC-003,James Patel,89.40,89.40,8940,GB,Log ingestion - LARGE. Review log verbosity.
+2026-01,123456789012,Production,Amazon CloudWatch,Metrics,,N/A,eu-west-2,production,Platform,CC-003,James Patel,22.80,22.80,228,Metrics,Custom metrics - 228 metrics
+2026-01,123456789012,Production,AWS Data Transfer,DataTransfer-Regional-Bytes,,N/A,eu-west-2,production,Platform,CC-003,James Patel,156.30,156.30,1563000,GB,Cross-AZ data transfer - investigate reduction
+2026-01,123456789012,Production,Amazon ECR,TimedStorage-ByteHrs,,N/A,eu-west-2,production,Platform,CC-003,James Patel,14.22,14.22,47400,GB-Mo,Container image storage - old images not pruned
+2026-01,123456789012,Production,AWS Secrets Manager,SecretsManager-Secret,,N/A,eu-west-2,production,Security,CC-004,James Patel,8.80,8.80,88,Secrets,Secret rotations and API calls
+2026-01,123456789012,Production,Amazon EC2,NatGateway-Bytes,,nat-0abc,eu-west-2,production,Platform,CC-003,James Patel,92.40,92.40,924000,GB,NAT Gateway data - high. Review if private link cheaper.
+2026-01,123456789012,Production,Amazon EC2,NatGateway-Hours,,nat-0abc,eu-west-2,production,Platform,CC-003,James Patel,32.40,32.40,720,Hrs,NAT Gateway hourly - single NAT GW (not HA)
+2026-01,123456789012,Production,Amazon EC2,EBS:VolumeUsage.gp3,,vol-0abc,eu-west-2,production,Platform,CC-003,James Patel,38.60,38.60,9650,GB-Mo,EBS volumes for EKS nodes
+2026-01,234567890123,Non-Production,Amazon EC2,BoxUsage:t3.medium,i-0nonprod001,til-nonprod-app-01,eu-west-2,non-production,,CC-003,James Patel,28.08,28.08,720,Hrs,Dev environment - UNTAGGED application
+2026-01,234567890123,Non-Production,Amazon EC2,BoxUsage:t3.medium,i-0nonprod002,til-nonprod-app-02,eu-west-2,non-production,,CC-003,James Patel,28.08,28.08,720,Hrs,Dev environment - UNTAGGED application
+2026-01,234567890123,Non-Production,Amazon EC2,BoxUsage:t3.large,i-0nonprod003,,eu-west-2,non-production,,CC-003,,98.40,98.40,720,Hrs,UNTAGGED - no owner no application tag. WHO OWNS THIS?
+2026-01,234567890123,Non-Production,Amazon RDS,InstanceUsage:db.t3.medium,,tilington-dev-aurora,eu-west-2,non-production,Development,CC-003,James Patel,98.40,98.40,720,Hrs,Dev Aurora cluster
+2026-01,234567890123,Non-Production,Amazon EKS,AmazonEKS-Hours:perCluster,,tilington-nonprod-eks,eu-west-2,non-production,Platform,CC-003,James Patel,72.00,72.00,720,Hrs,Non-prod EKS control plane
+2026-01,234567890123,Non-Production,Amazon EC2,BoxUsage:t3.medium,i-0node-np-001,til-nonprod-node-001,eu-west-2,non-production,Platform,CC-003,James Patel,28.08,28.08,720,Hrs,Non-prod EKS node - runs 24/7. SHOULD WE SCHEDULE OFF-HOURS?
+2026-01,234567890123,Non-Production,Amazon EC2,BoxUsage:t3.medium,i-0node-np-002,til-nonprod-node-002,eu-west-2,non-production,Platform,CC-003,James Patel,28.08,28.08,720,Hrs,Non-prod EKS node 2 - runs 24/7 unnecessarily
+2026-01,345678901234,Security,Amazon S3,TimedStorage-ByteHrs,,tilington-central-logs,eu-west-2,security,Security,CC-004,Priya Sharma,24.80,24.80,874000,GB-Mo,Central log bucket - growing fast
+2026-01,345678901234,Security,Amazon GuardDuty,DataScanned-Bytes,,N/A,eu-west-2,security,Security,CC-004,Priya Sharma,8.40,8.40,8400,GB,GuardDuty master account
+2026-01,456789012345,Logging,Amazon S3,TimedStorage-ByteHrs,,tilington-cloudtrail-logs,eu-west-2,logging,Security,CC-004,Emma Clarke,18.60,18.60,620000,GB-Mo,CloudTrail logs - 6 months accumulated
+2026-01,456789012345,Logging,AWS CloudTrail,EventsRecorded,,N/A,eu-west-2,logging,Security,CC-004,Emma Clarke,28.00,28.00,280000,Events,Management events across all accounts
