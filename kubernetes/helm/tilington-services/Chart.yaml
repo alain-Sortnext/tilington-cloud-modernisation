@@ -1,0 +1,14 @@
+apiVersion: v2
+name: tilington-services
+description: Tilington plc Microservices Helm Chart
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+# STATUS: STARTER — Candidate completes in Phase 5
+maintainers:
+  - name: Tilington Cloud Platform Team
+    email: cloud-platform@tilington.co.uk
+keywords:
+  - tilington
+  - microservices
+  - financial-services
