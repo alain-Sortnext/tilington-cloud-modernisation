@@ -1,0 +1,742 @@
+{
+  "meta": {
+    "simulation_id": "tilington-aws-architect-v1",
+    "role": "AWS Solutions Architect",
+    "sector": "UK Financial Services",
+    "generated": "2026-06-22",
+    "data_sources": [
+      {
+        "source": "IT Jobs Watch",
+        "url": "https://www.itjobswatch.co.uk/jobs/uk/aws%20solution%20architect.do",
+        "retrieved": "2026-06-22",
+        "notes": "6 months to April 2026 — 66 permanent UK vacancies, median £95,000"
+      },
+      {
+        "source": "Glassdoor UK",
+        "url": "https://www.glassdoor.co.uk/Salaries/aws-solutions-architect-salary-SRCH_KO0,23.htm",
+        "retrieved": "2026-06-22",
+        "notes": "32 salaries submitted June 2026 — average £66,945, 90th percentile £112,870"
+      },
+      {
+        "source": "PayScale London",
+        "url": "https://www.payscale.com/research/UK/Job=Solutions_Architect/Salary/db1978ef/London-Amazon-Web-Services-AWS",
+        "retrieved": "2026-06-22",
+        "notes": "Solutions Architect with AWS skills London — average £77,700, base £66k–£103k"
+      },
+      {
+        "source": "Indeed UK",
+        "url": "https://uk.indeed.com/career-advice/pay-salary/how-much-does-aws-solution-architect-make",
+        "retrieved": "2026-06-22",
+        "notes": "National average £58,404, range £44,000–£97,000"
+      },
+      {
+        "source": "Levels.fyi UK",
+        "url": "https://www.levels.fyi/companies/amazon/salaries/solution-architect/locations/united-kingdom",
+        "retrieved": "2026-06-22",
+        "notes": "Amazon UK Solutions Architect median total comp £154K, L4–L7 range £67K–£218K"
+      }
+    ],
+    "market_summary": {
+      "uk_median_salary_gbp": 95000,
+      "london_median_salary_gbp": 100000,
+      "uk_excl_london_median_gbp": 92500,
+      "glassdoor_average_gbp": 66945,
+      "glassdoor_25th_percentile_gbp": 50895,
+      "glassdoor_75th_percentile_gbp": 88112,
+      "glassdoor_90th_percentile_gbp": 112870,
+      "payscale_london_average_gbp": 77700,
+      "permanent_vacancies_6mo_to_apr_2026": 66,
+      "yoy_vacancy_increase_pct": 230,
+      "top_location": "London",
+      "top_location_median_gbp": 100000,
+      "data_period": "6 months to April 2026",
+      "source": "IT Jobs Watch, Glassdoor UK, PayScale, Indeed UK — June 2026"
+    }
+  },
+  "entries": [
+    {
+      "id": "JM-001",
+      "job_title": "AWS Solutions Architect",
+      "employer": "Lloyds Banking Group",
+      "employer_type": "UK Tier-1 Bank",
+      "location": "London, EC2 (Hybrid — 2 days office)",
+      "region": "London",
+      "salary_min_gbp": 75000,
+      "salary_max_gbp": 95000,
+      "salary_display": "£75,000–£95,000",
+      "contract_type": "Permanent",
+      "posted_date": "March 2026",
+      "source_board": "LinkedIn UK",
+      "source_url": "https://uk.linkedin.com/jobs/aws-solutions-architect-jobs-london",
+      "skills_required": [
+        "AWS Organizations",
+        "Control Tower",
+        "Terraform",
+        "EKS",
+        "IAM",
+        "Transit Gateway",
+        "CloudTrail",
+        "Security Hub",
+        "FCA regulatory knowledge",
+        "HLD / LLD documentation",
+        "Architecture Decision Records"
+      ],
+      "certifications_preferred": [
+        "AWS Solutions Architect Professional",
+        "AWS Security Specialty"
+      ],
+      "key_responsibilities": [
+        "Design multi-account AWS landing zones using AWS Organizations and Control Tower",
+        "Produce HLD and LLD architecture documentation for enterprise workloads",
+        "Define VPC design, Transit Gateway, hybrid connectivity",
+        "Author Architecture Decision Records and govern through ARB",
+        "Ensure compliance with FCA, PRA, and NCSC Cloud Security Principles",
+        "Lead cloud migration planning using 6Rs methodology",
+        "Produce FinOps assessments and cost optimisation recommendations"
+      ],
+      "simulation_phases_covered": [1, 2, 3, 8, 9],
+      "portfolio_evidence_needed": [
+        "Enterprise Discovery Pack",
+        "AWS Landing Zone Design with HLD/LLD",
+        "Security and Network Architecture",
+        "Migration Strategy and FinOps Assessment",
+        "ARB Presentation Pack"
+      ],
+      "market_context": "Lloyds is expanding its cloud centre of excellence following a £3bn technology investment programme. FCA operational resilience requirements are driving urgent cloud adoption across the UK banking sector.",
+      "interview_difficulty": "High — technical architecture round + values/competency round + ARB presentation"
+    },
+    {
+      "id": "JM-002",
+      "job_title": "Senior Cloud Solutions Architect — AWS",
+      "employer": "HSBC Global Technology",
+      "employer_type": "Global Tier-1 Bank",
+      "location": "London, E14 (Hybrid — 3 days office)",
+      "region": "London",
+      "salary_min_gbp": 85000,
+      "salary_max_gbp": 110000,
+      "salary_display": "£85,000–£110,000",
+      "contract_type": "Permanent",
+      "posted_date": "February 2026",
+      "source_board": "Reed.co.uk",
+      "source_url": "https://www.reed.co.uk/jobs/solutions-architect-financial-services-aws/40396350",
+      "skills_required": [
+        "EKS",
+        "Kubernetes",
+        "Helm",
+        "ArgoCD",
+        "GitHub Actions",
+        "CloudWatch",
+        "Prometheus",
+        "Grafana",
+        "Aurora PostgreSQL",
+        "DynamoDB",
+        "Python / Boto3",
+        "SLO / SLA design",
+        "DevSecOps"
+      ],
+      "certifications_preferred": [
+        "AWS Solutions Architect Professional",
+        "CKA (Certified Kubernetes Administrator)"
+      ],
+      "key_responsibilities": [
+        "Design and implement EKS-based microservices platforms",
+        "Define CI/CD pipelines using GitHub Actions with security scanning integrated",
+        "Build observability stacks using CloudWatch, Prometheus, Grafana",
+        "Design Aurora PostgreSQL and DynamoDB data architectures",
+        "Author SLO/SLA frameworks and error budget policies",
+        "Define DR architecture with RTO/RPO targets and test plans",
+        "Conduct AWS Well-Architected Reviews",
+        "Deploy GitOps using ArgoCD and Helm"
+      ],
+      "simulation_phases_covered": [5, 6, 7],
+      "portfolio_evidence_needed": [
+        "Cloud-Native Microservices Platform (EKS + Helm + ArgoCD)",
+        "CI/CD Pipeline with DevSecOps (GitHub Actions + Trivy + Checkov)",
+        "Grafana Dashboards with SLO definitions",
+        "Cloud-Native Database Architecture (Aurora + DynamoDB)"
+      ],
+      "market_context": "HSBC is migrating its global retail banking platform to AWS following a multi-year cloud-first mandate. The role sits in the Global Technology division supporting 39 countries.",
+      "interview_difficulty": "Very High — system design whiteboard + live Kubernetes scenario + coding round (Python Boto3)"
+    },
+    {
+      "id": "JM-003",
+      "job_title": "Cloud Architect — AWS Financial Services",
+      "employer": "NatWest Group",
+      "employer_type": "UK Tier-1 Bank",
+      "location": "Edinburgh / London (Hybrid — 2 days office)",
+      "region": "Scotland / London",
+      "salary_min_gbp": 70000,
+      "salary_max_gbp": 90000,
+      "salary_display": "£70,000–£90,000",
+      "contract_type": "Permanent",
+      "posted_date": "March 2026",
+      "source_board": "Totaljobs",
+      "source_url": "https://www.totaljobs.com/jobs/cloud-architect-aws",
+      "skills_required": [
+        "Terraform",
+        "CloudFormation",
+        "Python",
+        "Boto3",
+        "Kubernetes",
+        "Helm",
+        "EKS",
+        "Draw.io",
+        "FCA compliance knowledge",
+        "ISO 27001",
+        "Migration planning",
+        "6Rs framework"
+      ],
+      "certifications_preferred": [
+        "AWS Solutions Architect Associate or Professional",
+        "AWS DevOps Engineer Professional"
+      ],
+      "key_responsibilities": [
+        "Assess legacy on-premise estate and produce current-state architecture documentation",
+        "Define application inventory and dependency maps for migration planning",
+        "Produce risk registers and compliance mapping for FCA/ISO 27001",
+        "Author IaC using Terraform and CloudFormation",
+        "Write Python automation scripts using Boto3 for inventory and cost reporting",
+        "Design Kubernetes manifests, Helm charts and autoscaling for EKS",
+        "Produce executive-level ARB presentation packs",
+        "Support migration waves planning including cutover and rollback strategies"
+      ],
+      "simulation_phases_covered": [1, 4, 8, 9],
+      "portfolio_evidence_needed": [
+        "Enterprise Discovery Pack with dependency mapping",
+        "Infrastructure Automation Platform (Terraform + Python toolkit)",
+        "Migration Strategy with wave plan",
+        "ARB Presentation Pack"
+      ],
+      "market_context": "NatWest is completing the final phases of its Project Cloud programme — migrating remaining legacy workloads from two on-premise datacentres acquired through the RBS restructuring. Strong candidate pipeline expected.",
+      "interview_difficulty": "High — technical take-home task (Terraform module) + architecture review panel"
+    },
+    {
+      "id": "JM-004",
+      "job_title": "AWS Solutions Architect — Cloud Platform",
+      "employer": "Barclays",
+      "employer_type": "UK Tier-1 Bank",
+      "location": "London, E14 (Hybrid — 3 days office)",
+      "region": "London",
+      "salary_min_gbp": 80000,
+      "salary_max_gbp": 105000,
+      "salary_display": "£80,000–£105,000",
+      "contract_type": "Permanent",
+      "posted_date": "April 2026",
+      "source_board": "LinkedIn UK",
+      "source_url": "https://uk.linkedin.com/jobs/aws-solutions-architect-jobs-london",
+      "skills_required": [
+        "AWS multi-account design",
+        "Service Control Policies",
+        "IAM Identity Centre",
+        "VPC design",
+        "Direct Connect",
+        "WAF",
+        "GuardDuty",
+        "Security Hub",
+        "Terraform",
+        "EKS",
+        "PCI DSS knowledge",
+        "NCSC 14 Cloud Security Principles"
+      ],
+      "certifications_preferred": [
+        "AWS Solutions Architect Professional",
+        "AWS Security Specialty",
+        "CISSP (advantageous)"
+      ],
+      "key_responsibilities": [
+        "Govern multi-account AWS organisation via Control Tower and SCPs",
+        "Design network architecture including VPC, Transit Gateway, and Direct Connect",
+        "Define security controls meeting PCI DSS v4, FCA, and NCSC requirements",
+        "Build and maintain Terraform IaC platform with peer review process",
+        "Lead Well-Architected Reviews across product teams",
+        "Engage Architecture Review Board with design proposals and ADRs"
+      ],
+      "simulation_phases_covered": [2, 3, 4, 9],
+      "portfolio_evidence_needed": [
+        "AWS Landing Zone Design (multi-account, SCPs, Control Tower)",
+        "Security and Network Architecture with NCSC mapping",
+        "Terraform Repository with remote state",
+        "ARB Presentation with ADR log"
+      ],
+      "market_context": "Barclays is expanding its AWS Centre of Excellence following regulatory scrutiny of operational resilience. PCI DSS expertise is at a premium following the introduction of PCI DSS v4 in 2024.",
+      "interview_difficulty": "Very High — 4-stage process: technical screen → system design → security deep-dive → stakeholder panel"
+    },
+    {
+      "id": "JM-005",
+      "job_title": "Cloud Solutions Architect — AWS",
+      "employer": "Standard Chartered",
+      "employer_type": "International Bank (UK regulated)",
+      "location": "London, EC2 (Hybrid — 2 days office)",
+      "region": "London",
+      "salary_min_gbp": 90000,
+      "salary_max_gbp": 120000,
+      "salary_display": "£90,000–£120,000",
+      "contract_type": "Permanent",
+      "posted_date": "March 2026",
+      "source_board": "CWJobs",
+      "source_url": "https://www.cwjobs.co.uk/jobs/aws-architect",
+      "skills_required": [
+        "AWS EKS",
+        "Microservices architecture",
+        "API design",
+        "ArgoCD",
+        "GitOps",
+        "GitHub Actions",
+        "Terraform",
+        "Aurora PostgreSQL",
+        "DynamoDB",
+        "CloudWatch",
+        "Grafana",
+        "SLO design",
+        "Kubernetes security"
+      ],
+      "certifications_preferred": [
+        "AWS Solutions Architect Professional",
+        "CKA",
+        "AWS DevOps Engineer Professional"
+      ],
+      "key_responsibilities": [
+        "Design microservices architecture for cloud-native banking applications",
+        "Build EKS platform with GitOps delivery via ArgoCD",
+        "Define API boundaries and event-driven integration patterns",
+        "Implement DevSecOps pipeline with automated security scanning",
+        "Design SLO framework and observability stack",
+        "Mentor engineering teams on cloud-native patterns"
+      ],
+      "simulation_phases_covered": [5, 6],
+      "portfolio_evidence_needed": [
+        "Cloud-Native Microservices Platform with service boundary documentation",
+        "GitOps Configuration (ArgoCD ApplicationSet)",
+        "DevSecOps Pipeline with Trivy/Checkov evidence",
+        "SLO/SLA Runbook with error budget calculations"
+      ],
+      "market_context": "Standard Chartered is building a new cloud-native retail banking platform for its Asia-Pacific and Africa markets, engineered from its London technology hub. The role is greenfield — high autonomy and significant scope.",
+      "interview_difficulty": "Very High — system design + live coding (Kubernetes manifest review) + architecture defence"
+    },
+    {
+      "id": "JM-006",
+      "job_title": "Senior AWS Cloud Architect",
+      "employer": "Accenture UK Financial Services",
+      "employer_type": "Big-4 Consultancy",
+      "location": "London / Client Sites (Hybrid)",
+      "region": "London",
+      "salary_min_gbp": 80000,
+      "salary_max_gbp": 115000,
+      "salary_display": "£80,000–£115,000",
+      "contract_type": "Permanent",
+      "posted_date": "February 2026",
+      "source_board": "LinkedIn UK",
+      "source_url": "https://uk.linkedin.com/jobs/aws-solutions-architect-jobs-london",
+      "skills_required": [
+        "AWS multi-account design",
+        "Terraform",
+        "EKS",
+        "Migration planning",
+        "6Rs framework",
+        "Client-facing architecture",
+        "FCA / PRA regulatory knowledge",
+        "FinOps",
+        "Well-Architected Framework",
+        "Stakeholder management",
+        "Executive presentation"
+      ],
+      "certifications_preferred": [
+        "AWS Solutions Architect Professional",
+        "AWS Solutions Architect Associate (minimum)"
+      ],
+      "key_responsibilities": [
+        "Lead AWS cloud transformation engagements for UK financial services clients",
+        "Design target state architectures and produce HLD/LLD documentation",
+        "Lead discovery and current state assessment of legacy estates",
+        "Define migration wave plans and manage cutover activities",
+        "Produce ARB packs and present to client C-suite",
+        "Conduct AWS Well-Architected Reviews",
+        "Lead FinOps assessments and cost optimisation recommendations"
+      ],
+      "simulation_phases_covered": [1, 2, 3, 8, 9],
+      "portfolio_evidence_needed": [
+        "Enterprise Discovery Pack demonstrating assessment at scale",
+        "Landing Zone Design and Governance Framework",
+        "Migration Strategy and FinOps Assessment",
+        "ARB Presentation demonstrating executive communication"
+      ],
+      "market_context": "Accenture's financial services cloud practice has grown 40% in 12 months driven by UK bank regulatory pressure. Candidates with UK banking sector experience command a premium. Travel to client sites 2–3 days per week expected.",
+      "interview_difficulty": "High — case study presentation + competency interview + partner-level panel"
+    },
+    {
+      "id": "JM-007",
+      "job_title": "AWS Solutions Architect",
+      "employer": "Nationwide Building Society",
+      "employer_type": "UK Building Society",
+      "location": "Swindon / London (Hybrid — 2 days office)",
+      "region": "South West / London",
+      "salary_min_gbp": 72000,
+      "salary_max_gbp": 92000,
+      "salary_display": "£72,000–£92,000",
+      "contract_type": "Permanent",
+      "posted_date": "April 2026",
+      "source_board": "Reed.co.uk",
+      "source_url": "https://www.reed.co.uk/jobs/aws-solutions-architect/32663466",
+      "skills_required": [
+        "AWS Organizations",
+        "Terraform",
+        "CloudFormation",
+        "VPC design",
+        "EKS",
+        "Aurora PostgreSQL",
+        "DynamoDB",
+        "Python / Boto3",
+        "ISO 27001",
+        "FCA operational resilience",
+        "DR design",
+        "RTO / RPO"
+      ],
+      "certifications_preferred": [
+        "AWS Solutions Architect Associate or Professional"
+      ],
+      "key_responsibilities": [
+        "Design AWS architecture for Nationwide's digital mortgage and savings platform",
+        "Complete IaC using Terraform across networking, security, and compute",
+        "Design Aurora PostgreSQL database tier for member account data",
+        "Produce DR architecture with documented RTO/RPO targets",
+        "Support FCA operational resilience scenario testing",
+        "Author operations runbooks for the cloud platform team"
+      ],
+      "simulation_phases_covered": [3, 4, 7, 8],
+      "portfolio_evidence_needed": [
+        "Terraform Repository with completed modules",
+        "Cloud-Native Database Architecture",
+        "DR Architecture with RTO/RPO Matrix",
+        "Operations Runbook"
+      ],
+      "market_context": "Nationwide is migrating its legacy IBM mainframe estate to AWS as part of a £1.3bn technology transformation. The candidate will join an established cloud team with strong mentoring culture. Swindon HQ with flexible London working.",
+      "interview_difficulty": "Medium-High — technical assessment + line manager interview + peer panel"
+    },
+    {
+      "id": "JM-008",
+      "job_title": "Lead Cloud Solutions Architect — AWS",
+      "employer": "Prudential Financial (UK)",
+      "employer_type": "Insurance / Asset Management",
+      "location": "London, EC3 (Hybrid — 2 days office)",
+      "region": "London",
+      "salary_min_gbp": 95000,
+      "salary_max_gbp": 125000,
+      "salary_display": "£95,000–£125,000",
+      "contract_type": "Permanent",
+      "posted_date": "March 2026",
+      "source_board": "LinkedIn UK",
+      "source_url": "https://uk.linkedin.com/jobs/aws-solutions-architect-jobs-london",
+      "skills_required": [
+        "AWS multi-account design",
+        "EKS",
+        "Kubernetes",
+        "Microservices",
+        "Terraform",
+        "GitOps",
+        "ArgoCD",
+        "GitHub Actions",
+        "DevSecOps",
+        "Grafana",
+        "SLO design",
+        "FCA / PRA regulatory knowledge",
+        "Aurora PostgreSQL",
+        "Executive communication"
+      ],
+      "certifications_preferred": [
+        "AWS Solutions Architect Professional",
+        "CKA",
+        "AWS Security Specialty"
+      ],
+      "key_responsibilities": [
+        "Lead architecture of Prudential's cloud-native platform across UK and Europe",
+        "Define microservices decomposition strategy for legacy policy administration system",
+        "Build EKS platform with full GitOps delivery pipeline",
+        "Chair internal Architecture Review Board",
+        "Present quarterly to CTO and Board Technology Committee",
+        "Define FinOps governance framework and monthly cost reviews",
+        "Manage team of 3 cloud platform engineers"
+      ],
+      "simulation_phases_covered": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "portfolio_evidence_needed": [
+        "Full Tilington simulation portfolio demonstrates all required competencies",
+        "Emphasis on: ARB presentation, microservices architecture, EKS platform, FinOps assessment"
+      ],
+      "market_context": "Prudential is separating its UK and Asia operations following the M&G demerger. The UK entity is building its cloud platform independently for the first time. This is a lead/principal-level role with genuine platform ownership.",
+      "interview_difficulty": "Very High — 5-stage: HR → technical screen → architecture case study (take-home) → panel → CTO interview"
+    },
+    {
+      "id": "JM-009",
+      "job_title": "AWS Cloud Architect — Contract",
+      "employer": "Capita (on behalf of UK Financial Services client)",
+      "employer_type": "Outsourcer / Contract",
+      "location": "London / Remote (contract)",
+      "region": "London",
+      "salary_min_gbp": 600,
+      "salary_max_gbp": 750,
+      "salary_display": "£600–£750 per day",
+      "contract_type": "Contract",
+      "duration": "6 months initial, likely to extend",
+      "posted_date": "April 2026",
+      "source_board": "CWJobs",
+      "source_url": "https://www.cwjobs.co.uk/jobs/aws-architect",
+      "skills_required": [
+        "Terraform",
+        "AWS EKS",
+        "Kubernetes",
+        "GitHub Actions",
+        "CloudWatch",
+        "Migration planning",
+        "AWS Well-Architected",
+        "Python / Boto3"
+      ],
+      "certifications_preferred": [
+        "AWS Solutions Architect Professional (essential for this rate)"
+      ],
+      "key_responsibilities": [
+        "Complete Terraform IaC modules for AWS landing zone deployment",
+        "Support EKS platform build and Kubernetes workload migration",
+        "Produce migration wave planning for 30-application portfolio",
+        "Deliver Well-Architected Review and remediation roadmap"
+      ],
+      "simulation_phases_covered": [4, 5, 8],
+      "portfolio_evidence_needed": [
+        "Terraform Repository with completed modules (evidence of working code)",
+        "EKS Kubernetes manifests and Helm chart",
+        "Migration Wave Plan spreadsheet"
+      ],
+      "market_context": "Contract market for AWS cloud architects in UK financial services is strong — £600–£750/day is the prevailing rate for mid-senior profiles. IR35 determination is inside for most banking clients. Outside IR35 available through boutique consultancies.",
+      "interview_difficulty": "Medium — technical screen + 1-stage interview, fast turnaround typical"
+    },
+    {
+      "id": "JM-010",
+      "job_title": "Senior AWS Solutions Architect — Insurance",
+      "employer": "Aviva",
+      "employer_type": "UK Insurance / Financial Services",
+      "location": "Norwich / London (Hybrid — 2 days office)",
+      "region": "East Anglia / London",
+      "salary_min_gbp": 75000,
+      "salary_max_gbp": 95000,
+      "salary_display": "£75,000–£95,000",
+      "contract_type": "Permanent",
+      "posted_date": "February 2026",
+      "source_board": "Reed.co.uk",
+      "source_url": "https://www.reed.co.uk/jobs/aws-solutions-architect/32663466",
+      "skills_required": [
+        "AWS multi-account design",
+        "Terraform",
+        "EKS",
+        "Aurora PostgreSQL",
+        "DynamoDB",
+        "CloudTrail",
+        "GuardDuty",
+        "FCA / PRA compliance",
+        "NCSC Cloud Security Principles",
+        "Migration planning",
+        "DR design"
+      ],
+      "certifications_preferred": [
+        "AWS Solutions Architect Associate or Professional",
+        "AWS Security Specialty (preferred)"
+      ],
+      "key_responsibilities": [
+        "Lead AWS architecture for Aviva's digital claims processing platform",
+        "Define multi-account structure and security baseline for AWS organisation",
+        "Produce IaC in Terraform for networking, security, and application tiers",
+        "Design Aurora PostgreSQL schema for claims and policy data",
+        "Produce FCA operational resilience compliance evidence",
+        "Support migration from legacy IBM infrastructure to AWS"
+      ],
+      "simulation_phases_covered": [1, 2, 3, 4, 7, 8],
+      "portfolio_evidence_needed": [
+        "Enterprise Discovery Pack",
+        "AWS Landing Zone Design",
+        "Security Architecture with NCSC mapping",
+        "Terraform Repository",
+        "Cloud-Native Database Architecture",
+        "Migration Strategy"
+      ],
+      "market_context": "Aviva is one of the UK's largest insurance groups and is accelerating its AWS adoption following a board commitment to cloud-first in 2024. The Norwich office is the technology hub with strong AWS team culture. Competitive pension and bonus.",
+      "interview_difficulty": "High — technical assessment (take-home IaC task) + 2-stage interview"
+    },
+    {
+      "id": "JM-011",
+      "job_title": "AWS Solutions Architect — FinTech",
+      "employer": "Monzo Bank",
+      "employer_type": "UK Digital Bank",
+      "location": "London, EC2 (Hybrid — 3 days office)",
+      "region": "London",
+      "salary_min_gbp": 90000,
+      "salary_max_gbp": 130000,
+      "salary_display": "£90,000–£130,000 + equity",
+      "contract_type": "Permanent",
+      "posted_date": "March 2026",
+      "source_board": "LinkedIn UK",
+      "source_url": "https://uk.linkedin.com/jobs/aws-solutions-architect-jobs-london",
+      "skills_required": [
+        "AWS EKS",
+        "Kubernetes",
+        "Microservices",
+        "GitOps",
+        "ArgoCD",
+        "Terraform",
+        "GitHub Actions",
+        "DynamoDB",
+        "Aurora PostgreSQL",
+        "Grafana",
+        "Prometheus",
+        "SLO design",
+        "PCI DSS",
+        "Security scanning"
+      ],
+      "certifications_preferred": [
+        "AWS Solutions Architect Professional",
+        "CKA (preferred)"
+      ],
+      "key_responsibilities": [
+        "Design and scale AWS infrastructure for 9 million UK customer accounts",
+        "Lead EKS platform engineering for 200+ microservices",
+        "Define GitOps delivery standards across 50+ engineering teams",
+        "Build DevSecOps pipeline with automated compliance checking",
+        "Own SLO framework for FCA operational resilience compliance",
+        "Conduct AWS Well-Architected Reviews quarterly"
+      ],
+      "simulation_phases_covered": [5, 6, 7],
+      "portfolio_evidence_needed": [
+        "Cloud-Native Microservices Platform — EKS manifests, Helm chart, ArgoCD config",
+        "DevSecOps Pipeline — GitHub Actions with Trivy/Checkov evidence",
+        "SLO/SLA Runbook with error budget calculations"
+      ],
+      "market_context": "Monzo is the UK's largest digital bank by customer accounts and is preparing for international expansion. All infrastructure is AWS, all delivery is GitOps, all monitoring is Prometheus/Grafana. Fast-paced, high-trust engineering culture. Equity package is meaningful at current growth trajectory.",
+      "interview_difficulty": "Very High — system design + live Kubernetes debugging + take-home architecture challenge"
+    },
+    {
+      "id": "JM-012",
+      "job_title": "Principal Cloud Architect — AWS",
+      "employer": "KPMG UK Technology Advisory",
+      "employer_type": "Big-4 Consultancy",
+      "location": "London / Client Sites (Hybrid)",
+      "region": "London",
+      "salary_min_gbp": 100000,
+      "salary_max_gbp": 140000,
+      "salary_display": "£100,000–£140,000",
+      "contract_type": "Permanent",
+      "posted_date": "April 2026",
+      "source_board": "LinkedIn UK",
+      "source_url": "https://uk.linkedin.com/jobs/aws-solutions-architect-jobs-london",
+      "skills_required": [
+        "AWS multi-account design",
+        "Terraform",
+        "EKS",
+        "Microservices",
+        "Migration planning",
+        "6Rs framework",
+        "FCA / PRA / NCSC compliance",
+        "FinOps",
+        "Well-Architected Framework",
+        "Executive stakeholder management",
+        "ARB governance",
+        "Client-facing delivery"
+      ],
+      "certifications_preferred": [
+        "AWS Solutions Architect Professional (essential)",
+        "AWS Security Specialty",
+        "TOGAF (advantageous)"
+      ],
+      "key_responsibilities": [
+        "Lead AWS cloud transformation engagements for UK financial services clients (banks, insurers, asset managers)",
+        "Design enterprise AWS landing zones and multi-account governance frameworks",
+        "Chair client Architecture Review Boards",
+        "Present to CTO, CRO, and Board-level stakeholders",
+        "Define migration strategies for datacentre exit programmes",
+        "Produce AWS Well-Architected Reviews and remediation roadmaps",
+        "Lead business development for cloud architecture propositions",
+        "Line-manage a team of 4–6 cloud architects"
+      ],
+      "simulation_phases_covered": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "portfolio_evidence_needed": [
+        "Full Tilington portfolio demonstrates the breadth required for this role",
+        "Particular emphasis on: ARB presentation quality, executive communication, FinOps governance, regulatory compliance mapping"
+      ],
+      "market_context": "KPMG's Technology Advisory practice has won several large UK bank cloud transformation mandates in 2025–2026 and is aggressively hiring AWS architects with financial services experience. Principal-level candidates command £100k–£140k plus bonus (15–20% typical). Travel is 2–3 days/week on client site.",
+      "interview_difficulty": "Very High — 5-stage: HR → technical screen → case study presentation → partner panel → client simulation exercise"
+    }
+  ],
+  "salary_benchmarks": {
+    "source": "IT Jobs Watch UK, Glassdoor UK, PayScale — June 2026",
+    "role": "AWS Solutions Architect — UK",
+    "data_period": "6 months to April 2026",
+    "permanent": {
+      "uk_10th_percentile_gbp": 80000,
+      "uk_25th_percentile_gbp": 90000,
+      "uk_median_gbp": 95000,
+      "uk_75th_percentile_gbp": 100000,
+      "london_median_gbp": 100000,
+      "uk_excl_london_median_gbp": 92500,
+      "north_west_median_gbp": 90000,
+      "glassdoor_average_gbp": 66945,
+      "glassdoor_90th_percentile_gbp": 112870,
+      "payscale_london_average_gbp": 77700,
+      "senior_financial_services_range": "£85,000–£125,000",
+      "principal_consulting_range": "£100,000–£140,000"
+    },
+    "contract": {
+      "mid_senior_daily_rate_range": "£600–£750",
+      "senior_principal_daily_rate_range": "£750–£950",
+      "ir35_status_note": "Most UK banking clients are inside IR35. Outside IR35 available via specialist cloud consultancies."
+    },
+    "yoy_market_trend": {
+      "vacancy_growth_pct": 230,
+      "note": "66 permanent vacancies in 6 months to April 2026 vs 20 in same period 2025 — significant demand growth driven by UK bank FCA operational resilience programmes and datacentre exit deadlines"
+    }
+  },
+  "portfolio_to_job_mapping": {
+    "description": "Which simulation deliverables unlock which job market entries",
+    "mappings": [
+      {
+        "deliverable": "Enterprise Discovery Pack (Phase 1)",
+        "unlocks_jobs": ["JM-001", "JM-003", "JM-006", "JM-010", "JM-012"],
+        "why": "Discovery, current state assessment, and application portfolio classification are required for any bank or consultancy migration role"
+      },
+      {
+        "deliverable": "AWS Landing Zone Design + HLD/LLD (Phase 2)",
+        "unlocks_jobs": ["JM-001", "JM-004", "JM-006", "JM-008", "JM-012"],
+        "why": "Multi-account design with Control Tower, SCPs, and governance framework is a headline requirement at Lloyds, Barclays, and KPMG"
+      },
+      {
+        "deliverable": "Security & Network Architecture (Phase 3)",
+        "unlocks_jobs": ["JM-001", "JM-004", "JM-005", "JM-010"],
+        "why": "VPC design, hybrid connectivity, NCSC mapping, and GuardDuty/Security Hub configuration are standard requirements at regulated firms"
+      },
+      {
+        "deliverable": "Infrastructure Automation Platform (Phase 4)",
+        "unlocks_jobs": ["JM-001", "JM-003", "JM-006", "JM-007", "JM-009"],
+        "why": "Working Terraform modules and Python Boto3 tools are the most commonly tested deliverables in technical assessments"
+      },
+      {
+        "deliverable": "Cloud-Native Microservices Platform (Phase 5)",
+        "unlocks_jobs": ["JM-002", "JM-005", "JM-008", "JM-011"],
+        "why": "EKS, Helm, ArgoCD, and GitOps are required at HSBC, Standard Chartered, Monzo, and Prudential — cloud-native leaders"
+      },
+      {
+        "deliverable": "DevSecOps Pipeline + Observability (Phase 6)",
+        "unlocks_jobs": ["JM-002", "JM-005", "JM-011"],
+        "why": "GitHub Actions pipeline with security scanning evidence and Grafana dashboards with SLO definitions are differentiating deliverables for modern cloud-native roles"
+      },
+      {
+        "deliverable": "Cloud-Native Database Architecture (Phase 7)",
+        "unlocks_jobs": ["JM-002", "JM-005", "JM-007", "JM-010"],
+        "why": "Aurora PostgreSQL + DynamoDB design with access patterns and backup strategy is required for any role touching financial data architecture"
+      },
+      {
+        "deliverable": "Migration Strategy + DR + FinOps (Phase 8)",
+        "unlocks_jobs": ["JM-001", "JM-003", "JM-006", "JM-007", "JM-010", "JM-012"],
+        "why": "Migration wave planning, DR architecture with RTO/RPO, and FinOps assessment are required for bank datacentre exit programmes — the dominant UK market opportunity"
+      },
+      {
+        "deliverable": "ARB Presentation Pack (Phase 9)",
+        "unlocks_jobs": ["JM-004", "JM-006", "JM-008", "JM-012"],
+        "why": "Executive communication, ARB governance, and board presentation capability are specifically required at Barclays, KPMG, Prudential, and Accenture"
+      }
+    ]
+  }
+}
