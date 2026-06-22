@@ -44,7 +44,8 @@
     ],
     "market_context": "Lloyds is expanding its cloud centre of excellence following a £3bn technology investment programme. FCA operational resilience requirements are driving urgent cloud adoption across the UK banking sector.",
     "interview_difficulty": "High — technical architecture round + values/competency round + ARB presentation",
-    "posted_date": "March 2026"
+    "posted_date": "March 2026",
+    "salary_display": "£75,000–£95,000"
   },
   {
     "entry_id": "JM-002",
@@ -93,7 +94,8 @@
     ],
     "market_context": "HSBC is migrating its global retail banking platform to AWS following a multi-year cloud-first mandate. The role sits in the Global Technology division supporting 39 countries.",
     "interview_difficulty": "Very High — system design whiteboard + live Kubernetes scenario + coding round (Python Boto3)",
-    "posted_date": "February 2026"
+    "posted_date": "February 2026",
+    "salary_display": "£85,000–£110,000"
   },
   {
     "entry_id": "JM-003",
@@ -141,7 +143,8 @@
     ],
     "market_context": "NatWest is completing the final phases of its Project Cloud programme — migrating remaining legacy workloads from two on-premise datacentres acquired through the RBS restructuring. Strong candidate pipeline expected.",
     "interview_difficulty": "High — technical take-home task (Terraform module) + architecture review panel",
-    "posted_date": "March 2026"
+    "posted_date": "March 2026",
+    "salary_display": "£70,000–£90,000"
   },
   {
     "entry_id": "JM-004",
@@ -187,7 +190,8 @@
     ],
     "market_context": "Barclays is expanding its AWS Centre of Excellence following regulatory scrutiny of operational resilience. PCI DSS expertise is at a premium following the introduction of PCI DSS v4 in 2024.",
     "interview_difficulty": "Very High — 4-stage process: technical screen → system design → security deep-dive → stakeholder panel",
-    "posted_date": "April 2026"
+    "posted_date": "April 2026",
+    "salary_display": "£80,000–£105,000"
   },
   {
     "entry_id": "JM-005",
@@ -234,7 +238,8 @@
     ],
     "market_context": "Standard Chartered is building a new cloud-native retail banking platform for its Asia-Pacific and Africa markets, engineered from its London technology hub. The role is greenfield — high autonomy and significant scope.",
     "interview_difficulty": "Very High — system design + live coding (Kubernetes manifest review) + architecture defence",
-    "posted_date": "March 2026"
+    "posted_date": "March 2026",
+    "salary_display": "£90,000–£120,000"
   },
   {
     "entry_id": "JM-006",
@@ -280,7 +285,8 @@
     ],
     "market_context": "Accenture's financial services cloud practice has grown 40% in 12 months driven by UK bank regulatory pressure. Candidates with UK banking sector experience command a premium. Travel to client sites 2–3 days per week expected.",
     "interview_difficulty": "High — case study presentation + competency interview + partner-level panel",
-    "posted_date": "February 2026"
+    "posted_date": "February 2026",
+    "salary_display": "£80,000–£115,000"
   },
   {
     "entry_id": "JM-007",
@@ -326,7 +332,8 @@
     ],
     "market_context": "Nationwide is migrating its legacy IBM mainframe estate to AWS as part of a £1.3bn technology transformation. The candidate will join an established cloud team with strong mentoring culture. Swindon HQ with flexible London working.",
     "interview_difficulty": "Medium-High — technical assessment + line manager interview + peer panel",
-    "posted_date": "April 2026"
+    "posted_date": "April 2026",
+    "salary_display": "£72,000–£92,000"
   },
   {
     "entry_id": "JM-008",
@@ -373,7 +380,8 @@
     ],
     "market_context": "Prudential is separating its UK and Asia operations following the M&G demerger. The UK entity is building its cloud platform independently for the first time. This is a lead/principal-level role with genuine platform ownership.",
     "interview_difficulty": "Very High — 5-stage: HR → technical screen → architecture case study (take-home) → panel → CTO interview",
-    "posted_date": "March 2026"
+    "posted_date": "March 2026",
+    "salary_display": "£95,000–£125,000"
   },
   {
     "entry_id": "JM-009",
@@ -412,7 +420,8 @@
     ],
     "market_context": "Contract market for AWS cloud architects in UK financial services is strong — £600–£750/day is the prevailing rate for mid-senior profiles. IR35 determination is inside for most banking clients. Outside IR35 available through boutique consultancies.",
     "interview_difficulty": "Medium — technical screen + 1-stage interview, fast turnaround typical",
-    "posted_date": "April 2026"
+    "posted_date": "April 2026",
+    "salary_display": "£132,000–£165,000"
   },
   {
     "entry_id": "JM-010",
@@ -459,7 +468,8 @@
     ],
     "market_context": "Aviva is one of the UK's largest insurance groups and is accelerating its AWS adoption following a board commitment to cloud-first in 2024. The Norwich office is the technology hub with strong AWS team culture. Competitive pension and bonus.",
     "interview_difficulty": "High — technical assessment (take-home IaC task) + 2-stage interview",
-    "posted_date": "February 2026"
+    "posted_date": "February 2026",
+    "salary_display": "£75,000–£95,000"
   },
   {
     "entry_id": "JM-011",
@@ -506,7 +516,8 @@
     ],
     "market_context": "Monzo is the UK's largest digital bank by customer accounts and is preparing for international expansion. All infrastructure is AWS, all delivery is GitOps, all monitoring is Prometheus/Grafana. Fast-paced, high-trust engineering culture. Equity package is meaningful at current growth trajectory.",
     "interview_difficulty": "Very High — system design + live Kubernetes debugging + take-home architecture challenge",
-    "posted_date": "March 2026"
+    "posted_date": "March 2026",
+    "salary_display": "£90,000–£130,000"
   },
   {
     "entry_id": "JM-012",
@@ -552,6 +563,7 @@
     ],
     "market_context": "KPMG's Technology Advisory practice has won several large UK bank cloud transformation mandates in 2025–2026 and is aggressively hiring AWS architects with financial services experience. Principal-level candidates command £100k–£140k plus bonus (15–20% typical). Travel is 2–3 days/week on client site.",
     "interview_difficulty": "Very High — 5-stage: HR → technical screen → case study presentation → partner panel → client simulation exercise",
-    "posted_date": "April 2026"
+    "posted_date": "April 2026",
+    "salary_display": "£100,000–£140,000"
   }
 ]
